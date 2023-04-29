@@ -1,27 +1,14 @@
 {
-  "item.qsrehydrated.eight_ball": "Eight Ball",
-  "item.qsrehydrated.blueberry": "Blueberry",
-  "item.qsrehydrated.soap_water_bucket": "Soap Water Bucket",
-  "item.qsrehydrated.chomper_spawn_egg": "Chomper Spawn Egg",
-  "item.qsrehydrated.zircon_pickaxe": "Zircon Pickaxe",
+
 
   "block.qsrehydrated.mixer": "Fluid Mixer",
 
-  "block.qsrehydrated.red_maple_log": "Red Maple Log",
-  "block.qsrehydrated.red_maple_planks": "Red Maple Planks",
-  "block.qsrehydrated.red_maple_wood": "Red Maple Wood",
-  "block.qsrehydrated.stripped_red_maple_log": "Stripped Red Maple Log",
-  "block.qsrehydrated.stripped_red_maple_wood": "Stripped Red Maple Wood",
-  "block.qsrehydrated.red_maple_leaves": "Red Maple Leaves",
-  "block.qsrehydrated.red_maple_sapling": "Red Maple Sapling",
   "block.qsrehydrated.quicksand":  "Quicksand",
-
+  "block.qsrehydrated.soft_quicksand":  "Soft quicksand",
 
   "itemGroup.quicksand_tab": "Quicksand Reloaded",
 
   "key.category.qsrehydrated.tab": "Quicksand Rehydrated",
-  "key.qsrehydrated.drink_water": "Drink Water",
-
 
   "qsrehydrated.tooltip.liquid.amount.with.capacity": "%s / %s mB",
   "qsrehydrated.tooltip.liquid.amount": "%s mB"
