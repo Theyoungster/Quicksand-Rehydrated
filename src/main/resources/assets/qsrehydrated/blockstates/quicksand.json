@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "": { "model": "qsrehydrated:block/quicksand" }
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 13, 15]
+    }
+  ]
+}

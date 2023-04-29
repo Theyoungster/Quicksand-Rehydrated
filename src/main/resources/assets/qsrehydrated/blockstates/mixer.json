@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "qsrehydrated:block/mixer"
+    },
+    "facing=south": {
+      "model": "qsrehydrated:block/mixer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "qsrehydrated:block/mixer",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "qsrehydrated:block/mixer",
+      "y": 90
+    }
+  }
+}

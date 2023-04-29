@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "net.mokai.quicksandrehydrated.mixins",
+  "refmap" : "net.mokai.quicksandrehydrated.mixins.refmap.json",
+  "mixins":
+  [
+    "AirControlMixin"
+  ],
+  "client":
+  [
+    "AirControlMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
