@@ -17,12 +17,12 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, QuicksandRehydrated.MOD_ID);
 
-    public static final RegistryObject<Item> ROPE = ITEMS.register("rope",
-            () -> new Rope(new Item.Properties().stacksTo(1)));
-
     public static final RegistryObject<Item> CRANBERRY = ITEMS.register("cranberry",
             () -> new Item(new Item.Properties()
-                    .food(new FoodProperties.Builder().nutrition(2).saturationMod(2f).build())));
+                    .food(new FoodProperties.Builder().nutrition(1).saturationMod(1f).fast().build())));
+
+    public static final RegistryObject<Item> ROPE = ITEMS.register("rope",
+            () -> new Rope(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> DRY_QUICKSAND_BUCKET = ITEMS.register("dry_quicksand_bucket",
             () -> new BucketItem(ModFluids.DRY_QUICKSAND,
