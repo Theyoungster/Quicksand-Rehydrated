@@ -1,27 +1,18 @@
 package net.mokai.quicksandrehydrated;
 
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.common.extensions.IForgeLivingEntity;
-import net.mokai.quicksandrehydrated.block.ModBlocks;
-import net.mokai.quicksandrehydrated.block.entity.ModBlockEntities;
-import net.mokai.quicksandrehydrated.entity.ModEntityTypes;
-import net.mokai.quicksandrehydrated.fluid.ModFluidTypes;
-import net.mokai.quicksandrehydrated.fluid.ModFluids;
+import net.mokai.quicksandrehydrated.registry.ModBlocks;
+import net.mokai.quicksandrehydrated.registry.ModBlockEntities;
+import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
+import net.mokai.quicksandrehydrated.registry.ModFluids;
 import net.mokai.quicksandrehydrated.item.ModCreativeModeTab;
-import net.mokai.quicksandrehydrated.item.ModItems;
+import net.mokai.quicksandrehydrated.registry.ModItems;
 import net.mokai.quicksandrehydrated.loot.ModLootModifiers;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
-import net.mokai.quicksandrehydrated.recipe.ModRecipes;
+import net.mokai.quicksandrehydrated.registry.ModRecipes;
 import net.mokai.quicksandrehydrated.screen.MixerScreen;
 import net.mokai.quicksandrehydrated.screen.ModMenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -44,17 +35,11 @@ public class QuicksandRehydrated {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
-
-
         ModFluids.register(modEventBus);
-        ModFluidTypes.register(modEventBus);
-
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
-
         ModRecipes.register(modEventBus);
         ModEntityTypes.register(modEventBus);
-
         ModLootModifiers.register(modEventBus);
 
 
@@ -81,7 +66,7 @@ public class QuicksandRehydrated {
         if(event.getTab() == ModCreativeModeTab.QUICKSAND_TAB) {
             event.accept(ModItems.ROPE);
             event.accept(ModItems.CRANBERRY);
-            event.accept(ModItems.DRY_QUICKSAND_BUCKET);
+            //event.accept(ModItems.DRY_QUICKSAND_BUCKET);
 
             event.accept(ModBlocks.QUICKSAND);
             event.accept(ModBlocks.SOFT_QUICKSAND);
@@ -94,8 +79,8 @@ public class QuicksandRehydrated {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            ItemBlockRenderTypes.setRenderLayer(ModFluids.DRY_QUICKSAND.get(), RenderType.solid());
-            ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DRY_QUICKSAND.get(), RenderType.solid());
+            //ItemBlockRenderTypes.setRenderLayer(ModFluids.DRY_QUICKSAND.get(), RenderType.solid());
+            //ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DRY_QUICKSAND.get(), RenderType.solid());
 
             MenuScreens.register(ModMenuTypes.MIXER_MENU.get(), MixerScreen::new);
 

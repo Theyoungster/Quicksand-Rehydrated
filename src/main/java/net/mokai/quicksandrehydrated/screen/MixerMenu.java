@@ -1,6 +1,6 @@
 package net.mokai.quicksandrehydrated.screen;
 
-import net.mokai.quicksandrehydrated.block.ModBlocks;
+import net.mokai.quicksandrehydrated.registry.ModBlocks;
 import net.mokai.quicksandrehydrated.block.entity.MixerEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

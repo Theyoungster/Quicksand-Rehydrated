@@ -1,4 +1,4 @@
-package net.mokai.quicksandrehydrated.entity;
+package net.mokai.quicksandrehydrated.registry;
 
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.minecraft.resources.ResourceLocation;

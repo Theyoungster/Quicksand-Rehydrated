@@ -1,14 +1,11 @@
 package net.mokai.quicksandrehydrated.block.entity;
 
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.mokai.quicksandrehydrated.block.custom.MixerBlock;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
 import net.mokai.quicksandrehydrated.networking.packet.FluidSyncS2CPacket;
 import net.mokai.quicksandrehydrated.networking.packet.ItemStackSyncS2CPacket;
 import net.mokai.quicksandrehydrated.recipe.FluidMixerRecipes;
+import net.mokai.quicksandrehydrated.registry.ModBlockEntities;
 import net.mokai.quicksandrehydrated.screen.MixerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,7 +33,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openjdk.nashorn.internal.objects.annotations.Property;
 
 import java.util.Map;
 import java.util.Optional;

@@ -23,7 +23,7 @@ public class FluidQuicksandBase extends FluidType {
     private final ResourceLocation stillTexture;
     private final ResourceLocation flowingTexture;
     private final ResourceLocation overlayTexture;
-    private final Vector3f fogColor = new Vector3f(224f / 255f, 56f / 255f, 208f / 255f);
+    private final Vector3f fogColor = new Vector3f(118f / 255f, 118f / 255f, 79f / 255f);
 
     public FluidQuicksandBase(final ResourceLocation stillTexture, final ResourceLocation flowingTexture, final ResourceLocation overlayTexture, final Properties properties) {
         super(properties);
@@ -84,8 +84,8 @@ public class FluidQuicksandBase extends FluidType {
             @Override
             public void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick,
                                         float nearDistance, float farDistance, FogShape shape) {
-                RenderSystem.setShaderFogStart(1f);
-                RenderSystem.setShaderFogEnd(6f); // distance when the fog starts
+                RenderSystem.setShaderFogStart(0f);
+                RenderSystem.setShaderFogEnd(1f); // distance when the fog starts
             }
         });
     }

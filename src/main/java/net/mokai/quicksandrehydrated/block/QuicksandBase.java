@@ -63,7 +63,7 @@ public class QuicksandBase extends Block {
 
 
 
-
+    @SuppressWarnings("deprecation")
     @Override
     public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
 

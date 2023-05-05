@@ -1,12 +1,5 @@
 package net.mokai.quicksandrehydrated.integration;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.mokai.quicksandrehydrated.QuicksandRehydrated;
-import net.mokai.quicksandrehydrated.block.ModBlocks;
-import net.mokai.quicksandrehydrated.recipe.FluidMixerRecipes;
-import net.minecraft.network.chat.Component;
 /*
 public class MixerRecipeCategory { implements IRecipeCategory<FluidMixerRecipes> {
     public final static ResourceLocation UID = new ResourceLocation(QuicksandRehydrated.MOD_ID, "mixer");

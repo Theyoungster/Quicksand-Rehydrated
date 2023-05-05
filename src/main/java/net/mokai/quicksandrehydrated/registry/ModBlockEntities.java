@@ -1,7 +1,8 @@
-package net.mokai.quicksandrehydrated.block.entity;
+package net.mokai.quicksandrehydrated.registry;
 
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
-import net.mokai.quicksandrehydrated.block.ModBlocks;
+import net.mokai.quicksandrehydrated.block.entity.MixerEntity;
+import net.mokai.quicksandrehydrated.registry.ModBlocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;

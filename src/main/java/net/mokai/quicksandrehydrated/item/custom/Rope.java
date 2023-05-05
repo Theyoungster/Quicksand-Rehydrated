@@ -23,7 +23,7 @@ public class Rope extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if(!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
-            outputRandomNumber(player);
+            System.out.println("Rope thrown!");
             player.getCooldowns().addCooldown(this, 20);
         }
 
@@ -43,7 +43,6 @@ public class Rope extends Item {
     }
 
     private void outputRandomNumber(Player player) {
-        player.sendSystemMessage(Component.literal("Your Number is " + getRandomNumber()));
     }
 
     private int getRandomNumber() {

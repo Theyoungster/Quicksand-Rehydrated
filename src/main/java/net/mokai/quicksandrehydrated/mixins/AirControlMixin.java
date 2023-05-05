@@ -138,13 +138,11 @@ public abstract class AirControlMixin
         MinecraftForge.EVENT_BUS.post(event);
 
 
-        float f = 0.1f;
-        AABB aabb = AABB.ofSize(entity.getEyePosition(), (double)f, 1.0E-6D, (double)f);
-        boolean test = BlockPos.betweenClosedStream(aabb).anyMatch((p_201942_) -> {
+        double d = .1d;
+        AABB aabb = AABB.ofSize(entity.getEyePosition(), d, 1.0E-6D, d); // NOTE:
+        boolean qsDepthTest = BlockPos.betweenClosedStream(aabb).anyMatch((p_201942_) -> {
             BlockState blockstate = entity.level.getBlockState(p_201942_);
             return !blockstate.isAir()
-                    //&& blockstate.isSuffocating(entity.level, p_201942_)
-                    //&& Shapes.joinIsNotEmpty(blockstate.getShape(entity.level, new BlockPos(entity.getX(), entity.getEyeY(), entity.getZ())
                     && Shapes.joinIsNotEmpty(blockstate.getShape(entity.level, p_201942_).move((double)p_201942_.getX(), (double)p_201942_.getY(), (double)p_201942_.getZ()), Shapes.create(aabb), BooleanOp.AND);
         });
 
@@ -153,7 +151,7 @@ public abstract class AirControlMixin
 
         boolean matchesTag = blockAtEyes.getTags().toList().contains(QUICKSAND_DROWNABLE);
         boolean drowning =
-                ((IForgeLivingEntity) entity).canDrownInFluidType(stateAtEyes) || (matchesTag && test);
+                ((IForgeLivingEntity) entity).canDrownInFluidType(stateAtEyes) || (matchesTag && qsDepthTest);
 
 
         return !drowning;

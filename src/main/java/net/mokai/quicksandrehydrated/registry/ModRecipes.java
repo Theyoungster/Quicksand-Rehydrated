@@ -1,4 +1,4 @@
-package net.mokai.quicksandrehydrated.recipe;
+package net.mokai.quicksandrehydrated.registry;
 
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -6,6 +6,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.mokai.quicksandrehydrated.recipe.FluidMixerRecipes;
 
 public class ModRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
