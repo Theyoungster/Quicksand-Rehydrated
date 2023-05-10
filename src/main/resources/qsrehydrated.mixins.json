@@ -4,11 +4,8 @@
   "refmap" : "net.mokai.quicksandrehydrated.mixins.refmap.json",
   "mixins":
   [
-    "AirControlMixin"
-  ],
-  "client":
-  [
-    "AirControlMixin"
+    "AirControlMixin",
+    "SlowdownMixin"
   ],
   "injectors": {
     "defaultRequire": 1

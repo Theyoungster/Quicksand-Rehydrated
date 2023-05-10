@@ -5,88 +5,104 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
+import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 
-public class FluidQuicksandBase extends FluidType {
-    protected int quantaPerBlockFloat = 1;
-    private final ResourceLocation stillTexture;
-    private final ResourceLocation flowingTexture;
-    private final ResourceLocation overlayTexture;
-    private final Vector3f fogColor = new Vector3f(118f / 255f, 118f / 255f, 79f / 255f);
+public class FluidQuicksandBase extends LiquidBlock {
 
-    public FluidQuicksandBase(final ResourceLocation stillTexture, final ResourceLocation flowingTexture, final ResourceLocation overlayTexture, final Properties properties) {
-        super(properties);
-        this.stillTexture = stillTexture;
-        this.flowingTexture = flowingTexture;
-        this.overlayTexture = overlayTexture;
+    public FluidQuicksandBase(Supplier<? extends FlowingFluid> pFluid, Properties pProperties) {
+        super(pFluid, pProperties);
+    }
+
+    public double getOffset() { return 0d; } // This value is subtracted from depth for substances that aren't full blocks.
+
+    public boolean getBubbling() { return true; }
+
+
+    public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) {
+        return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset());
     }
 
 
+    public int toInt(double y) {
+        if (y < .375) {
+            return 0; //         Surface: 0 - .375
+        } else if (y < .75) {
+            return 1; //         Knee deep: .375 - .75
+        } else if (y < 1.25) {
+            return 2; //         Waist deep: .75 - 1.25
+        } else if (y < 1.625) {
+            return 3; //         Chest deep: 1.25 - 1.625
+        } else {
+            return 4; //         Under: 1.625+
+        }
+    }
+
+    public double getSink(double depth, double height) { return getSink()[toInt(depth)] * height; }
+
+    public double getWalk(double depth) { return walkSpeed()[toInt(depth)]; }
+
+    public boolean getJump(double depth) { return Math.random() < jumpPercentage()[toInt(depth)]; }
+
+    public double[] getSink() { return new double[]{1d, .3d, .1d, .04d, .01d}; }
+    public double[] walkSpeed() { return new double[]{0d, .5d, .25d, .125d, 0d}; }
+    public double[] jumpPercentage() { return new double[]{.1d, .25d, .125d, 0d, 0d}; }
+
+
+
+
+
+
+
+    @SuppressWarnings("deprecation")
     @Override
-    public boolean canPushEntity(Entity entity)
-    {
-        return false;
-    }
+    public void entityInside(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
 
+        double depth = getDepth(pLevel, pPos, pEntity);
+        double mult = 1;
+        if (depth >0) {
+            pEntity.sendSystemMessage(Component.literal("Depth: " + depth + "  " + pPos.toShortString()));
+            pEntity.setSprinting(false);
 
-    public ResourceLocation getStillTexture() {
-        return stillTexture;
-    }
-
-    public ResourceLocation getFlowingTexture() {
-        return flowingTexture;
-    }
-
-    public ResourceLocation getOverlayTexture() {
-        return overlayTexture;
-    }
-
-    public Vector3f getFogColor() {
-        return fogColor;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
-        consumer.accept(new IClientFluidTypeExtensions() {
-            @Override
-            public ResourceLocation getStillTexture() {
-                return stillTexture;
+            if (!(pEntity instanceof Player)) {
+                pEntity.setOnGround(true);
+                mult = .2;
             }
 
-            @Override
-            public ResourceLocation getFlowingTexture() {
-                return flowingTexture;
-            }
-
-            @Override
-            public @Nullable ResourceLocation getOverlayTexture() {
-                return overlayTexture;
+            //SINKIN' CODE HERE//
+            boolean move = getJump(depth);
+            if (move) {
+                pEntity.setOnGround(true); // This allows the player to step up above a depth of .6
+                pEntity.makeStuckInBlock(pState, new Vec3(getWalk(depth), getSink(depth, mult), getWalk(depth))); /// Lower values are slower.
+            } else {
+                pEntity.makeStuckInBlock(pState, new Vec3(getWalk(depth), getSink(depth, mult), getWalk(depth))); /// Lower values are slower.
             }
 
 
-            @Override
-            public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level,
-                                                    int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
-                return fogColor;
-            }
+        }
 
-            @Override
-            public void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick,
-                                        float nearDistance, float farDistance, FogShape shape) {
-                RenderSystem.setShaderFogStart(0f);
-                RenderSystem.setShaderFogEnd(1f); // distance when the fog starts
-            }
-        });
     }
+
+
+
 }

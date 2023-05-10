@@ -1,4 +1,4 @@
-package net.mokai.quicksandrehydrated.fluid;
+package net.mokai.quicksandrehydrated.fluid.quicksands;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
@@ -15,6 +15,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
+import net.mokai.quicksandrehydrated.fluid.quicksands.blocks.DryQuicksandBlock;
 import net.mokai.quicksandrehydrated.registry.ModBlocks;
 import net.mokai.quicksandrehydrated.registry.ModFluids;
 import net.mokai.quicksandrehydrated.registry.ModItems;
@@ -28,9 +29,7 @@ public class DryQuicksandHolder {
     public static final int COLOR = 0x4B261F;
     public static RegistryObject<FlowingFluid> STILL = ModFluids.FLUIDS.register(id, () -> new DryQuicksandBlock.Source(makeProperties()));
     public static RegistryObject<FlowingFluid> FLOWING = ModFluids.FLUIDS.register(id + "_flowing", () -> new DryQuicksandBlock.Flowing(makeProperties()));
-    public static RegistryObject<LiquidBlock> BLOCK = ModBlocks.BLOCKS.register(id + "_still", () -> new DryQuicksandBlock(STILL, Block.Properties.of(Material.WATER).strength(100.0F).lightLevel((p_235456_0_) -> {
-        return 8;
-    }).noLootTable()));
+    public static RegistryObject<LiquidBlock> BLOCK = ModBlocks.BLOCKS.register(id + "_still", () -> new DryQuicksandBlock(STILL, Block.Properties.of(Material.WATER).strength(100.0F).noLootTable()));
     public static RegistryObject<Item> BUCKET = ModItems.ITEMS.register(id + "_bucket", () -> new BucketItem(STILL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     public static RegistryObject<FluidType> test_fluid_type = ModFluids.FLUID_TYPES.register(id, () -> new FluidType(FluidType.Properties.create()) {
 

@@ -2,14 +2,11 @@ package net.mokai.quicksandrehydrated.registry;
 
 import net.minecraftforge.fluids.FluidType;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-import net.mokai.quicksandrehydrated.fluid.DryQuicksandHolder;
+import net.mokai.quicksandrehydrated.fluid.quicksands.DryQuicksandHolder;
 
 public class ModFluids {
 

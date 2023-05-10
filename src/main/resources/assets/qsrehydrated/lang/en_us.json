@@ -13,5 +13,30 @@
   "key.category.qsrehydrated.tab": "Quicksand Rehydrated",
 
   "qsrehydrated.tooltip.liquid.amount.with.capacity": "%s / %s mB",
-  "qsrehydrated.tooltip.liquid.amount": "%s mB"
+  "qsrehydrated.tooltip.liquid.amount": "%s mB",
+
+
+
+  "death.attack.qsrehydrated_hardcore": "%1$s forgot their Phoenix feather.",
+
+  "death.attack.qsrehydrated_generic_0": "%1$s vanished in soft, sucking terrain.",
+  "death.attack.qsrehydrated_generic_1": "%1$s didn't watch their step.",
+  "death.attack.qsrehydrated_generic_2": "%1$s was reduced to bubbles on the surface.",
+
+  "death.attack.qsrehydrated_quicksand": "%1$s disappeared in innocent-looking quicksand.",
+  "death.attack.qsrehydrated_soft_quicksand": "%1$s was smothered by soft quicksand.",
+
+  "death.attack.qsrehydrated_dry_quicksand": "%1$s vanished in a soft, fine sand.",
+
+  "death.attack.qsrehydrated_moor": "%1$s mistook the moor for solid ground.",
+  "death.attack.qsrehydrated_tar": "%1$s will make for a fine fossil.",
+
+  "death.attack.qsrehydrated_flesh": "%1$s was squeezed and swallowed by tentacles.",
+  "death.attack.qsrehydrated_soulsand": "%1$s felt the corrupting influence of the soul sand.",
+  "death.attack.qsrehydrated_acid": "%1$s was smothered and digested by a fleshy pit.",
+
+  "death.attack.qsrehydrated_chocolate_0": "%1$s become chocolate fondue.",
+  "death.attack.qsrehydrated_chocolate_1": "%1$s met their sweet demise in chocolate goo.",
+  "death.attack.qsrehydrated_marshmallow": "%1$s was smothered in marshmallow fluff.",
+  "death.attack.qsrehydrated_sugar": "%1$s tasted sugary defeat."
 }

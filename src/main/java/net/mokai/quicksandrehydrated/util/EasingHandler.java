@@ -1,16 +1,12 @@
 package net.mokai.quicksandrehydrated.util;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.mokai.quicksandrehydrated.block.QuicksandBase;
+
 public class EasingHandler {
 
-    /**
-     * Basic linear interpolation.
-     *
-     * @param start
-     * @param end
-     * @param position
-     * @return Final position
-     *
-     */
     public static double lerp(double start, double end, double position) {
         position = Math.max(0, Math.min(position, 1)); // Bound `position` to [0,1]
         return ease(start, end, position);
@@ -32,6 +28,21 @@ public class EasingHandler {
         } else {
             return ease_pow_inv(start, end, position, exponent);
         }
+    }
+
+    public static double getDepth(Entity pEntity, Level pLevel, BlockPos pPos, Double offset) {
+        double playerY = pEntity.getPosition(1).y();
+        double depth;
+        BlockPos playercube;
+        double currentHeight = pPos.getY();
+        do {
+            currentHeight++;
+            playercube = new BlockPos(pPos.getX(), currentHeight, pPos.getY());
+        } while (pLevel.getBlockState(playercube).getBlock() instanceof QuicksandBase);
+
+        depth  = playercube.getY() - playerY - offset;
+
+        return depth;
     }
 
 
