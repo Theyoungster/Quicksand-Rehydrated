@@ -57,11 +57,8 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
-            arg 'mixin-config=mixins.qsrehydrated.json'
-
-
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'error' // replace with 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'qsrehydrated'
@@ -79,7 +76,7 @@ minecraft {
 
             //arg '-mixin.config=mixins.qsrehydrated.json'
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'error'
             property 'forge.enabledGameTestNamespaces', 'qsrehydrated'
 
             mods {

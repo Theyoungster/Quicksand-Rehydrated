@@ -18,6 +18,9 @@ public class SoftQuicksand extends QuicksandBase {
     public SoftQuicksand(Properties pProperties) {super(pProperties);}
 
     @Override
+    public String getTex() {return "qsrehydrated:textures/block/soft_quicksand_0.png";}
+
+    @Override
     public double getOffset() {return 0.1875d;}
 
     private static final VoxelShape SHAPE =

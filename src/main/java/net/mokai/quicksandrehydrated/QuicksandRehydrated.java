@@ -1,15 +1,10 @@
 package net.mokai.quicksandrehydrated;
 
 import com.mojang.logging.LogUtils;
-import net.mokai.quicksandrehydrated.registry.ModBlocks;
-import net.mokai.quicksandrehydrated.registry.ModBlockEntities;
-import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
-import net.mokai.quicksandrehydrated.registry.ModFluids;
+import net.mokai.quicksandrehydrated.registry.*;
 import net.mokai.quicksandrehydrated.item.ModCreativeModeTab;
-import net.mokai.quicksandrehydrated.registry.ModItems;
 import net.mokai.quicksandrehydrated.loot.ModLootModifiers;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
-import net.mokai.quicksandrehydrated.registry.ModRecipes;
 import net.mokai.quicksandrehydrated.screen.MixerScreen;
 import net.mokai.quicksandrehydrated.screen.ModMenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -66,7 +61,6 @@ public class QuicksandRehydrated {
         if(event.getTab() == ModCreativeModeTab.QUICKSAND_TAB) {
             event.accept(ModItems.ROPE);
             event.accept(ModItems.CRANBERRY);
-            //event.accept(ModItems.DRY_QUICKSAND_BUCKET);
 
             event.accept(ModBlocks.QUICKSAND);
             event.accept(ModBlocks.SOFT_QUICKSAND);

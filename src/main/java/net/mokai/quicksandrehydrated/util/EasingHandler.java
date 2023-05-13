@@ -30,6 +30,16 @@ public class EasingHandler {
         }
     }
 
+    public static double reverse_interp(double start, double end, double position) {
+        double b = end-start;
+        return (position-start)/b;
+    }
+
+    public static double reverse_interp_sqrt(double start, double end, double position) {
+        double b = end-start;
+        return (position-start)/b;
+    }
+
     public static double getDepth(Entity pEntity, Level pLevel, BlockPos pPos, Double offset) {
         double playerY = pEntity.getPosition(1).y();
         double depth;

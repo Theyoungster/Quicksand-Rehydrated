@@ -20,7 +20,6 @@ public abstract class SlowdownMixin {
     public double horizontal = Double.MAX_VALUE;
     public double vertical = Double.MAX_VALUE;
 
-
     /**
      *
      * @param pState
@@ -28,6 +27,7 @@ public abstract class SlowdownMixin {
      * @author Mokai
      * @reason makeStuckInBlock simply overwrote stuckSpeedMultiplier, which lead to instances of directional priority; now, it only accepts the strongest slowdown applied that tick.
      */
+
     @Overwrite
     public void makeStuckInBlock(BlockState pState, Vec3 spd) {
 
@@ -45,8 +45,8 @@ public abstract class SlowdownMixin {
         e.resetFallDistance();
 
         // It's that easy.
-
     }
+
 
     @Inject(method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V", at = @At("TAIL"))
     public void emperorsNewMove(MoverType mv, Vec3 spd, final CallbackInfo ci)

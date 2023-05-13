@@ -106,8 +106,8 @@ public abstract class AirControlMixin
 
 
     /**
-     * Returns true if the given entity is able to breathe based on the fluid contents of its eye level.<br>
-     * Similar to IForgeLivingEntity.canDrownInFluidType, but bypassing vanilla breathing lets us treat air as a fluid as well.
+     * Returns true if the given entity is able to breathe based on the fluid contents of its eye level
+     * Similar to IForgeLivingEntity.canDrownInFluidType, but bypassing vanilla breathing lets us treat anything as a drownable fluid.
      */
     private boolean canBreathe(LivingEntity entity, boolean matchesTag)
     {
@@ -115,7 +115,6 @@ public abstract class AirControlMixin
         //if (blockAtEyes.getBlock().getCollisionShape(blockAtEyes,entity.level,new BlockPos(entity.getX(), entity.getEyeY(), entity.getZ()), entity.collision)
         livingBreathingEvent.LivingCanBreatheFluidEvent event = new livingBreathingEvent.LivingCanBreatheFluidEvent(entity, entity.getLevel().getFluidState(entity.blockPosition().offset(0, entity.getEyeHeight(), 0)));
         MinecraftForge.EVENT_BUS.post(event);
-
 
         double d = .1d;
         AABB aabb = AABB.ofSize(entity.getEyePosition(), d, 1.0E-6D, d);
