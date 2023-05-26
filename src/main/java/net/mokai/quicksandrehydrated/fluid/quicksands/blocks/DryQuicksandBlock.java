@@ -10,11 +10,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.mokai.quicksandrehydrated.block.QuicksandInterface;
 import net.mokai.quicksandrehydrated.fluid.FluidQuicksandBase;
+import net.mokai.quicksandrehydrated.block.QuicksandBase;
 import org.jetbrains.annotations.NotNull;
 
 
-public class DryQuicksandBlock extends FluidQuicksandBase {
+public class DryQuicksandBlock extends FluidQuicksandBase implements QuicksandInterface {
 
     public static class Flowing extends ForgeFlowingFluid.Flowing {
 
@@ -35,9 +37,7 @@ public class DryQuicksandBlock extends FluidQuicksandBase {
 
     public static class Source extends ForgeFlowingFluid.Source {
 
-        public Source(Properties properties) {
-                super(properties);
-            }
+        public Source(Properties properties) { super(properties); }
 
         @Override
         public int getSlopeFindDistance(LevelReader worldIn) {
@@ -66,15 +66,18 @@ public class DryQuicksandBlock extends FluidQuicksandBase {
     @Override
     @SuppressWarnings("deprecation")
     public @NotNull VoxelShape getOcclusionShape(BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos) {
-        return shapes[state.getValue(LEVEL)];
+        //return shapes[state.getValue(LEVEL)];
+        return Shapes.empty();
     }
-
-
 
 
     public double getOffset() {
         return 0d; // This value is subtracted from depth for substances that aren't full blocks.
     }
 
+    @Override
+    public boolean getBubbling() {
+        return true;
+    }
 
 }

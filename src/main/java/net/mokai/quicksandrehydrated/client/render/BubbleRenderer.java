@@ -2,6 +2,8 @@ package net.mokai.quicksandrehydrated.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import com.mojang.math.Transformation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -25,14 +27,16 @@ public class BubbleRenderer extends EntityRenderer<EntityBubble> {
 
     @Override
     public void render(EntityBubble bubble, float yaw, float partialTicks, PoseStack stack, MultiBufferSource buffers, int light) {
+        bubble.initForRender();
         stack.pushPose();
         float size = (float)bubble.getSize();
-        System.out.println(size);
+
+
         stack.translate(0, .5, 0);
         stack.scale(size, size, size);
         stack.translate(0f, -.125, 0);
+        stack.mulPose(Axis.YP.rotationDegrees(bubble.rotAngle * (180F / (float) Math.PI)));
 
-        //VertexConsumer builder = buffers.getBuffer(model.renderType(textureLoc));
         VertexConsumer builder = buffers.getBuffer(model.renderType(bubble.getTexture()));
 
         model.renderToBuffer(stack, builder, light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.075F);

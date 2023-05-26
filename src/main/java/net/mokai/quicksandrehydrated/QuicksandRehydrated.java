@@ -1,6 +1,10 @@
 package net.mokai.quicksandrehydrated;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.RegistryObject;
 import net.mokai.quicksandrehydrated.registry.*;
 import net.mokai.quicksandrehydrated.item.ModCreativeModeTab;
 import net.mokai.quicksandrehydrated.loot.ModLootModifiers;
@@ -17,6 +21,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(QuicksandRehydrated.MOD_ID)
@@ -59,12 +67,14 @@ public class QuicksandRehydrated {
 
     private void addCreative(CreativeModeTabEvent.BuildContents event) {
         if(event.getTab() == ModCreativeModeTab.QUICKSAND_TAB) {
-            event.accept(ModItems.ROPE);
-            event.accept(ModItems.CRANBERRY);
+            Iterator<RegistryObject<Item>> iterator = ModItems.getItemList();
 
-            event.accept(ModBlocks.QUICKSAND);
-            event.accept(ModBlocks.SOFT_QUICKSAND);
-            event.accept(ModBlocks.MIXER);
+            while (iterator.hasNext()) {
+                RegistryObject<Item> i = iterator.next();
+                event.accept(i);
+            }
+            System.out.println(ModItems.ITEMS.getEntries());
+
         }
     }
 
@@ -74,7 +84,6 @@ public class QuicksandRehydrated {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             //ItemBlockRenderTypes.setRenderLayer(ModFluids.DRY_QUICKSAND.get(), RenderType.solid());
-            //ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DRY_QUICKSAND.get(), RenderType.solid());
 
             MenuScreens.register(ModMenuTypes.MIXER_MENU.get(), MixerScreen::new);
 

@@ -9,9 +9,15 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
 public class ModItems {
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, QuicksandRehydrated.MOD_ID);
+
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, QuicksandRehydrated.MOD_ID);
+    public static void register(IEventBus eventBus) { ITEMS.register(eventBus); }
+
 
     public static final RegistryObject<Item> CRANBERRY = ITEMS.register("cranberry",
             () -> new Item(new Item.Properties()
@@ -20,12 +26,13 @@ public class ModItems {
     public static final RegistryObject<Item> ROPE = ITEMS.register("rope",
             () -> new Rope(new Item.Properties().stacksTo(1)));
 
-    /*
-    public static final RegistryObject<Item> DRY_QUICKSAND_BUCKET = ITEMS.register("dry_quicksand_bucket",
-            () -> new BucketItem(ModFluids.DRY_QUICKSAND,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-*/
-    public static void register(IEventBus eventBus) {
-        ITEMS.register(eventBus);
+
+
+
+
+
+    public static Iterator<RegistryObject<Item>> getItemList() {
+        return ITEMS.getEntries().iterator();
     }
+
 }

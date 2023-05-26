@@ -1,12 +1,77 @@
 {
+  "block.qsrehydrated.mud": "Mud",
+  "block.qsrehydrated.shallow_mud": "Mud",
+  "block.qsrehydrated.deep_mud": "Mud",
+  "block.qsrehydrated.bottomless_mud": "Mud",
+  "block.qsrehydrated.powder_snow": "Powder Snow",
+  "block.qsrehydrated.powder_ash": "Powder Ash",
+  "block.qsrehydrated.soft_quicksand":  "Soft quicksand",
+  "block.qsrehydrated.moor": "Moor",
+  "block.qsrehydrated.mire": "Mire",
+  "block.qsrehydrated.wet_peat": "Wet Peat",
+  "block.qsrehydrated.dry_peat": "Dried Peat",
+  "block.qsrehydrated.brown_clay": "Brown Clay",
+  "block.qsrehydrated.mineral_clay": "Mineral Clay",
+  "block.qsrehydrated.hardened_clay": "Hardened Clay",
+  "block.qsrehydrated.sinking_clay": "Sinking Clay",
+  "block.qsrehydrated.wax": "Wax",
+  "block.qsrehydrated.quicksand":  "Quicksand",
+  "block.qsrehydrated.tangleroot_moss": "Tangleroot Moss",
+  "block.qsrehydrated.dense_webbing": "Dense Webbing",
+  "block.qsrehydrated.larvae": "Larvae",
+  "block.qsrehydrated.corrupt_sand": "Corrupt Sand",
+  "block.qsrehydrated.swallowing_flesh": "Swallowing Flesh",
+  "block.qsrehydrated.soft_gravel": "Soft Gravel",
+  "block.qsrehydrated.silt_sludge": "Silt Sludge",
+  "block.qsrehydrated.sinking_rug": "Sinking Rug",
+
+  "block.qsrehydrated.bog": "Bog",
+  "item.qsrehydrated.bog_bucket": "Bog Bucket",
+  "block.qsrehydrated.dry_quicksand": "Dry Quicksand",
+  "item.qsrehydrated.dry_quicksand_bucket": "Dry Quicksand Bucket",
+  "block.qsrehydrated.jungle_quicksand": "Jungle Quicksand",
+  "item.qsrehydrated.jugngle_quicksand_bucket": "Jungle Quicksand Bucket",
+  "block.qsrehydrated.liquid_mire": "Liquid Mire",
+  "item.qsrehydrated.liquid_mire_bucket": "Mire Bucket",
+  "block.qsrehydrated.sinking_slime": "Sinking Slime",
+  "item.qsrehydrated.sinking_slime_bucket": "Sinking Slime Bucket",
+  "block.qsrehydrated.mucus": "Mucus",
+  "item.qsrehydrated.mucus_bucket": "Mucus Bucket",
+  "block.qsrehydrated.tar": "Tar",
+  "item.qsrehydrated.tar_bucket": "Tar Bucket",
+  "block.qsrehydrated.acid": "Acid",
+  "item.qsrehydrated.acid_bucket": "Acid Bucket",
+  "block.qsrehydrated.liquid_honey": "Liquid Honey",
+  "item.qsrehydrated.liquid_honey_bucket": "Liquid Honey Bucket",
+  "block.qsrehydrated.liquid_chocolate": "Liquid Chocolate",
+  "item.qsrehydrated.liquid_chocolate_bucket": "Liquid Chocolate Bucket",
+
+  "block.qsrehydrated.chocolate": "Chocolate Block",
+  "block.qsrehydrated.honeycomb": "Populated Honeycomb",
+  "block.qsrehydrated.rafflesia_flesh": "Rafflesia Flower",
+  "block.qsrehydrated.rafflesia_wall": "Rafflesia Wall",
+  "block.qsrehydrated.wax_drip": "Wax Drip",
+  "block.qsrehydrated.dead_lieaves": "Dead Leaves",
 
 
   "block.qsrehydrated.mixer": "Fluid Mixer",
 
-  "block.qsrehydrated.quicksand":  "Quicksand",
-  "block.qsrehydrated.soft_quicksand":  "Soft quicksand",
 
   "item.qsrehydrated.cranberry": "Cranberries",
+  "item.qsrehydrated.larva_food": "Larva",
+  "item.qsrehydrated.cooked_larva_food": "Cooked Larva",
+
+
+
+  "item.qsrehydrated.long_stick": "Walking Stick",
+  "item.qsrehydrated.rope": "Rope",
+
+
+
+
+
+
+
 
   "itemGroup.quicksand_tab": "Quicksand Reloaded",
 
@@ -14,6 +79,11 @@
 
   "qsrehydrated.tooltip.liquid.amount.with.capacity": "%s / %s mB",
   "qsrehydrated.tooltip.liquid.amount": "%s mB",
+
+
+
+
+
 
 
 

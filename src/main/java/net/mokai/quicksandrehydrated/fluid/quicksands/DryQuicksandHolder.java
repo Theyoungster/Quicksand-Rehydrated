@@ -31,8 +31,9 @@ public class DryQuicksandHolder {
     public static RegistryObject<FlowingFluid> FLOWING = ModFluids.FLUIDS.register(id + "_flowing", () -> new DryQuicksandBlock.Flowing(makeProperties()));
     public static RegistryObject<LiquidBlock> BLOCK = ModBlocks.BLOCKS.register(id + "_still", () -> new DryQuicksandBlock(STILL, Block.Properties.of(Material.WATER).strength(100.0F).noLootTable()));
     public static RegistryObject<Item> BUCKET = ModItems.ITEMS.register(id + "_bucket", () -> new BucketItem(STILL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-    public static RegistryObject<FluidType> test_fluid_type = ModFluids.FLUID_TYPES.register(id, () -> new FluidType(FluidType.Properties.create()) {
 
+
+    public static RegistryObject<FluidType> FLUID_FLOWING_TYPE = ModFluids.FLUID_TYPES.register(id, () -> new FluidType(FluidType.Properties.create()) {
         @Override
         public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
             consumer.accept(new IClientFluidTypeExtensions() {
@@ -56,8 +57,10 @@ public class DryQuicksandHolder {
         }
     });
 
+
+
     private static ForgeFlowingFluid.Properties makeProperties() {
-        return new ForgeFlowingFluid.Properties(test_fluid_type, STILL, FLOWING)
+        return new ForgeFlowingFluid.Properties(FLUID_FLOWING_TYPE, STILL, FLOWING)
                 .bucket(BUCKET)
                 .block(BLOCK);
     }

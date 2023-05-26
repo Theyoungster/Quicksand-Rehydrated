@@ -1,6 +1,6 @@
 {
     "textures": {
-        "particle": "block/water_still"
+        "particle": "qsrehydrated:block/dry_quicksand_flowing"
     }
 }
 

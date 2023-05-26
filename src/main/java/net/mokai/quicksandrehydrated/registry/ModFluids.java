@@ -13,7 +13,8 @@ public class ModFluids {
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, QuicksandRehydrated.MOD_ID);
     public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, QuicksandRehydrated.MOD_ID);
 
-    public static final DryQuicksandHolder DRYQUICKSAND = new DryQuicksandHolder();
+    public static final DryQuicksandHolder DRY_QUICKSAND = new DryQuicksandHolder();
+
     /*
     public static final RegistryObject<FlowingFluid> DRY_QUICKSAND = FLUIDS.register("dry_quicksand",
             () -> new ForgeFlowingFluid.Source(ModFluids.DRY_QUICKSAND_PROPERTIES));

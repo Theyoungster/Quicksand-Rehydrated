@@ -1,23 +1,30 @@
 package net.mokai.quicksandrehydrated.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.mokai.quicksandrehydrated.entity.EntityBubble;
+import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
 import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
+import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
+import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
 
-public class QuicksandBase extends Block {
+public class QuicksandBase extends Block implements QuicksandInterface {
 
     public QuicksandBase(Properties pProperties) {
         super(pProperties);
@@ -104,9 +111,21 @@ public class QuicksandBase extends Block {
             boolean canJump = getJump(depth, pLevel);
             double sink = getSink(depth);
             double walk = getWalk(depth);
-            if(pPos.getX() != pEntity.getBlockX() || pPos.getZ() != pEntity.getBlockZ())
-                { walk = Math.max(walk, .0625); }// Cap the speed reduction if the player is only partially inside any quicksand blocks.
-            if (canJump) { pEntity.setOnGround(true); } // Above depth .6, the player can step back onto land.
+            if (canJump) { pEntity.setOnGround(true); } // Semi-randomly set the player on 'land'. Above depth .6, this means the player can step back onto land.
+            if(pPos.getX() != pEntity.getBlockX() || pPos.getZ() != pEntity.getBlockZ()) // If the player is NOT fully inside this Quicksand block...
+                { walk = Math.max(walk, .0625); }// ... Cap the speed reduction.
+            else {
+                // Bubble code!
+                if(getBubbling()) {
+                    if (Math.random() > .75) { // Obvs we need to get more robust than this.
+                        Vec3 pos = new Vec3(pEntity.getX() + Math.random(), pPos.getY() + .5, pEntity.getZ() + Math.random());
+                        BlockPos np = new BlockPos(pos);
+                        spawnBubble(pLevel.getBlockState(np), pLevel, pos, np);
+                    }
+                }
+                // End bubble code
+            }
+
 
 
             /**
@@ -117,15 +136,13 @@ public class QuicksandBase extends Block {
              */
 
             if(pLevel.isClientSide()) { // This bit is broken. We need to have the player themselves calculate their rotation / struggle speed, using the AirControlMixin to add the function, and then later call it.
-
                 double test = Math.abs(pEntity.getViewVector(0).x - pEntity.getViewVector(1).x);
                 if (test > getStruggleSensitivity()) {
                     sink = sink + 1.1111111f;
                 }
-
             }
-
             pEntity.makeStuckInBlock(pState, new Vec3(walk, sink, walk)); /// Lower values are slower.
+
 
             ////// SINKIN' CODE END
 
@@ -152,6 +169,35 @@ public class QuicksandBase extends Block {
                 KILL(pEntity);
             }
         }
+    }
+
+    @Override
+    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+
+    }
+
+    public void spawnBubble(BlockState pState, Level pLevel, Vec3 pos, BlockPos pPos) {
+        BlockState upOne = pLevel.getBlockState(pPos.above());
+        if (checkDrownable(pState) && !checkDrownable(upOne)) {
+            double offset = 0d;
+            Block gb = pState.getBlock();
+            if (gb instanceof QuicksandInterface) {
+                offset = ((QuicksandInterface)gb).getOffset();
+            }
+            pos = pos.add( new Vec3(0, -offset, 0) );
+            EntityBubble newBubble = getBubble(pLevel, pos);
+            pLevel.addFreshEntity(newBubble);
+        }
+    }
+
+    public EntityBubble getBubble(Level pLevel, Vec3 pos) {
+        return new EntityBubble(ModEntityTypes.BUBBLE.get(), pLevel, pos);
+    }
+
+    public boolean checkDrownable(BlockState pState) {
+        System.out.println(pState.getBlock().getName() + ", " +  pState.getTags().toList());
+        System.out.println(pState.getBlock().getName() + ", " +  pState.getFluidState().getTags().toList());
+        return pState.getTags().toList().contains(QUICKSAND_DROWNABLE) || pState.getFluidState().getTags().toList().contains(QUICKSAND_DROWNABLE_FLUID);
     }
 
 }
