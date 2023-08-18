@@ -1,7 +1,6 @@
 package net.mokai.quicksandrehydrated.block;
 
 public interface QuicksandInterface {
-    boolean getBubbling();
+    double getBubblingChance();
     double getOffset();
-    String getTex();
 }

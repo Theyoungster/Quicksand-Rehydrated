@@ -2,70 +2,94 @@ package net.mokai.quicksandrehydrated.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
-import net.mokai.quicksandrehydrated.block.QuicksandBase;
 import net.mokai.quicksandrehydrated.block.QuicksandInterface;
-import net.mokai.quicksandrehydrated.fluid.FluidQuicksandBase;
+import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 
-import java.util.Random;
+import javax.annotation.Nullable;
 
 
 public class EntityBubble extends Entity {
 
-    public String texture = "minecraft:textures/block/sand.png";
+    private BlockState blockState = Blocks.DIRT.defaultBlockState();
     private boolean init = true;
     public long startLife;
     public long endLife;
     public float scale;
     public float rotAngle;
+    @Nullable
+    public CompoundTag blockData;
 
     public EntityBubble(EntityType<? extends EntityBubble> type, Level world) {
         super(type, world);
+        if (world.isClientSide()) {
+            System.out.println("Clientside, WRONG constructor"); // <---- Only this is being called.
+        } else {
+            System.out.println("Serverside, WRONG constructor");
+        }
+
+    }
+
+    public EntityBubble(EntityType<? extends EntityBubble> type, Level world, Vec3 pos, float pSize, int pLifetime, BlockState bs) {
+        super(type, world);
+        if (world.isClientSide()) {
+            System.out.println("Clientside, right constructor!");
+        } else {
+            System.out.println("Serverside, right constructor!"); // <---- Only this is being called.
+        }
+
+        startprep(world);
+
+        this.setPos(pos);
+        blockState = bs;
+        System.out.println(blockState);
+    }
+
+    public void startprep(Level world) {
         startLife = world.getGameTime();
         endLife = startLife + 60;
         scale = .4f;
         rotAngle = (float)Math.random()*360;
     }
 
-    public EntityBubble(EntityType<? extends EntityBubble> type, Level world, Vec3 pos ) {
-        this(type, world);
-        this.setPos(pos);
+    public static EntityBubble spawn(Level pLevel, Vec3 pPos, BlockState pBlockState) {
+        EntityBubble bubble = new EntityBubble(ModEntityTypes.BUBBLE.get(), pLevel, pPos, 0, 0, Blocks.ACACIA_FENCE.defaultBlockState());
+        pLevel.addFreshEntity(bubble);
+        return bubble;
     }
 
-    public EntityBubble(EntityType<? extends EntityBubble> type, Level world, float pSize, int pLifetime) {
-        super(type, world);
+    public void setBlockState(BlockState bs) {
+        blockState = bs;
     }
 
-    public void initForRender() {
-      // this is EXTREMELY UGLY. I'm pretty sure this should be illegal tbh.
-        if (init) {
-            this.setYRot(rotAngle);
-            BlockPos pos = this.getOnPos();
-            Block thisBlock = this.level.getBlockState(pos).getBlock();
+    public BlockState getBlockState() {
+        return blockState;
+    }
 
-            if (thisBlock instanceof QuicksandInterface) {
-                texture = ((QuicksandInterface)thisBlock).getTex();
-            }
+    protected void addAdditionalSaveData(CompoundTag pCompound) {
+        pCompound.put("BlockState", NbtUtils.writeBlockState(this.blockState));
+    }
 
-            init = false;
-        }
+    protected void readAdditionalSaveData(CompoundTag pCompound) {
+        this.blockState = NbtUtils.readBlockState(this.level.holderLookup(Registries.BLOCK), pCompound.getCompound("BlockState"));
     }
 
     @Override
@@ -88,18 +112,7 @@ public class EntityBubble extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
-
-    }
+    protected void defineSynchedData() {}
 
     @Override
     public void tick() {
@@ -117,20 +130,9 @@ public class EntityBubble extends Entity {
         super.kill();
     }
 
-    public ResourceLocation getTexture() {
-        return new ResourceLocation(texture);
-    }
-
-
     protected void spawnParticles() {
-        int i = Mth.floor(this.getX());
-        int j = Mth.floor(this.getY() - (double)0.2F);
-        int k = Mth.floor(this.getZ());
-        BlockPos blockpos = new BlockPos(i, j, k);
-        BlockState blockstate = this.level.getBlockState(blockpos);
-        System.out.println(blockstate.getBlock());
-        for (i=0; i<3; i++) {
-            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate).setPos(blockpos), this.getX(), this.getY() + .6D, this.getZ(), (Math.random() - .5) * 2.0D, .25D, (Math.random() - .5) * 2.0D);
+        for (int i=0; i<3; i++) {
+            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockState).setPos(this.getOnPos()), this.getX(), this.getY()+.5f, this.getZ(), (Math.random() - .5) * 2.0D, .25D, (Math.random() - .5) * 2.0D);
         }
     }
 

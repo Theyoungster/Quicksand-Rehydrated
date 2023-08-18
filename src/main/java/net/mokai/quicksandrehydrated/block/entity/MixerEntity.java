@@ -1,6 +1,6 @@
 package net.mokai.quicksandrehydrated.block.entity;
 
-import net.mokai.quicksandrehydrated.block.custom.MixerBlock;
+import net.mokai.quicksandrehydrated.block.MixerBlock;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
 import net.mokai.quicksandrehydrated.networking.packet.FluidSyncS2CPacket;
 import net.mokai.quicksandrehydrated.networking.packet.ItemStackSyncS2CPacket;
@@ -217,7 +217,7 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
         nbt.putInt("mixing_progress", this.progress);
-        //TODO: figure out how to store multiple tanks in JSON.
+        // TODO: figure out how to store multiple tanks in JSON.
         // This would be too easy, but using it multiple times overrides previous uses.
         // nbt = FLUID_TANK.writeToNBT(nbt);
         // You also cannot seem to grab a FluidStack from a string.

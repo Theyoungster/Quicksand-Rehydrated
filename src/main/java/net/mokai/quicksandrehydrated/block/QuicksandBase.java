@@ -7,9 +7,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
@@ -29,7 +31,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     public QuicksandBase(Properties pProperties) {
         super(pProperties);
     }
-    private Random rng = new Random();
+    private final Random rng = new Random();
 
 
     // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
@@ -40,7 +42,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     public double getStruggleSensitivity() {return .01d;} //.05 is very sensitive, .2 is moderately sensitive, and .8+ is very un-sensitive.
 
-    public boolean getBubbling() { return true; } // Does this substance bubble when you sink?
+    public double getBubblingChance() { return .75d; } // Does this substance bubble when you sink?
 
     public double[] getSink() { return new double[]{.1d, .08d, .05d, .0d, .1d}; } // Sinking speed. Lower is slower.
     public double[] walkSpeed() { return new double[]{1d, .5d, .25d, .125d, 0d}; } // Horizontal movement speed (ignoring Gravity)
@@ -91,6 +93,8 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     @Override
     public void entityInside(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
 
+        if (pEntity instanceof EntityBubble) {return;}
+
         //if (pEntity instanceof ItemEntity) { pEntity.makeStuckInBlock(pState, new Vec3(.1, .02, .1)); return; }  /// This is an ugly hack; items are jittering in quicksand, but skipping all of the code works fine.
 
         double depth = getDepth(pLevel, pPos, pEntity);
@@ -116,11 +120,11 @@ public class QuicksandBase extends Block implements QuicksandInterface {
                 { walk = Math.max(walk, .0625); }// ... Cap the speed reduction.
             else {
                 // Bubble code!
-                if(getBubbling()) {
-                    if (Math.random() > .75) { // Obvs we need to get more robust than this.
+                if(getBubblingChance()>0) {
+                    if (Math.random() > getBubblingChance()) {
                         Vec3 pos = new Vec3(pEntity.getX() + Math.random(), pPos.getY() + .5, pEntity.getZ() + Math.random());
                         BlockPos np = new BlockPos(pos);
-                        spawnBubble(pLevel.getBlockState(np), pLevel, pos, np);
+                        spawnBubble(pLevel.getBlockState(np), pLevel, pos, np, this.defaultBlockState());
                     }
                 }
                 // End bubble code
@@ -176,7 +180,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     }
 
-    public void spawnBubble(BlockState pState, Level pLevel, Vec3 pos, BlockPos pPos) {
+    public void spawnBubble(BlockState pState, Level pLevel, Vec3 pos, BlockPos pPos, BlockState bs) {
         BlockState upOne = pLevel.getBlockState(pPos.above());
         if (checkDrownable(pState) && !checkDrownable(upOne)) {
             double offset = 0d;
@@ -185,18 +189,19 @@ public class QuicksandBase extends Block implements QuicksandInterface {
                 offset = ((QuicksandInterface)gb).getOffset();
             }
             pos = pos.add( new Vec3(0, -offset, 0) );
-            EntityBubble newBubble = getBubble(pLevel, pos);
-            pLevel.addFreshEntity(newBubble);
+            spawnBubble(pLevel, pos);
         }
     }
 
-    public EntityBubble getBubble(Level pLevel, Vec3 pos) {
-        return new EntityBubble(ModEntityTypes.BUBBLE.get(), pLevel, pos);
+    public void spawnBubble(Level pLevel, Vec3 pos) {
+        if (!pLevel.isClientSide()) {
+            EntityBubble.spawn(pLevel, pos, Blocks.COAL_BLOCK.defaultBlockState());
+        }
     }
 
+
+
     public boolean checkDrownable(BlockState pState) {
-        System.out.println(pState.getBlock().getName() + ", " +  pState.getTags().toList());
-        System.out.println(pState.getBlock().getName() + ", " +  pState.getFluidState().getTags().toList());
         return pState.getTags().toList().contains(QUICKSAND_DROWNABLE) || pState.getFluidState().getTags().toList().contains(QUICKSAND_DROWNABLE_FLUID);
     }
 

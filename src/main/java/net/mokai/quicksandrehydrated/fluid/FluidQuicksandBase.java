@@ -57,12 +57,12 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
 
     public double getStruggleSensitivity() {return .01d;} //.05 is very sensitive, .2 is moderately sensitive, and .8+ is very un-sensitive.
 
-    public boolean getBubbling() { return true; } // Does this substance bubble when you sink?
+    public double getBubblingChance() { return .75d; } // Does this substance bubble when you sink?
 
     public double[] getSink() { return new double[]{.1d, .08d, .05d, .0d, .1d}; } // Sinking speed. Lower is slower.
     public double[] walkSpeed() { return new double[]{1d, .5d, .25d, .125d, 0d}; } // Horizontal movement speed (ignoring Gravity)
     public double[] gravity() { return new double[] {0d, 0d, .1d, .2d, .3d}; } // Gravity pulls you towards the center of a given mess block- potentially away from any ledges one could climb up on.
-    public int[] jumpPercentage() { return new int[]{30, 20, 0, 0, 0}; } // Chance per tick to be able to jump.
+    public int[] jumpPercentage() { return new int[]{0, 0, 0, 0, 0}; } // Chance per tick to be able to jump.
 
     public double getCustomDeathMessageOdds() { return .25; }
 
@@ -132,8 +132,8 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
             { walk = Math.max(walk, .0625); }// ... Cap the speed reduction.
             else {
                 // Bubble code!
-                if(getBubbling()) {
-                    if (Math.random() > .95) { // Obvs we need to get more robust than this.
+                if(getBubblingChance()>0) {
+                    if (Math.random() > getBubblingChance()) {
                         Vec3 pos = new Vec3(pEntity.getX() + Math.random(), pPos.getY() + .5, pEntity.getZ() + Math.random());
                         BlockPos np = new BlockPos(pos);
                         spawnBubble(pLevel.getBlockState(np), pLevel, pos, np);
@@ -212,7 +212,7 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
     }
 
     public EntityBubble getBubble(Level pLevel, Vec3 pos) {
-        return new EntityBubble(ModEntityTypes.BUBBLE.get(), pLevel, pos);
+        return new EntityBubble(ModEntityTypes.BUBBLE.get(), pLevel, pos,0, 0, this.defaultBlockState());
     }
 
     public boolean checkDrownable(BlockState pState) {

@@ -6,7 +6,8 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.mokai.quicksandrehydrated.fluid.quicksands.DryQuicksandHolder;
+import net.mokai.quicksandrehydrated.fluid.dryQuicksand.DryQuicksandHolder;
+
 
 public class ModFluids {
 

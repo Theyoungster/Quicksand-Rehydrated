@@ -1,7 +1,7 @@
 package net.mokai.quicksandrehydrated.registry;
 
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
-import net.mokai.quicksandrehydrated.block.custom.*;
+import net.mokai.quicksandrehydrated.block.MixerBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
@@ -13,7 +13,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mokai.quicksandrehydrated.block.quicksands.*;
 
-import java.util.Iterator;
 import java.util.function.Supplier;
 
 public class ModBlocks {

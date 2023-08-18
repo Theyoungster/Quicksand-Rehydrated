@@ -4,6 +4,9 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mokai.quicksandrehydrated.registry.*;
 import net.mokai.quicksandrehydrated.item.ModCreativeModeTab;
@@ -32,7 +35,7 @@ public class QuicksandRehydrated {
     public static final String MOD_ID = "qsrehydrated";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    // Very Important Comment
+
     public QuicksandRehydrated() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -56,13 +59,15 @@ public class QuicksandRehydrated {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
-        event.enqueueWork(() -> {
-/*            SpawnPlacements.register(ModEntityTypes.CHOMPER.get(),
+/*         event.enqueueWork(() -> {
+           SpawnPlacements.register(ModEntityTypes.CHOMPER.get(),
                     SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                     Monster::checkMonsterSpawnRules);
-*/
+
             ModMessages.register();
-        });
+       });
+*/
+        event.enqueueWork(ModMessages::register);
     }
 
     private void addCreative(CreativeModeTabEvent.BuildContents event) {
