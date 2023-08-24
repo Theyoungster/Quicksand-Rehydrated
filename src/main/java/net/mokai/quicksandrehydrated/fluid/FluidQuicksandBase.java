@@ -14,15 +14,22 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.mokai.quicksandrehydrated.block.QuicksandBase;
 import net.mokai.quicksandrehydrated.block.QuicksandInterface;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
@@ -42,11 +49,51 @@ import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNA
 
 public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterface {
 
+
+    // ----- THESE ARE ONLY FOR THIS CLASS, AND NOT THE SOLID QUICKSAND. ----- //
     public FluidQuicksandBase(Supplier<? extends FlowingFluid> pFluid, Properties pProperties) {
         super(pFluid, pProperties);
     }
 
     private Random rng = new Random();
+
+
+
+    public static class Flowing extends ForgeFlowingFluid.Flowing {
+
+        public Flowing(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        public int getSlopeFindDistance(LevelReader worldIn) {
+            return 1;
+        }
+
+        @Override
+        public int getDropOff(LevelReader worldIn) {
+            return 7;
+        }
+    }
+
+    public static class Source extends ForgeFlowingFluid.Source {
+
+        public Source(Properties properties) { super(properties); }
+
+        @Override
+        public int getSlopeFindDistance(LevelReader worldIn) {
+            return 1;
+        }
+
+        @Override
+        public int getDropOff(LevelReader worldIn) {
+            return 7;
+        }
+
+    }
+
+
+
 
 
     // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
@@ -107,9 +154,8 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
     @SuppressWarnings("deprecation")
     @Override
     public void entityInside(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
-
         //if (pEntity instanceof ItemEntity) { pEntity.makeStuckInBlock(pState, new Vec3(.1, .02, .1)); return; }  /// This is an ugly hack; items are jittering in quicksand, but skipping all of the code works fine.
-
+        //super.updateShape();
         double depth = getDepth(pLevel, pPos, pEntity);
 
         double mod = 1;

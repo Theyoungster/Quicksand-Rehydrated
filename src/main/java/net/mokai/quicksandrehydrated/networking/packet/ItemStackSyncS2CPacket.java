@@ -1,6 +1,6 @@
 package net.mokai.quicksandrehydrated.networking.packet;
 
-import net.mokai.quicksandrehydrated.block.entity.MixerEntity;
+import net.mokai.quicksandrehydrated.block.entity.MixerBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -45,7 +45,7 @@ public class ItemStackSyncS2CPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof MixerEntity blockEntity) {
+            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof MixerBlockEntity blockEntity) {
                 blockEntity.setHandler(this.itemStackHandler);
             }
         });

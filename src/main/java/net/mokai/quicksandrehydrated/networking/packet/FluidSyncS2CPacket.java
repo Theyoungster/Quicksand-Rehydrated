@@ -1,6 +1,6 @@
 package net.mokai.quicksandrehydrated.networking.packet;
 
-import net.mokai.quicksandrehydrated.block.entity.MixerEntity;
+import net.mokai.quicksandrehydrated.block.entity.MixerBlockEntity;
 import net.mokai.quicksandrehydrated.screen.MixerMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,7 @@ public class FluidSyncS2CPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof MixerEntity blockEntity) {
+            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof MixerBlockEntity blockEntity) {
                 blockEntity.setInFluid(this.fluidStack);
 
                 if(Minecraft.getInstance().player.containerMenu instanceof MixerMenu menu &&

@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
-public class MixerEntity extends BlockEntity implements MenuProvider {
+public class MixerBlockEntity extends BlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler = new ItemStackHandler(4) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -128,14 +128,14 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
     private int progress = 0;
     private int maxProgress = 78;
 
-    public MixerEntity(BlockPos pos, BlockState state) {
+    public MixerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MIXER.get(), pos, state);
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
-                    case 0 -> MixerEntity.this.progress;
-                    case 1 -> MixerEntity.this.maxProgress;
+                    case 0 -> MixerBlockEntity.this.progress;
+                    case 1 -> MixerBlockEntity.this.maxProgress;
                     default -> 0;
                 };
             }
@@ -143,8 +143,8 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
             @Override
             public void set(int index, int value) {
                 switch (index) {
-                    case 0 -> MixerEntity.this.progress = value;
-                    case 1 -> MixerEntity.this.maxProgress = value;
+                    case 0 -> MixerBlockEntity.this.progress = value;
+                    case 1 -> MixerBlockEntity.this.maxProgress = value;
                 }
             }
 
@@ -264,7 +264,7 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, MixerEntity pEntity) {
+    public static void tick(Level level, BlockPos pos, BlockState state, MixerBlockEntity pEntity) {
         if(level.isClientSide()) {
             return;
         }
@@ -287,7 +287,7 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    private static void transferItemFluidToFluidTank(MixerEntity pEntity) {
+    private static void transferItemFluidToFluidTank(MixerBlockEntity pEntity) {
         pEntity.itemHandler.getStackInSlot(0).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(handler -> {
             int drainAmount = Math.min(pEntity.FLUID_TANK.getSpace(), 1000);
 
@@ -299,14 +299,14 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
         });
     }
 
-    private static void fillTankWithFluid(MixerEntity pEntity, FluidStack stack, ItemStack container) {
+    private static void fillTankWithFluid(MixerBlockEntity pEntity, FluidStack stack, ItemStack container) {
         pEntity.FLUID_TANK.fill(stack, IFluidHandler.FluidAction.EXECUTE);
         //pEntity.OUTPUT_TANK.fill(stack, IFluidHandler.FluidAction.EXECUTE);
         pEntity.itemHandler.extractItem(0, 1, false);
         pEntity.itemHandler.insertItem(0, container, false);
     }
 
-    private static boolean hasFluidItemInSourceSlot(MixerEntity pEntity) {
+    private static boolean hasFluidItemInSourceSlot(MixerBlockEntity pEntity) {
         return pEntity.itemHandler.getStackInSlot(0).getCount() > 0;
     }
 
@@ -315,7 +315,7 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
         this.progress = 0;
     }
 
-    private static void craftItem(MixerEntity pEntity) {
+    private static void craftItem(MixerBlockEntity pEntity) {
         Level level = pEntity.level;
         SimpleContainer inventory = new SimpleContainer(pEntity.itemHandler.getSlots());
         for (int i = 0; i < pEntity.itemHandler.getSlots(); i++) {
@@ -335,7 +335,7 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    private static boolean hasRecipe(MixerEntity entity) {
+    private static boolean hasRecipe(MixerBlockEntity entity) {
         Level level = entity.level;
         SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
         for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
@@ -352,11 +352,11 @@ public class MixerEntity extends BlockEntity implements MenuProvider {
     }
 
 
-    private static boolean hasCorrectFluidAmountInTank(MixerEntity entity, Optional<FluidMixerRecipes> recipe) {
+    private static boolean hasCorrectFluidAmountInTank(MixerBlockEntity entity, Optional<FluidMixerRecipes> recipe) {
         return entity.FLUID_TANK.getFluidAmount() >= recipe.get().getFluid().getAmount();
     }
 
-    private static boolean hasCorrectFluidInTank(MixerEntity entity, Optional<FluidMixerRecipes> recipe) {
+    private static boolean hasCorrectFluidInTank(MixerBlockEntity entity, Optional<FluidMixerRecipes> recipe) {
         return recipe.get().getFluid().equals(entity.FLUID_TANK.getFluid());
     }
 

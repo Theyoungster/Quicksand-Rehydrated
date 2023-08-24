@@ -1,26 +1,6 @@
-package net.mokai.quicksandrehydrated.fluid.dryQuicksand;
+package net.mokai.quicksandrehydrated.fluid.quicksands;
 
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.fluids.DispenseFluidContainer;
-import net.minecraftforge.fluids.FluidType;
-import org.apache.commons.lang3.Validate;
-
-import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,24 +9,40 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fluids.DispenseFluidContainer;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import net.mokai.quicksandrehydrated.block.QuicksandInterface;
+import net.mokai.quicksandrehydrated.fluid.FluidQuicksandBase;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
-
 import java.util.function.Consumer;
-
-import net.mokai.quicksandrehydrated.fluid.dryQuicksand.DryQuicksandBlock;
 
 import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
 
 
-public class DryQuicksandHolder {
+public class DryQuicksand {
 
     private static final String name = "dry_quicksand";
     private static final ResourceLocation FLUID_STILL = new ResourceLocation("qsrehydrated:block/fluid/" + name + "_still");
     private static final ResourceLocation FLUID_FLOWING = new ResourceLocation("qsrehydrated:block/fluid/" + name + "_flowing");
 
-    public static final ResourceLocation FLUID_OVERLAY = new ResourceLocation("minecraft:block/obsidian");
+    public static final ResourceLocation FLUID_OVERLAY = new ResourceLocation("minecraft:block/sand");
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
@@ -59,7 +55,7 @@ public class DryQuicksandHolder {
                 .bucket(dry_quicksand_bucket).block(dry_quicksand_block).levelDecreasePerBlock(5).slopeFindDistance(0);
     }
 
-    public static RegistryObject<FluidType> dry_quicksand_type = FLUID_TYPES.register("dry_quicksand", () -> new FluidType(FluidType.Properties.create())
+    public static RegistryObject<FluidType> dry_quicksand_type = FLUID_TYPES.register(name, () -> new FluidType(FluidType.Properties.create())
     {
         @Override
         public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
@@ -89,22 +85,22 @@ public class DryQuicksandHolder {
         }
     });
 
-    public static RegistryObject<FlowingFluid> dry_quicksand = FLUIDS.register("dry_quicksand", () ->
+    public static RegistryObject<FlowingFluid> dry_quicksand = FLUIDS.register(name, () ->
             new ForgeFlowingFluid.Source(makeProperties())
     );
-    public static RegistryObject<FlowingFluid> dry_quicksand_flowing = FLUIDS.register("dry_quicksand_flowing", () ->
+    public static RegistryObject<FlowingFluid> dry_quicksand_flowing = FLUIDS.register(name + "_flowing", () ->
             new ForgeFlowingFluid.Flowing(makeProperties())
     );
 
-    public static RegistryObject<LiquidBlock> dry_quicksand_block = BLOCKS.register("dry_quicksand_block", () ->
-            new DryQuicksandBlock(dry_quicksand, Properties.of(Material.AIR).noCollission().strength(100.0F).noLootTable())
+    public static RegistryObject<LiquidBlock> dry_quicksand_block = BLOCKS.register(name + "_block", () ->
+            new ThisFluid(dry_quicksand, Properties.of(Material.AIR).noCollission().strength(100.0F).noLootTable())
     );
-    public static RegistryObject<Item> dry_quicksand_bucket = ITEMS.register("dry_quicksand_bucket", () ->
+    public static RegistryObject<Item> dry_quicksand_bucket = ITEMS.register(name + "_bucket", () ->
             new BucketItem(dry_quicksand, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1))
     );
 
 
-    public DryQuicksandHolder()
+    public DryQuicksand()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -126,6 +122,29 @@ public class DryQuicksandHolder {
         Validate.isTrue(stack.getItem() == Fluids.WATER.getBucket());
         event.enqueueWork(() -> DispenserBlock.registerBehavior(dry_quicksand_bucket.get(), DispenseFluidContainer.getInstance()));
     }
+
+
+
+
+
+
+    private static class ThisFluid extends FluidQuicksandBase implements QuicksandInterface {
+
+        public ThisFluid(java.util.function.Supplier<? extends FlowingFluid> supplier, Properties props) {
+            super(supplier, props);
+        }
+
+        public double getOffset() {
+            return 0d; // This value is subtracted from depth for substances that aren't full blocks.
+        }
+
+        @Override
+        public double getBubblingChance() {
+            return .75d;
+        }
+
+    }
+
 
 
 }

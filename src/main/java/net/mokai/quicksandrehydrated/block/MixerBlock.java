@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.fluids.capability.ItemFluidContainer;
-import net.mokai.quicksandrehydrated.block.entity.MixerEntity;
+import net.mokai.quicksandrehydrated.block.entity.MixerBlockEntity;
 import net.mokai.quicksandrehydrated.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -74,8 +74,8 @@ public class MixerBlock extends BaseEntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof MixerEntity) {
-                ((MixerEntity) blockEntity).drops();
+            if (blockEntity instanceof MixerBlockEntity) {
+                ((MixerBlockEntity) blockEntity).drops();
             }
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
@@ -87,7 +87,7 @@ public class MixerBlock extends BaseEntityBlock {
                                  Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if(entity instanceof MixerEntity) {
+            if(entity instanceof MixerBlockEntity) {
                 ItemStack bukkit = pPlayer.getItemInHand(pHand);
                 if (bukkit.getItem() instanceof ItemFluidContainer) {
                     //if (bukkit.getFluid()== Fluids.WATER) {
@@ -96,7 +96,7 @@ public class MixerBlock extends BaseEntityBlock {
                         pPlayer.setItemInHand(pHand, newitem);
                    // }
                 } else {
-                    NetworkHooks.openScreen(((ServerPlayer) pPlayer), (MixerEntity) entity, pPos);
+                    NetworkHooks.openScreen(((ServerPlayer) pPlayer), (MixerBlockEntity) entity, pPos);
                 }
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
@@ -109,7 +109,7 @@ public class MixerBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new MixerEntity(pos, state);
+        return new MixerBlockEntity(pos, state);
     }
 
     @Nullable
@@ -117,6 +117,6 @@ public class MixerBlock extends BaseEntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
                                                                   BlockEntityType<T> type) {
         return createTickerHelper(type, ModBlockEntities.MIXER.get(),
-                MixerEntity::tick);
+                MixerBlockEntity::tick);
     }
 }

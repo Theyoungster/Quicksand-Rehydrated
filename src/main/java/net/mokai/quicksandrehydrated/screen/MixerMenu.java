@@ -1,7 +1,7 @@
 package net.mokai.quicksandrehydrated.screen;
 
 import net.mokai.quicksandrehydrated.registry.ModBlocks;
-import net.mokai.quicksandrehydrated.block.entity.MixerEntity;
+import net.mokai.quicksandrehydrated.block.entity.MixerBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class MixerMenu extends AbstractContainerMenu {
-    public final MixerEntity blockEntity;
+    public final MixerBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
     private FluidStack fluidStack;
@@ -26,7 +26,7 @@ public class MixerMenu extends AbstractContainerMenu {
     public MixerMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.MIXER_MENU.get(), id);
         checkContainerSize(inv, 4);
-        blockEntity = (MixerEntity) entity;
+        blockEntity = (MixerBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
         this.fluidStack = blockEntity.getInFluidStack();
@@ -59,7 +59,7 @@ public class MixerMenu extends AbstractContainerMenu {
         return fluidStack;
     }
 
-    public MixerEntity getBlockEntity() {
+    public MixerBlockEntity getBlockEntity() {
         return this.blockEntity;
     }
 
