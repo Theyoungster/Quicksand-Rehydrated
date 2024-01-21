@@ -3,5 +3,6 @@ A revival of the More Fun Quicksand Mod, bringing its messes, mobs and items up 
 
 Plans include bringing back (almost) all of the previous quicksand types, mobs, and flesh pits and fauna, along with new plants, potentially more slimes, and better mechanics for all of the above. Plus, an alternate Candy dimension with actual rewards!
 
-
 This mod is currently in VERY early alpha, VERY heavily WIP.
+
+This is Blossom's fork of the mod. working on things like custom liquid quicksand layers, and a struggling keybind.
