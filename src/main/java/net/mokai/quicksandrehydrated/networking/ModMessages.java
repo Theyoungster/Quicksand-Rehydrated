@@ -44,6 +44,19 @@ public class ModMessages {
                 .encoder(ItemStackSyncS2CPacket::toBytes)
                 .consumerMainThread(ItemStackSyncS2CPacket::handle)
                 .add();
+
+        net.messageBuilder(StruggleAttemptC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(StruggleAttemptC2SPacket::new)
+                .encoder(StruggleAttemptC2SPacket::toBytes)
+                .consumerMainThread(StruggleAttemptC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(StruggleResultS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(StruggleResultS2CPacket::new)
+                .encoder(StruggleResultS2CPacket::toBytes)
+                .consumerMainThread(StruggleResultS2CPacket::handle)
+                .add();
+
     }
 
     public static <MSG> void sendToServer(MSG message) {

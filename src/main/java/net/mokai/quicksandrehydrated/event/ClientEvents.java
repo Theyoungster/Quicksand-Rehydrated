@@ -1,17 +1,32 @@
 package net.mokai.quicksandrehydrated.event;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.mokai.quicksandrehydrated.client.render.BubbleRenderer;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
+import net.mokai.quicksandrehydrated.networking.ModMessages;
+import net.mokai.quicksandrehydrated.networking.packet.StruggleAttemptC2SPacket;
 import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
+import net.mokai.quicksandrehydrated.util.Keybinding;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = QuicksandRehydrated.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
+        @SubscribeEvent
+        public static void onKeyInput(InputEvent.Key event) {
+            if (Keybinding.STRUGGLE_KEY.consumeClick()) {
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal("Struggle Key"));
+                ModMessages.sendToServer(new StruggleAttemptC2SPacket());
+            }
+        }
+
     }
 
     @Mod.EventBusSubscriber(modid = QuicksandRehydrated.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -19,6 +34,11 @@ public class ClientEvents {
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
             //event.registerEntityRenderer(ModEntityTypes.BUBBLE.get(), BubbleRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+            event.register(Keybinding.STRUGGLE_KEY);
         }
 
     }

@@ -115,7 +115,10 @@ public class QuicksandBase extends Block implements QuicksandInterface {
             boolean canJump = getJump(depth, pLevel);
             double sink = getSink(depth);
             double walk = getWalk(depth);
-            if (canJump) { pEntity.setOnGround(true); } // Semi-randomly set the player on 'land'. Above depth .6, this means the player can step back onto land.
+
+            //if (canJump) { pEntity.setOnGround(true); } // Semi-randomly set the player on 'land'. Above depth .6, this means the player can step back onto land.
+            // TODO - make QuicksandBase functions that determine struggling
+
             if(pPos.getX() != pEntity.getBlockX() || pPos.getZ() != pEntity.getBlockZ()) // If the player is NOT fully inside this Quicksand block...
                 { walk = Math.max(walk, .0625); }// ... Cap the speed reduction.
             else {
