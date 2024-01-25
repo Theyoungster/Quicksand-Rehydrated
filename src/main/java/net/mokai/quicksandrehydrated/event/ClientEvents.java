@@ -11,6 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.mokai.quicksandrehydrated.client.render.BubbleRenderer;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
+import net.mokai.quicksandrehydrated.mixins.playerStruggling;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
 import net.mokai.quicksandrehydrated.networking.packet.StruggleAttemptC2SPacket;
 import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
@@ -22,8 +23,8 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if (Keybinding.STRUGGLE_KEY.consumeClick()) {
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("Struggle Key"));
-                ModMessages.sendToServer(new StruggleAttemptC2SPacket());
+                // cast to playerStruggling interface
+                ((playerStruggling)Minecraft.getInstance().player).attemptStruggle();
             }
         }
 
