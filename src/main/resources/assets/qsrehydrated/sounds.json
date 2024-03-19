@@ -1,0 +1,10 @@
+{
+  "music_disc_flight": {
+    "sounds": [
+      {
+        "name": "qsrehydrated:music_disc_flight",
+        "stream": true
+      }
+    ]
+  }
+}

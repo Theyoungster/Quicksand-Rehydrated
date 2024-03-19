@@ -1,5 +1,16 @@
 {
   "variants": {
-    "": { "model": "qsrehydrated:block/soft_quicksand" }
+    "level=1": {
+      "model": "qsrehydrated:block/layers/flowing_1"
+    },
+    "level=2": {
+      "model": "qsrehydrated:block/layers/flowing_2"
+    },
+    "level=3": {
+      "model": "qsrehydrated:block/layers/flowing_3"
+    },
+    "level=4": {
+      "model": "qsrehydrated:block/layers/flowing_4"
+    }
   }
 }

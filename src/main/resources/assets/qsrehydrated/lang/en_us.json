@@ -59,7 +59,7 @@
   "block.qsrehydrated.mixer": "Fluid Mixer",
 
 
-  "item.qsrehydrated.cranberry": "Cranberries",
+  "item.qsrehydrated.cranberries": "Cranberries",
   "item.qsrehydrated.larva_food": "Larva",
   "item.qsrehydrated.cooked_larva_food": "Cooked Larva",
 
@@ -68,7 +68,8 @@
   "item.qsrehydrated.long_stick": "Walking Stick",
   "item.qsrehydrated.rope": "Rope",
 
-
+  "item.qsrehydrated.music_disc_flight": "Music Disc",
+  "item.qsrehydrated.music_disc_flight.desc": "Rimsky-Korsakov - Flight of the Bumblebee",
 
 
 

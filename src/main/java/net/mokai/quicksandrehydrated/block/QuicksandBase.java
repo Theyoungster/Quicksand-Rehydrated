@@ -5,17 +5,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
-import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +24,7 @@ import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNA
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
 
-public class QuicksandBase extends Block implements QuicksandInterface {
+public class QuicksandBase extends FallingBlock implements QuicksandInterface {
 
     public QuicksandBase(Properties pProperties) {
         super(pProperties);
@@ -38,7 +36,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     public String getTex() {return "qsrehydrated:textures/block/quicksand.png";}
 
-    public double getOffset() { return 0d; } // This value is subtracted from depth for substances that aren't full blocks.
+    public double getOffset(BlockState blockstate) { return 0d; } // This value is subtracted from depth for substances that aren't full blocks.
 
     public double getStruggleSensitivity() {return .01d;} //.05 is very sensitive, .2 is moderately sensitive, and .8+ is very un-sensitive.
 
@@ -55,12 +53,9 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         pEntity.hurt(new DamageSource(MOD_ID + "_quicksand"), 2);
     }
 
-
-
+    // 
 
     // ----- OKAY YOU CAN STOP OVERRIDING AND MODIFYING VALUES NOW ----- //
-
-
 
     public int toInt(double y) {
         if (y < .375) {
@@ -76,7 +71,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         }
     }
 
-    public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) { return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset()); }
+    public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) { return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(null)); }
 
     public double getSink(double depth) { return getSink()[toInt(depth)] ; }
     public double getWalk(double depth) { return walkSpeed()[toInt(depth)]; }
@@ -186,7 +181,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
             double offset = 0d;
             Block gb = pState.getBlock();
             if (gb instanceof QuicksandInterface) {
-                offset = ((QuicksandInterface)gb).getOffset();
+                offset = ((QuicksandInterface)gb).getOffset(pState);
             }
             pos = pos.add( new Vec3(0, -offset, 0) );
             spawnBubble(pLevel, pos);

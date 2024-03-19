@@ -1,34 +1,19 @@
 package net.mokai.quicksandrehydrated.fluid;
 
-import com.mojang.blaze3d.shaders.FogShape;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Camera;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.mokai.quicksandrehydrated.block.QuicksandBase;
 import net.mokai.quicksandrehydrated.block.QuicksandInterface;
@@ -36,11 +21,8 @@ import net.mokai.quicksandrehydrated.entity.EntityBubble;
 import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.util.Random;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
@@ -49,14 +31,10 @@ import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNA
 
 public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterface {
 
+    public FluidQuicksandBase(Supplier<? extends FlowingFluid> pFluid, Properties pProperties) {super(pFluid, pProperties);}
+    private final Random rng = new Random();
 
     // ----- THESE ARE ONLY FOR THIS CLASS, AND NOT THE SOLID QUICKSAND. ----- //
-    public FluidQuicksandBase(Supplier<? extends FlowingFluid> pFluid, Properties pProperties) {
-        super(pFluid, pProperties);
-    }
-
-    private Random rng = new Random();
-
 
 
     public static class Flowing extends ForgeFlowingFluid.Flowing {
@@ -92,24 +70,23 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
 
     }
 
-
-
-
-
     // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
+    //
+    //
+    //
+    //
+    //
 
-    public String getTex() {return "qsrehydrated:textures/block/dry_quicksand_still.png";}
-
-    public double getOffset() { return 0d; } // This value is subtracted from depth for substances that aren't full blocks.
-
+    public double getOffset(BlockState blockState) { return .875d; } // This value is subtracted from depth for substances that aren't full blocks.
+        // This may be re-implemented for fluids, depending on height changes.
     public double getStruggleSensitivity() {return .01d;} //.05 is very sensitive, .2 is moderately sensitive, and .8+ is very un-sensitive.
 
     public double getBubblingChance() { return .75d; } // Does this substance bubble when you sink?
 
     public double[] getSink() { return new double[]{.1d, .08d, .05d, .0d, .1d}; } // Sinking speed. Lower is slower.
-    public double[] walkSpeed() { return new double[]{1d, .5d, .25d, .125d, 0d}; } // Horizontal movement speed (ignoring Gravity)
-    public double[] gravity() { return new double[] {0d, 0d, .1d, .2d, .3d}; } // Gravity pulls you towards the center of a given mess block- potentially away from any ledges one could climb up on.
-    public int[] jumpPercentage() { return new int[]{0, 0, 0, 0, 0}; } // Chance per tick to be able to jump.
+    public double[] walkSpeed() { return new double[]{1d, .5d, .25d, .125d, 0d}; } // Horizontal movement speed (ignoring Gravity). Lower is slower.
+    public double[] gravity() { return new double[] {0d, 0d, .1d, .2d, .3d}; } // Force of pulling towards the center of the mess block.
+    public int[] jumpPercentage() { return new int[]{30, 20, 0, 0, 0}; } // Chance per tick to be able to jump. 50 = 50%
 
     public double getCustomDeathMessageOdds() { return .25; }
 
@@ -117,12 +94,12 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
         pEntity.hurt(new DamageSource(MOD_ID + "_quicksand"), 2);
     }
 
-
-
-
+    //
+    //
+    //
+    //
+    //
     // ----- OKAY YOU CAN STOP OVERRIDING AND MODIFYING VALUES NOW ----- //
-
-
 
     public int toInt(double y) {
         if (y < .375) {
@@ -138,7 +115,7 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
         }
     }
 
-    public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) { return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset()); }
+    public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) { return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(null)); }
 
     public double getSink(double depth) { return getSink()[toInt(depth)] ; }
     public double getWalk(double depth) { return walkSpeed()[toInt(depth)]; }
@@ -188,7 +165,7 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
                 // End bubble code
             }
 
-            if (canJump) { pEntity.setOnGround(true); } // Semi-randomly set the player on 'land'. Above depth .6, this means the player can step back onto land.
+            //if (canJump) { pEntity.setOnGround(true); } // Semi-randomly set the player on 'land'. Above depth .6, this means the player can step back onto land.
 
 
             /**
@@ -207,7 +184,7 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
 
             }
 
-            pEntity.makeStuckInBlock(pState, new Vec3(walk, sink, walk)); /// Lower values are slower.
+            //pEntity.makeStuckInBlock(pState, new Vec3(walk, sink, walk)); /// Lower values are slower.
 
             ////// SINKIN' CODE END
 
@@ -248,7 +225,7 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
             Block gb = pState.getBlock();
             if (gb instanceof QuicksandInterface) {
                 System.out.println("Interface here!");
-                offset = ((QuicksandBase)gb).getOffset();
+                offset = ((QuicksandBase)gb).getOffset(null);
             }
 
             pos = pos.add( new Vec3(0, -offset, 0) );

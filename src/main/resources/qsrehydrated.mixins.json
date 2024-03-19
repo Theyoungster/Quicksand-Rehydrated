@@ -6,7 +6,8 @@
   "mixins":
   [
     "AirControlMixin",
-    "SlowdownMixin"
+    "SlowdownMixin",
+    "FallingBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
