@@ -12,7 +12,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
-import net.mokai.quicksandrehydrated.item.ModCreativeModeTab;
 import net.mokai.quicksandrehydrated.loot.ModLootModifiers;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
 import net.mokai.quicksandrehydrated.registry.*;
@@ -26,7 +25,6 @@ import java.util.Iterator;
 @Mod(QuicksandRehydrated.MOD_ID)
 public class QuicksandRehydrated {
     public static final String MOD_ID = "qsrehydrated";
-    private static final Logger LOGGER = LogUtils.getLogger();
 
 
     public QuicksandRehydrated() {

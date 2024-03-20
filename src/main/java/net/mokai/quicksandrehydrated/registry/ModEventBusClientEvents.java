@@ -12,6 +12,5 @@ public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModModelLayers.HUNNIBEE_LAYER, HunnibeeModel::createBodyLayer);
-        System.out.println(ModModelLayers.HUNNIBEE_LAYER);
     }
 }

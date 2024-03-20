@@ -1,11 +1,7 @@
 package net.mokai.quicksandrehydrated.mixins;
 
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.mokai.quicksandrehydrated.block.quicksands.SoftQuicksand;
-import net.mokai.quicksandrehydrated.registry.ModBlocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +20,7 @@ public abstract class FallingBlockEntityMixin {
     @Inject(method = "tick()V", at = @At("HEAD"))
     public void tick(CallbackInfo ci)
     {
-        System.out.println(this.blockState.getTags().toList());
+        //System.out.println(this.blockState.getTags().toList());
         if (this.blockState.getTags().toList().contains(QUICKSAND_DROWNABLE)) {
             this.cancelDrop = true; // setting cancelDrop will, later in the function, cause the item dropping to be skipped, and the onBrokenAfterFall method will fire instead without dropping an item.
         }
