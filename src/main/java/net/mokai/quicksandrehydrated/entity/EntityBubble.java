@@ -22,7 +22,6 @@ import net.mokai.quicksandrehydrated.util.EasingHandler;
 
 import javax.annotation.Nullable;
 
-
 public class EntityBubble extends Entity {
 
     private BlockState blockState = Blocks.DIRT.defaultBlockState();
@@ -37,9 +36,9 @@ public class EntityBubble extends Entity {
     public EntityBubble(EntityType<? extends EntityBubble> type, Level world) {
         super(type, world);
         if (world.isClientSide()) {
-            System.out.println("Clientside, WRONG constructor"); // <---- Only this is being called.
+            //System.out.println("Clientside, WRONG constructor"); // <---- Only this is being called.
         } else {
-            System.out.println("Serverside, WRONG constructor");
+            //System.out.println("Serverside, WRONG constructor");
         }
 
     }
@@ -47,9 +46,9 @@ public class EntityBubble extends Entity {
     public EntityBubble(EntityType<? extends EntityBubble> type, Level world, Vec3 pos, float pSize, int pLifetime, BlockState bs) {
         super(type, world);
         if (world.isClientSide()) {
-            System.out.println("Clientside, right constructor!");
+            //System.out.println("Clientside, right constructor!");
         } else {
-            System.out.println("Serverside, right constructor!"); // <---- Only this is being called.
+            //System.out.println("Serverside, right constructor!"); // <---- Only this is being called.
         }
 
         startprep(world);

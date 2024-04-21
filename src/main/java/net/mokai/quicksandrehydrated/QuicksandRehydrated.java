@@ -1,6 +1,5 @@
 package net.mokai.quicksandrehydrated;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,7 +16,6 @@ import net.mokai.quicksandrehydrated.networking.ModMessages;
 import net.mokai.quicksandrehydrated.registry.*;
 import net.mokai.quicksandrehydrated.screen.MixerScreen;
 import net.mokai.quicksandrehydrated.screen.ModMenuTypes;
-import org.slf4j.Logger;
 
 import java.util.Iterator;
 
