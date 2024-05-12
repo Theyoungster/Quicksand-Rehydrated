@@ -57,6 +57,18 @@ public class ModMessages {
                 .consumerMainThread(StruggleResultS2CPacket::handle)
                 .add();
 
+        net.messageBuilder(StruggleDownC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(StruggleDownC2SPacket::new)
+                .encoder(StruggleDownC2SPacket::toBytes)
+                .consumerMainThread(StruggleDownC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(StruggleReleaseC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(StruggleReleaseC2SPacket::new)
+                .encoder(StruggleReleaseC2SPacket::toBytes)
+                .consumerMainThread(StruggleReleaseC2SPacket::handle)
+                .add();
+
     }
 
     public static <MSG> void sendToServer(MSG message) {

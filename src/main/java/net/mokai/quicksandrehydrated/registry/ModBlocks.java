@@ -22,6 +22,8 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> QUICKSAND = registerBlock("quicksand", () -> new Quicksand( BlockBehaviour.Properties.copy(Blocks.SAND).noCollission().requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> SOFT_QUICKSAND = registerBlock("soft_quicksand", () -> new SoftQuicksand(BlockBehaviour.Properties.copy(Blocks.SAND).noCollission().requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> LIVING_SLIME = registerBlock("living_slime", () -> new LivingSlime( BlockBehaviour.Properties.copy(Blocks.SLIME_BLOCK).noCollission().requiresCorrectToolForDrops()));
+
 
 
     public static final RegistryObject<Block> MIXER = registerBlock("mixer", () -> new MixerBlock(BlockBehaviour.Properties.of(Material.METAL).strength(6f).requiresCorrectToolForDrops().noOcclusion()));

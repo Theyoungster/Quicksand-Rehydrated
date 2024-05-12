@@ -6,7 +6,8 @@
   "mixins":
   [
     "AirControlMixin",
-    "SlowdownMixin"
+    "SlowdownMixin",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
