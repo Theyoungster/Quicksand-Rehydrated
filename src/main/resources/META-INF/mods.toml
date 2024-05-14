@@ -9,7 +9,7 @@ modLoader="javafml" #mandatory
 loaderVersion="[41,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
-license="MIT License"
+license="QSR \"Don't Be a Jerk\" License"
 # A URL to refer people to when problems occur with this mod
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
@@ -29,7 +29,7 @@ displayName="Quicksand Rehydrated" #mandatory
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="qsicon.png" #optional
 # A text field displayed in the mod UI
-credits="Code by Emblem; Original MFQM textures by MrBlackGoo and Crishnate; new textures by Emblem, K_H" #optional
+credits="Code by Emblem and Blossom; Original MFQM textures by MrBlackGoo and Crishnate; new textures by PoweredByGif, Blossom, Ozzy, Emblem, and K_H." #optional
 # A text field displayed in the mod UI
 authors="Emblem AKA Mokai" #optional
 # Display Test controls the display for your mod in the server connection screen

@@ -9,6 +9,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
 import net.mokai.quicksandrehydrated.particle.QuicksandBubbleParticle;
 
+import net.mokai.quicksandrehydrated.entity.EntityHunnibee;
+
+
 public class ModEvents {
     @Mod.EventBusSubscriber(modid = QuicksandRehydrated.MOD_ID)
     public static class ForgeEvents {
@@ -20,6 +23,7 @@ public class ModEvents {
         @SubscribeEvent
         public static void entityAttributeEvent(EntityAttributeCreationEvent event) {
             //event.put(ModEntityTypes.BUBBLE.get(), EntityBubble.getBubbleAttributes().build());
+            event.put(ModEntityTypes.HUNNIBEE.get(), EntityHunnibee.setAttributes());
 
         }
 

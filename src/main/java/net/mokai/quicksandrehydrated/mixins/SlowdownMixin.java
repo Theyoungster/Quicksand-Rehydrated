@@ -5,7 +5,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -24,6 +23,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+
+import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 
 import static net.minecraft.world.level.block.Blocks.AIR;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
@@ -164,6 +167,17 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
         // It's that easy.
     }
 
+
+    @Shadow protected boolean onGround;
+    @Inject(method = "collide", at = @At("HEAD"))
+    private void collide(Vec3 pVec, CallbackInfoReturnable<Vec3> cir) {
+
+        Entity thisEntity = (Entity)(Object)this;
+        BlockState test = thisEntity.getFeetBlockState();
+        this.onGround = this.onGround || test.getTags().toList().contains(QUICKSAND_DROWNABLE);
+        // Allows for step-up even while falling if your center is inside a Quicksand_Drownable.
+
+    }
 
     @Inject(method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V", at = @At("TAIL"))
     public void emperorsNewMove(MoverType mv, Vec3 spd, final CallbackInfo ci)

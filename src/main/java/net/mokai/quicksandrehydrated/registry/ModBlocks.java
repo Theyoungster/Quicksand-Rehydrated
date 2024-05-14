@@ -1,17 +1,19 @@
 package net.mokai.quicksandrehydrated.registry;
 
-import net.mokai.quicksandrehydrated.QuicksandRehydrated;
-import net.mokai.quicksandrehydrated.block.MixerBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.mokai.quicksandrehydrated.QuicksandRehydrated;
+import net.mokai.quicksandrehydrated.block.*;
 import net.mokai.quicksandrehydrated.block.quicksands.*;
+
 
 import java.util.function.Supplier;
 
@@ -25,6 +27,12 @@ public class ModBlocks {
     public static final RegistryObject<Block> LIVING_SLIME = registerBlock("living_slime", () -> new LivingSlime( BlockBehaviour.Properties.copy(Blocks.SLIME_BLOCK).noCollission().requiresCorrectToolForDrops()));
 
 
+    public static final RegistryObject<Block> SOFT_QUICKSAND = registerBlock("soft_quicksand", () -> new SoftQuicksand(BlockBehaviour.Properties.copy(Blocks.SAND).noCollission().requiresCorrectToolForDrops().noOcclusion()
+            .isViewBlocking((p_187417_, p_187418_, p_187419_) -> { return p_187417_.getValue(FlowingQuicksandBase.LEVEL) >= 4;})));
+
+
+
+    public static final RegistryObject<Block> SOFT_COVER = registerBlock("loose_moss", () -> new GoundCover(BlockBehaviour.Properties.copy(Blocks.MOSS_CARPET)));
 
     public static final RegistryObject<Block> MIXER = registerBlock("mixer", () -> new MixerBlock(BlockBehaviour.Properties.of(Material.METAL).strength(6f).requiresCorrectToolForDrops().noOcclusion()));
 
@@ -42,6 +50,8 @@ public class ModBlocks {
     }
 
     public static void register(IEventBus eventBus) {
+
         BLOCKS.register(eventBus);
+
     }
 }

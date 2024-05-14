@@ -8,6 +8,7 @@
     "AirControlMixin",
     "SlowdownMixin",
     "PlayerMixin"
+    "FallingBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

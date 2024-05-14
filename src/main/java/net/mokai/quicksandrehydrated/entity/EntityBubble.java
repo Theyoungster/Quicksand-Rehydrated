@@ -1,31 +1,26 @@
 package net.mokai.quicksandrehydrated.entity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
-import net.mokai.quicksandrehydrated.block.QuicksandInterface;
 import net.mokai.quicksandrehydrated.registry.ModEntityTypes;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 
 import javax.annotation.Nullable;
-
 
 public class EntityBubble extends Entity {
 
@@ -41,9 +36,9 @@ public class EntityBubble extends Entity {
     public EntityBubble(EntityType<? extends EntityBubble> type, Level world) {
         super(type, world);
         if (world.isClientSide()) {
-            System.out.println("Clientside, WRONG constructor"); // <---- Only this is being called.
+            //System.out.println("Clientside, WRONG constructor"); // <---- Only this is being called.
         } else {
-            System.out.println("Serverside, WRONG constructor");
+            //System.out.println("Serverside, WRONG constructor");
         }
 
     }
@@ -51,16 +46,15 @@ public class EntityBubble extends Entity {
     public EntityBubble(EntityType<? extends EntityBubble> type, Level world, Vec3 pos, float pSize, int pLifetime, BlockState bs) {
         super(type, world);
         if (world.isClientSide()) {
-            System.out.println("Clientside, right constructor!");
+            //System.out.println("Clientside, right constructor!");
         } else {
-            System.out.println("Serverside, right constructor!"); // <---- Only this is being called.
+            //System.out.println("Serverside, right constructor!"); // <---- Only this is being called.
         }
 
         startprep(world);
 
         this.setPos(pos);
         blockState = bs;
-        System.out.println(blockState);
     }
 
     public void startprep(Level world) {

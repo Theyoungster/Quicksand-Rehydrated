@@ -4,6 +4,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.fluids.capability.ItemFluidContainer;
 import net.mokai.quicksandrehydrated.block.entity.MixerBlockEntity;
 import net.mokai.quicksandrehydrated.registry.ModBlockEntities;
@@ -39,10 +40,14 @@ public class MixerBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE =
             Block.box(0,0,0,16,13,16);
 
-    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
         return SHAPE;
+    }
+
+    @Override
+    public VoxelShape getVisualShape(BlockState pState, BlockGetter pReader, BlockPos pPos, CollisionContext pContext) {
+        return Shapes.empty();
     }
 
     @Override
@@ -50,7 +55,6 @@ public class MixerBlock extends BaseEntityBlock {
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public BlockState rotate(BlockState pState, Rotation pRotation) {
         return pState.setValue(FACING, pRotation.rotate(pState.getValue(FACING)));
