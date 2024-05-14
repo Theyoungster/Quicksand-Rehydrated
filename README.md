@@ -3,6 +3,7 @@ Quicksand-Rehydrated
 Quicksand Rehydrated is a mod that adds, well... quicksand! It's a reimagining of the 1.7.10 mod *More Fun Quicksand Mod*, with more in-*depth* escape mechanics, and rebalancing to make the mod suitable for a Survival experience.
 
 
+
 Down the line, we plan to add several companion mods:
 
 - This mod \[Quicksand Core\] will serve as a modpack-friendly basis that adds the terrain-themed hazards and structures, along with Hunnibees, a bee-like NPC with which to trade.

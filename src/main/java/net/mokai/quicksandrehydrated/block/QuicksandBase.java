@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
+import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
+import net.mokai.quicksandrehydrated.registry.ModParticles;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,13 +26,12 @@ import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNA
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
 
-public class QuicksandBase extends FallingBlock implements QuicksandInterface {
+public class QuicksandBase extends Block implements QuicksandInterface {
 
     public QuicksandBase(Properties pProperties) {
         super(pProperties);
     }
     private final Random rng = new Random();
-
 
     // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
 
@@ -42,8 +43,21 @@ public class QuicksandBase extends FallingBlock implements QuicksandInterface {
 
     public double getBubblingChance() { return .75d; } // Does this substance bubble when you sink?
 
-    public double[] getSink() { return new double[]{.1d, .08d, .05d, .0d, .1d}; } // Sinking speed. Lower is slower.
-    public double[] walkSpeed() { return new double[]{1d, .5d, .25d, .125d, 0d}; } // Horizontal movement speed (ignoring Gravity)
+    // Sinking speed. Lower is slower.
+    // normalized against the vertSpeed, so this value remains effective in spite of how thick the quicksand is.
+    public double[] getSink() { return new double[]{.001d, .001d, .001d, .001d, .001d}; }
+
+    public double[] vertSpeed() { return new double[]{.3d, .2d, .1d, .05d, .025d}; } // Vertical movement speed
+
+    public double[] walkSpeed() { return new double[]{0.8d, 0.7d, .5d, .25d, 0d}; } // Horizontal movement speed
+
+
+
+
+
+    public double[] getTugLerp() {return new double[]{1d, 1d, 1d, 1d, 1d}; } // the previous position will lerp towards the player this amount *per tick* !
+    public double[] getTug() {return new double[]{0d, 0d, 0d, 0d, 0d}; } // how much force is applied on the player, towards the previous Position, *per tick* !
+
     public double[] gravity() { return new double[] {0d, 0d, .1d, .2d, .3d}; } // Gravity pulls you towards the center of a given mess block- potentially away from any ledges one could climb up on.
     public int[] jumpPercentage() { return new int[]{30, 20, 0, 0, 0}; } // Chance per tick to be able to jump.
 
@@ -73,87 +87,163 @@ public class QuicksandBase extends FallingBlock implements QuicksandInterface {
 
     public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) { return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(null)); }
 
-    public double getSink(double depth) { return getSink()[toInt(depth)] ; }
+    public double getSink(double depth) { return getSink()[toInt(depth)]; }
     public double getWalk(double depth) { return walkSpeed()[toInt(depth)]; }
-    public boolean getJump(double depth, Level pLevel) {
-        rng.setSeed(pLevel.getGameTime());
-        float p = rng.nextInt(100);
-        return p < jumpPercentage()[toInt(depth)];
+    public double getVert(double depth) { return vertSpeed()[toInt(depth)]; }
+
+
+    public double getTugLerp(double depth) { return getTugLerp()[toInt(depth)]; }
+    public double getTug(double depth) { return getTug()[toInt(depth)]; }
+
+
+    public boolean getJump(double depth) {
+        if (depth < 0.375) {return true;}
+        return false;
     }
 
+    public void quicksandTugMove(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity, double depth) {
 
+        entityQuicksandVar es = (entityQuicksandVar) pEntity;
 
+        Vec3 currentPos = pEntity.getPosition(0);
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void entityInside(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
+        // Get the Previous Position variable
+        Vec3 prevPos = es.getPreviousPosition();
+
+        // move previous pos towards player a tiny bit
+        es.setPreviousPosition(prevPos.lerp(currentPos, getTugLerp(depth)));
+
+    }
+
+    public void quicksandTug(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity, double depth) {
+
+        Vec3 Momentum = pEntity.getDeltaMovement();
+        entityQuicksandVar es = (entityQuicksandVar) pEntity;
+
+        // the difference between the entity position, and the previous position.
+        Vec3 differenceVec = es.getPreviousPosition().subtract( pEntity.getPosition(0));
+
+        // apply momentum towards previous pos to entity
+        double spd = getTug(depth);
+        Vec3 addMomentum = differenceVec.multiply(new Vec3(spd, spd, spd));
+        pEntity.setDeltaMovement(Momentum.add(addMomentum));
+
+    }
+
+    public void quicksandMomentum(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity, double depth) {
+
+        // get quicksand Variables
+        double walk = getWalk(depth);
+        double vert = getVert(depth);
+        double sink = getSink(depth);
+
+        // sinking is a replacement for gravity.
+        Vec3 Momentum = pEntity.getDeltaMovement();
+        boolean playerFlying = false;
+        if (pEntity instanceof Player) {
+            Player p = (Player) pEntity;
+            playerFlying = p.getAbilities().flying;
+        }
+        if (!playerFlying) {
+            sink = sink / vert; // counteract vertical thickness
+            Momentum = Momentum.add(0.0, -sink, 0.0);
+        }
+
+        Momentum = Momentum.multiply(walk, vert, walk);
+        pEntity.setDeltaMovement(Momentum);
+
+    }
+
+    public void applyQuicksandEffects(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
 
         if (pEntity instanceof EntityBubble) {return;}
 
-        //if (pEntity instanceof ItemEntity) { pEntity.makeStuckInBlock(pState, new Vec3(.1, .02, .1)); return; }  /// This is an ugly hack; items are jittering in quicksand, but skipping all of the code works fine.
+        double depth = getDepth(pLevel, pPos, pEntity);
+
+        if (depth >= 0) {
+
+            // there are three main effects that happen every tick.
+
+
+            // first, the quicksand's main effects are applied. Thickness and sinking.
+            quicksandMomentum(pState, pLevel, pPos, pEntity, depth);
+
+
+
+            // the next two deal with the entity's "Previous Position" variable.
+            // This can be used in different ways to get different effects.
+
+            // first the player is pushed towards this position a small amount
+            quicksandTug(pState, pLevel, pPos, pEntity, depth);
+
+            // then we move that position a little bit towards the player
+            quicksandTugMove(pState, pLevel, pPos, pEntity, depth);
+
+            // By default, the tug position is constantly set to the entity's position, and applies no force on the entity towards it.
+
+
+
+            // Some movement stuff. Dealing with whether the entity is "OnGround"
+            // whether they can jump, and step out onto a solid block.
+
+            if (getJump(depth)) {
+                if (pLevel.getBlockState(pPos.above()).isAir()) {
+
+                    boolean playerFlying = false;
+                    if (pEntity instanceof Player) {
+                        Player p = (Player) pEntity;
+                        playerFlying = p.getAbilities().flying;
+                    }
+
+                    if (!playerFlying) {
+                        // if the player is flying ... they shouldn't be set on ground! cause then they can't fly.
+                        // quicksand effects are still dealt, above, though.
+                        pEntity.setOnGround(true);
+                    }
+
+                }
+            }
+            else {
+                // set on false even if they're at bottom
+                pEntity.setOnGround(false);
+                pEntity.resetFallDistance();
+            }
+
+        }
+
+    }
+
+    public void struggleAttempt(@NotNull BlockState pState, @NotNull Entity pEntity, double struggleAmount) {
+        // runs when the player struggles in a block of this type. Default has nothing happen.
+
+        Vec3 pos = pEntity.position();
+
+        pEntity.getLevel().addParticle(ModParticles.QUICKSAND_BUBBLE_PARTICLES.get(),
+                pos.x, pos.y, pos.z, 0, 0, 0);
+
+    }
+
+    @Override
+    public void entityInside(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
+
+        // when an entity is touching a quicksand block ...
 
         double depth = getDepth(pLevel, pPos, pEntity);
 
-        double mod = 1;
-        if (depth > 0) {
+        if (depth >= 0) {
 
+            // all that needs to be done is set the fact that this entity is in quicksand.
+            // Entities choose which quicksand block to run the applyQuicksandEffects function from.
 
+            boolean canJump = getJump(depth);
+            entityQuicksandVar es = (entityQuicksandVar) pEntity;
 
-            ////// SINKIN' CODE HERE //////
-            pEntity.setSprinting(false);
-            if (!(pEntity instanceof Player)) {
-                pEntity.setOnGround(true);
-                mod = 1.62 / pEntity.getEyeHeight(); // 1.62 is the player's eye height; this gets a multiplier so shorter entities sink slower.
-                depth = depth * mod;
-            }
-
-            boolean canJump = getJump(depth, pLevel);
-            double sink = getSink(depth);
-            double walk = getWalk(depth);
-            if (canJump) { pEntity.setOnGround(true); } // Semi-randomly set the player on 'land'. Above depth .6, this means the player can step back onto land.
-            if(pPos.getX() != pEntity.getBlockX() || pPos.getZ() != pEntity.getBlockZ()) // If the player is NOT fully inside this Quicksand block...
-                { walk = Math.max(walk, .0625); }// ... Cap the speed reduction.
-            else {
-                // Bubble code!
-                if(getBubblingChance()>0) {
-                    if (Math.random() > getBubblingChance()) {
-                        Vec3 pos = new Vec3(pEntity.getX() + Math.random(), pPos.getY() + .5, pEntity.getZ() + Math.random());
-                        BlockPos np = new BlockPos(pos);
-                        spawnBubble(pLevel.getBlockState(np), pLevel, pos, np, this.defaultBlockState());
-                    }
-                }
-                // End bubble code
-            }
-
-
-
-            /**
-             * Things that might slurp the player down faster:
-             * - Heavy armor
-             * - struggling
-             * - Sinking potion effect
-             */
-
-            if(pLevel.isClientSide()) { // This bit is broken. We need to have the player themselves calculate their rotation / struggle speed, using the AirControlMixin to add the function, and then later call it.
-                double test = Math.abs(pEntity.getViewVector(0).x - pEntity.getViewVector(1).x);
-                if (test > getStruggleSensitivity()) {
-                    sink = sink + 1.1111111f;
-                }
-            }
-            pEntity.makeStuckInBlock(pState, new Vec3(walk, sink, walk)); /// Lower values are slower.
-
-
-            ////// SINKIN' CODE END
-
+            // more movement variables.
+            es.setInQuicksand(true);
+            pEntity.resetFallDistance();
 
         }
-           // Kill code here.
-        if (pEntity instanceof LivingEntity) {
-            LivingEntity le = (LivingEntity) pEntity;
-            if (pEntity.getAirSupply() <= -20 && le.getHealth() <= 2) {
-                deathMessage(pLevel, le);
-            }
-        }
+
     }
 
 

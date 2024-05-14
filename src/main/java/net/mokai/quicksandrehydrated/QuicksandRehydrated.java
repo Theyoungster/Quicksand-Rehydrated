@@ -23,6 +23,8 @@ import java.util.Iterator;
 @Mod(QuicksandRehydrated.MOD_ID)
 public class QuicksandRehydrated {
     public static final String MOD_ID = "qsrehydrated";
+    public static final Logger LOGGER = LogUtils.getLogger();
+
 
 
     public QuicksandRehydrated() {
@@ -34,10 +36,10 @@ public class QuicksandRehydrated {
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
+        ModParticles.register(modEventBus);
         ModEntityTypes.register(modEventBus);
         ModLootModifiers.register(modEventBus);
         ModSounds.register(modEventBus);
-
 
         modEventBus.addListener(this::commonSetup);
 

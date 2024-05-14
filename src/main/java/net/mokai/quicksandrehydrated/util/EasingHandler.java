@@ -1,8 +1,14 @@
 package net.mokai.quicksandrehydrated.util;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.mokai.quicksandrehydrated.block.QuicksandBase;
 
 public class EasingHandler {
@@ -40,19 +46,25 @@ public class EasingHandler {
         return (position-start)/b;
     }
 
-    public static double getDepth(Entity pEntity, Level pLevel, BlockPos pPos, Double offset) {
+
+    public static double getDepth(Entity pEntity, Level pLevel, BlockPos pPos, double offset) {
+
         double playerY = pEntity.getPosition(1).y();
         double depth;
+
         BlockPos playercube;
         double currentHeight = pPos.getY();
+
         do {
             currentHeight++;
-            playercube = new BlockPos(pPos.getX(), currentHeight, pPos.getY());
+            BlockPos check = new BlockPos(pPos.getX(), currentHeight, pPos.getZ());
+            playercube = check;
         } while (pLevel.getBlockState(playercube).getBlock() instanceof QuicksandBase);
 
-        depth  = playercube.getY() - playerY - offset;
+        depth = playercube.getY() - playerY - offset;
 
         return depth;
+
     }
 
 
