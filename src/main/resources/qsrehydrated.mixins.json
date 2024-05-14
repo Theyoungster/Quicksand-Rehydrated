@@ -7,7 +7,7 @@
   [
     "AirControlMixin",
     "SlowdownMixin",
-    "PlayerMixin"
+    "PlayerMixin",
     "FallingBlockEntityMixin"
   ],
   "injectors": {

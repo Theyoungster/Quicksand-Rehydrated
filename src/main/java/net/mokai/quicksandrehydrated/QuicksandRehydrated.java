@@ -23,7 +23,6 @@ import java.util.Iterator;
 @Mod(QuicksandRehydrated.MOD_ID)
 public class QuicksandRehydrated {
     public static final String MOD_ID = "qsrehydrated";
-    public static final Logger LOGGER = LogUtils.getLogger();
 
 
 

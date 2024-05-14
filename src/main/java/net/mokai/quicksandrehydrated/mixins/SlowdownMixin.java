@@ -167,8 +167,6 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
         // It's that easy.
     }
 
-
-    @Shadow protected boolean onGround;
     @Inject(method = "collide", at = @At("HEAD"))
     private void collide(Vec3 pVec, CallbackInfoReturnable<Vec3> cir) {
 
