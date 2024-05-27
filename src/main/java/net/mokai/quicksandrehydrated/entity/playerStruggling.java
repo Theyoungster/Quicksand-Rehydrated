@@ -1,5 +1,6 @@
 package net.mokai.quicksandrehydrated.entity;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,6 +12,16 @@ public interface playerStruggling {
 
     int struggleHold = 0;
     boolean holdingStruggle = false;
+
+    double coveragePercent = 0.0;
+
+    double getCoveragePercent();
+    void setCoveragePercent(double set);
+
+    String coverageTexture = null;
+
+    String getCoverageTexture();
+    void setCoverageTexture(String set);
 
 
 

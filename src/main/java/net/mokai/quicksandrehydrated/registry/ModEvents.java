@@ -10,6 +10,7 @@ import net.mokai.quicksandrehydrated.entity.EntityBubble;
 import net.mokai.quicksandrehydrated.particle.QuicksandBubbleParticle;
 
 import net.mokai.quicksandrehydrated.entity.EntityHunnibee;
+import net.mokai.quicksandrehydrated.particle.TestDustParticle;
 
 
 public class ModEvents {

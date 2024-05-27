@@ -33,7 +33,8 @@ import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
-public class FlowingQuicksandBase extends FallingBlock implements QuicksandInterface{
+public class FlowingQuicksandBase extends FallingBlock implements QuicksandInterface {
+
 
 
     public FlowingQuicksandBase(Properties pProperties) {
@@ -244,6 +245,10 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
             Block.box(0, 0, 0, 16, 16, 16)
     };
 
+    public VoxelShape getOcclusionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
+        int level = pState.getValue(LEVEL);
+        return SHAPE_BY_LEVEL[level];
+    }
 
     // VANILLA bounding box stuff
 

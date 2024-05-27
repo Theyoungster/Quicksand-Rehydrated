@@ -46,14 +46,25 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
     public Vec3 getPreviousPosition() {return this.previousPosition;}
     public void setPreviousPosition(Vec3 set) {this.previousPosition = set;}
 
+
+
+
     public boolean inQuicksand = false;
-
-
     public boolean getInQuicksand() {
         return this.inQuicksand;
     }
     public void setInQuicksand(boolean set) {
         this.inQuicksand = set;
+    }
+
+
+
+    public boolean quicksandEnterFlag = false;
+    public boolean getquicksandEnterFlag() {
+        return this.quicksandEnterFlag;
+    }
+    public void setquicksandEnterFlag(boolean set) {
+        this.quicksandEnterFlag = set;
     }
 
 
@@ -67,6 +78,7 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
 //        this.onGround = this.onGround || test.getBlock() instanceof QuicksandBase;
 //
 //    }
+
 
 
     public BlockPos getStuckBlock(Entity pEntity) {
@@ -115,6 +127,12 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
         if (!QuicksandVarEntity.getInQuicksand()) {
             // if not in quicksand, move previous position directly to position
             QuicksandVarEntity.setPreviousPosition(thisEntity.getPosition(0));
+
+            if (QuicksandVarEntity.getquicksandEnterFlag()) {
+                // set the enter flag to false as well
+                QuicksandVarEntity.setquicksandEnterFlag(false);
+            }
+
         }
         else {
 
@@ -168,7 +186,7 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
     }
 
 
-    @Shadow protected boolean onGround;
+
     @Inject(method = "collide", at = @At("HEAD"))
     private void collide(Vec3 pVec, CallbackInfoReturnable<Vec3> cir) {
 

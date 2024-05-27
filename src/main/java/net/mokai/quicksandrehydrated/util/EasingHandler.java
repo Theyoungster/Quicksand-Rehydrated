@@ -68,6 +68,40 @@ public class EasingHandler {
     }
 
 
+
+    public static double doubleListInterpolate(double val, double[] listOfDoubles) {
+
+        // val should be scaled 0 to 1, to be mapped to either end of list
+        // listOfDoubles is just a list of vals
+        if (listOfDoubles.length == 0) {
+            throw new IndexOutOfBoundsException("cannot interpolate into an empty list. What would the correct default value be?");
+        }
+        else if (listOfDoubles.length == 1) {
+            return listOfDoubles[0];
+        }
+
+        if (val >= 1.0) {
+            return listOfDoubles[listOfDoubles.length-1];
+        }
+        else if (val <= 0.0) {
+            return listOfDoubles[0];
+        }
+
+        int indexMaximum = (listOfDoubles.length)-1;
+        double scaledDouble = val * indexMaximum;
+
+        int leftIndex = (int) Math.floor(scaledDouble);
+        int rightIndex = leftIndex;
+
+        double percent = (val * indexMaximum) - rightIndex;
+
+        double leftNumber = listOfDoubles[leftIndex];
+        double rightNumber = listOfDoubles[rightIndex];
+
+        return ease(leftNumber, rightNumber, percent);
+
+    }
+
     private static double ease(double start, double end, double pos) {
         return (pos*(end-start))+start;
     }

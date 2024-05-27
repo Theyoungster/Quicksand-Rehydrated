@@ -36,19 +36,22 @@ public class EntityBubble extends Entity {
     public EntityBubble(EntityType<? extends EntityBubble> type, Level world) {
         super(type, world);
         if (world.isClientSide()) {
-            //System.out.println("Clientside, WRONG constructor"); // <---- Only this is being called.
+            // System.out.println("Clientside, WRONG constructor"); // <---- Only this is
+            // being called.
         } else {
-            //System.out.println("Serverside, WRONG constructor");
+            // System.out.println("Serverside, WRONG constructor");
         }
 
     }
 
-    public EntityBubble(EntityType<? extends EntityBubble> type, Level world, Vec3 pos, float pSize, int pLifetime, BlockState bs) {
+    public EntityBubble(EntityType<? extends EntityBubble> type, Level world, Vec3 pos, float pSize, int pLifetime,
+            BlockState bs) {
         super(type, world);
         if (world.isClientSide()) {
-            //System.out.println("Clientside, right constructor!");
+            // System.out.println("Clientside, right constructor!");
         } else {
-            //System.out.println("Serverside, right constructor!"); // <---- Only this is being called.
+            // System.out.println("Serverside, right constructor!"); // <---- Only this is
+            // being called.
         }
 
         startprep(world);
@@ -61,11 +64,12 @@ public class EntityBubble extends Entity {
         startLife = world.getGameTime();
         endLife = startLife + 60;
         scale = .4f;
-        rotAngle = (float)Math.random()*360;
+        rotAngle = (float) Math.random() * 360;
     }
 
     public static EntityBubble spawn(Level pLevel, Vec3 pPos, BlockState pBlockState) {
-        EntityBubble bubble = new EntityBubble(ModEntityTypes.BUBBLE.get(), pLevel, pPos, 0, 0, Blocks.ACACIA_FENCE.defaultBlockState());
+        EntityBubble bubble = new EntityBubble(ModEntityTypes.BUBBLE.get(), pLevel, pPos, 0, 0,
+                Blocks.ACACIA_FENCE.defaultBlockState());
         pLevel.addFreshEntity(bubble);
         return bubble;
     }
@@ -83,7 +87,8 @@ public class EntityBubble extends Entity {
     }
 
     protected void readAdditionalSaveData(CompoundTag pCompound) {
-        this.blockState = NbtUtils.readBlockState(this.level.holderLookup(Registries.BLOCK), pCompound.getCompound("BlockState"));
+        this.blockState = NbtUtils.readBlockState(this.level.holderLookup(Registries.BLOCK),
+                pCompound.getCompound("BlockState"));
     }
 
     @Override
@@ -97,7 +102,8 @@ public class EntityBubble extends Entity {
                 EasingHandler.reverse_interp(
                         startLife,
                         endLife,
-                        ct + Minecraft.getInstance().getPartialTick())) * scale;
+                        ct + Minecraft.getInstance().getPartialTick()))
+                * scale;
     }
 
     @Override
@@ -106,27 +112,35 @@ public class EntityBubble extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {}
+    protected void defineSynchedData() {
+    }
 
     @Override
     public void tick() {
 
-        if(this.level.getGameTime() > endLife) { this.kill(); }
-        if(this.level.getGameTime()+1 > endLife) { spawnParticles(); } // NGL, no idea why particles can't spawn on the same tick the entity dies on. Thankfully, we can just... get the tick before.
+        if (this.level.getGameTime() > endLife) {
+            this.kill();
+        }
+        if (this.level.getGameTime() + 1 > endLife) {
+            spawnParticles();
+        } // NGL, no idea why particles can't spawn on the same tick the entity dies on.
+          // Thankfully, we can just... get the tick before.
 
     }
 
     @Override
     public void kill() {
         this.playSound(SoundEvents.LAVA_POP);
-        this.playSound(SoundEvents.LAVA_POP, .5f+ ((float)Math.random()*.25f), .6f);
+        this.playSound(SoundEvents.LAVA_POP, .5f + ((float) Math.random() * .25f), .6f);
         this.playSound(SoundEvents.SLIME_ATTACK, .15f, .6f);
         super.kill();
     }
 
     protected void spawnParticles() {
-        for (int i=0; i<3; i++) {
-            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockState).setPos(this.getOnPos()), this.getX(), this.getY()+.5f, this.getZ(), (Math.random() - .5) * 2.0D, .25D, (Math.random() - .5) * 2.0D);
+        for (int i = 0; i < 3; i++) {
+            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockState).setPos(this.getOnPos()),
+                    this.getX(), this.getY() + .5f, this.getZ(), (Math.random() - .5) * 2.0D, .25D,
+                    (Math.random() - .5) * 2.0D);
         }
     }
 

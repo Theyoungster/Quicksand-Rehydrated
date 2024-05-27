@@ -1,13 +1,16 @@
 package net.mokai.quicksandrehydrated.mixins;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.block.QuicksandBase;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.entity.playerStruggling;
@@ -30,6 +33,24 @@ public class PlayerMixin implements playerStruggling {
 
     int struggleHold = 0;
     boolean holdingStruggle = false;
+
+    double coveragePercent = 0.0;
+
+    public double getCoveragePercent() {
+        return this.coveragePercent;
+    }
+    public void setCoveragePercent(double set) {
+        this.coveragePercent = set;
+    }
+
+
+
+
+    String coverageTexture = "textures/entity/coverage/quicksand_coverage.png";
+
+    public String getCoverageTexture() {return coverageTexture;}
+    public void setCoverageTexture(String set) {this.coverageTexture = set;}
+
 
 
 
@@ -61,19 +82,24 @@ public class PlayerMixin implements playerStruggling {
 
         if (QuicksandVarEntity.getInQuicksand()) {
 
-            int ticks = strugglingPlayer.getStruggleHold();
-            double boost_amount = ticks / 20.0;
-            boost_amount *= 0.5; // half a block at max
-            player.addDeltaMovement(new Vec3(0.0, boost_amount, 0.0));
-
+            // find the block the player is stuck in
             BlockPos bp = QuicksandVarEntity.getStuckBlock(player);
+
             if (bp != null) {
+
+                // can only do things if it exists, of course.
 
                 Level eLevel = player.getLevel();
                 BlockState bs = eLevel.getBlockState(bp);
 
+                int ticks = strugglingPlayer.getStruggleHold();
+
+                // TODO; right now this has a hard coded value of 20.
+                // Ideally there should be a way to determine what the max is per quicksand
+                double struggleAmount = ticks / 20.0;
+
                 QuicksandBase qs = (QuicksandBase) bs.getBlock();
-                qs.struggleAttempt(bs, player, boost_amount);
+                qs.struggleAttempt(bs, player, struggleAmount);
 
             }
 
@@ -95,8 +121,6 @@ public class PlayerMixin implements playerStruggling {
         Player player = (Player)(Object) this;
         entityQuicksandVar QuicksandVarEntity = (entityQuicksandVar) player;
         playerStruggling strugglingPlayer = (playerStruggling) player;
-
-
 
         AttributeInstance gravity = player.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get());
         if (QuicksandVarEntity.getInQuicksand()) {
