@@ -1,15 +1,9 @@
 package net.mokai.quicksandrehydrated.util;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraft.world.level.block.RedStoneOreBlock;
-import net.mokai.quicksandrehydrated.block.QuicksandBase;
+import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBase;
 
 public class EasingHandler {
 

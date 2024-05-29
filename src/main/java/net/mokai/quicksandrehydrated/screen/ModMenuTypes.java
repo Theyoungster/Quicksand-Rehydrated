@@ -17,6 +17,8 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<MixerMenu>> MIXER_MENU =
             registerMenuType(MixerMenu::new, "mixer_menu");
 
+    //public static final RegistryObject<MenuType<BookMenu>> BOOK_MENU = registerMenuType(BookMenu::new, "book_menu");
+
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(IContainerFactory<T> factory,
                                                                                                   String name) {

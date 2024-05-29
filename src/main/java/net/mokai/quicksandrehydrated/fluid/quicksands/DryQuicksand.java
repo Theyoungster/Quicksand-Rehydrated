@@ -26,7 +26,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.mokai.quicksandrehydrated.block.QuicksandInterface;
+import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandInterface;
 import net.mokai.quicksandrehydrated.fluid.FluidQuicksandBase;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;

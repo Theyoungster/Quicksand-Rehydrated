@@ -7,6 +7,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mokai.quicksandrehydrated.recipe.FluidMixerRecipes;
+import net.mokai.quicksandrehydrated.recipe.SinkingPotionConversionRecipe;
 
 public class ModRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
@@ -14,6 +15,9 @@ public class ModRecipes {
 
     public static final RegistryObject<RecipeSerializer<FluidMixerRecipes>> FLUID_MIXER_SERIALIZER =
             SERIALIZERS.register("fluid_mixer", () -> FluidMixerRecipes.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<SinkingPotionConversionRecipe>> SINKING_POTION_CONVERSION_SERALIZER =
+            SERIALIZERS.register("sinking_potion_conversion", () -> SinkingPotionConversionRecipe.Serializer.INSTANCE);
 
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);

@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "qsrehydrated:item/sinking_potion_overlay",
+    "layer1": "item/potion"
+  }
+}

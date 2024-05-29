@@ -1,4 +1,4 @@
-package net.mokai.quicksandrehydrated.block;
+package net.mokai.quicksandrehydrated.block.quicksands.core;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

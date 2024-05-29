@@ -13,6 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.block.*;
 import net.mokai.quicksandrehydrated.block.quicksands.*;
+import net.mokai.quicksandrehydrated.block.quicksands.core.FlowingQuicksandBase;
 
 
 import java.util.function.Supplier;

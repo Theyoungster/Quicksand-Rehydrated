@@ -1,0 +1,5 @@
+{
+  "type": "qsrehydrated:sinking_potion_conversion",
+  "ingredients": [{"item": "minecraft:sand"}],
+  "output": {"item": "qsrehydrated:quicksand"}
+}

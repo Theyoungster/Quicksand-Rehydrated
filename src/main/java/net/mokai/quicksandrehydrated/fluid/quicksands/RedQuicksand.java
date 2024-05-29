@@ -5,7 +5,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.DispenseFluidContainer;
 import net.minecraftforge.fluids.FluidType;
-import net.mokai.quicksandrehydrated.block.QuicksandInterface;
+import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandInterface;
 import net.mokai.quicksandrehydrated.fluid.FluidQuicksandBase;
 import org.apache.commons.lang3.Validate;
 

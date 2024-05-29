@@ -1,0 +1,14 @@
+Clay -> Mineral clay
+Terracotta -> Brown clay
+Grass -> Peat + Peat Bog
+Dirt -> Mire
+Mud -> Deep Mud
+Sand -> Dry Quicksand
+Snow -> Powdered Snow
+Soul Sand -> Corrupted Soul Sand
+Soul Soil -> Soul Mud
+Moss -> Pillow Moss and Tangleroot Moss
+? Slime Block -> Living Slime
+? Wool -> Sinking Wool
+? Honey Block -> Gooey Honey
+? Coal Block -> Tar

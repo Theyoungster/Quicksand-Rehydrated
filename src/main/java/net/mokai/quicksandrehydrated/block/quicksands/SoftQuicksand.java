@@ -2,7 +2,7 @@ package net.mokai.quicksandrehydrated.block.quicksands;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.mokai.quicksandrehydrated.block.FlowingQuicksandBase;
+import net.mokai.quicksandrehydrated.block.quicksands.core.FlowingQuicksandBase;
 
 import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
 
