@@ -20,6 +20,14 @@ public interface entityQuicksandVar {
     boolean getInQuicksand();
     void setInQuicksand(boolean set);
 
+
+
+    boolean quicksandEnterFlag = false;
+    boolean getquicksandEnterFlag();
+    void setquicksandEnterFlag(boolean set);
+
+
+
     BlockPos getStuckBlock(Entity pEntity);
 
 }

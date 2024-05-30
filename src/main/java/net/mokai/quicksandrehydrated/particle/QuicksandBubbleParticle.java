@@ -17,7 +17,7 @@ public class QuicksandBubbleParticle extends TextureSheetParticle {
         this.xd = xd;
         this.yd = yd;
         this.zd = zd;
-        this.quadSize *= (float) (1.5F + (this.random.nextDouble()*0.5));;
+        this.quadSize *= (float) (1.5F + (this.random.nextDouble()*0.5));
         this.lifetime = 15 + this.random.nextInt(10);
         this.setSpriteFromAge(spriteSet);
         this.sprites = spriteSet;

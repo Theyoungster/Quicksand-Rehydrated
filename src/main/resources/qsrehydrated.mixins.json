@@ -8,7 +8,9 @@
     "AirControlMixin",
     "SlowdownMixin",
     "PlayerMixin",
-    "FallingBlockEntityMixin"
+    "FallingBlockEntityMixin",
+    "CanOccludeMixin",
+    "LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
