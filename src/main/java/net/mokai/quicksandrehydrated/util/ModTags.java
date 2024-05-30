@@ -13,6 +13,9 @@ public class ModTags {
         public static final TagKey<Block> QUICKSAND_DROWNABLE
                 = tag("quicksand_drownable");
 
+        public static final TagKey<Block> QUICKSAND_AO_OVERRIDE
+                = tag("quicksand_ao_override");
+
         private static TagKey<Block> tag(String name) {
             return BlockTags.create(new ResourceLocation(QuicksandRehydrated.MOD_ID, name));
         }

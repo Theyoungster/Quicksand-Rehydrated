@@ -1,7 +1,9 @@
 package net.mokai.quicksandrehydrated;
 
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -22,9 +24,8 @@ import java.util.Iterator;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(QuicksandRehydrated.MOD_ID)
 public class QuicksandRehydrated {
+
     public static final String MOD_ID = "qsrehydrated";
-
-
 
     public QuicksandRehydrated() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
