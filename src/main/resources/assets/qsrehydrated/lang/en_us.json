@@ -56,21 +56,21 @@
   "block.qsrehydrated.dead_lieaves": "Dead Leaves",
 
 
-  "block.qsrehydrated.mixer": "Fluid Mixer",
+  "block.qsrehydrated.mixer": "Mess Mixer",
 
 
   "item.qsrehydrated.cranberries": "Cranberries",
   "item.qsrehydrated.larva_food": "Larva",
   "item.qsrehydrated.cooked_larva_food": "Cooked Larva",
-
-
-
   "item.qsrehydrated.long_stick": "Walking Stick",
   "item.qsrehydrated.rope": "Rope",
 
   "item.qsrehydrated.music_disc_flight": "Music Disc",
   "item.qsrehydrated.music_disc_flight.desc": "Rimsky-Korsakov - Flight of the Bumblebee",
+  "item.qsrehydrated.hunnibee_spawn_egg": "Hunnibee Spawn Egg",
 
+  "item.qsrehydrated.potion_of_sinking.effect.empty": "Potion of Sinking",
+  "item.qsrehydrated.splash_potion_of_sinking.effect.empty": "Splash Potion of Sinking",
 
 
 
