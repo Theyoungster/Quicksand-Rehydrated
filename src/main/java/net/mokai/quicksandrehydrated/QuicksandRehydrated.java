@@ -1,9 +1,7 @@
 package net.mokai.quicksandrehydrated;
 
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
