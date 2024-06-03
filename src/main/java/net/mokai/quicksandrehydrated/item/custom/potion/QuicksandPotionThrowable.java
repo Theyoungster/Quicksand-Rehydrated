@@ -39,4 +39,7 @@ public class QuicksandPotionThrowable extends ThrowablePotionItem {
         return InteractionResultHolder.sidedSuccess(itemstack, pLevel.isClientSide());
     }
 
+    @Override
+    public boolean isFoil(ItemStack pStack) {return true;}
+
 }

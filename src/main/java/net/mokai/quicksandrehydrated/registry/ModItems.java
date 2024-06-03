@@ -3,7 +3,6 @@ package net.mokai.quicksandrehydrated.registry;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.item.custom.QuicksandBook;
@@ -17,7 +16,6 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mokai.quicksandrehydrated.item.custom.potion.QuicksandPotion;
 import net.mokai.quicksandrehydrated.item.custom.potion.QuicksandPotionThrowable;
 
-import javax.management.ObjectInstance;
 import java.util.Iterator;
 
 public class ModItems {

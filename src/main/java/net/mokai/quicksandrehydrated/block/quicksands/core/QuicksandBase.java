@@ -24,6 +24,7 @@ import net.mokai.quicksandrehydrated.entity.EntityBubble;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.entity.playerStruggling;
 import net.mokai.quicksandrehydrated.registry.ModParticles;
+import net.mokai.quicksandrehydrated.util.DEPTH;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,23 +36,14 @@ import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNA
 
 public class QuicksandBase extends Block implements QuicksandInterface {
 
+    private final Random rng = new Random();
+
     public QuicksandBase(Properties pProperties) {
         super(pProperties);
     }
 
-    private final Random rng = new Random();
-
-    // constants for use in more in-depth depth calculations
-    public double DEPTH_FEET = .1875;
-    public double DEPTH_KNEE = .375;
-    public double DEPTH_WAIST = .75;
-    public double DEPTH_CHEST = 1.125;
-    public double DEPTH_SHOULDERS = 1.5;
-    public double DEPTH_HEAD = 2;
 
     // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
-
-    //public String getTex() { return "qsrehydrated:textures/block/quicksand.png";}
 
     public String coverageTexture() {
         return "qsrehydrated:textures/entity/coverage/quicksand_coverage.png";
@@ -76,13 +68,13 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     // get depth as double, and return integer.
 
     public int toInt(double y) {
-        if (y < .375) {
+        if (y < DEPTH.KNEE) {
             return 0; // Surface: 0 - .375
-        } else if (y < .75) {
+        } else if (y < DEPTH.WAIST) {
             return 1; // Knee deep: .375 - .75
-        } else if (y < 1.25) {
+        } else if (y < DEPTH.CHEST) {
             return 2; // Waist deep: .75 - 1.25
-        } else if (y < 1.625) {
+        } else if (y < DEPTH.SHOULDERS) {
             return 3; // Chest deep: 1.25 - 1.625
         } else {
             return 4; // Under: 1.625+

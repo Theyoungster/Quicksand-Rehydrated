@@ -33,6 +33,10 @@ public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterfac
 
     public FluidQuicksandBase(Supplier<? extends FlowingFluid> pFluid, Properties pProperties) {super(pFluid, pProperties);}
     private final Random rng = new Random();
+    public String coverageTexture() {
+        return null;
+    }
+
 
     // ----- THESE ARE ONLY FOR THIS CLASS, AND NOT THE SOLID QUICKSAND. ----- //
 

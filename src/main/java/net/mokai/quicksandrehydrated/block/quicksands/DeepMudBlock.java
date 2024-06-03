@@ -2,21 +2,17 @@ package net.mokai.quicksandrehydrated.block.quicksands;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SculkSensorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBase;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
-import net.mokai.quicksandrehydrated.registry.ModParticles;
+import net.mokai.quicksandrehydrated.util.DEPTH;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
@@ -35,7 +31,7 @@ public class DeepMudBlock extends QuicksandBase {
     public DeepMudBlock(Properties pProperties) {super(pProperties);}
 
     // helps determine what behaviour the mud should have. Is the entity deep enough to get stuck in place?
-    public double stuckDepth = DEPTH_KNEE;
+    public double stuckDepth = DEPTH.KNEE;
     public boolean depthIsStuck(double depthRaw) {
         return depthRaw >= stuckDepth;
     }

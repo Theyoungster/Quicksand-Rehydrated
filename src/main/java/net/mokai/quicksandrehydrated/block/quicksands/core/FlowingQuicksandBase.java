@@ -35,19 +35,16 @@ import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNA
 
 public class FlowingQuicksandBase extends FallingBlock implements QuicksandInterface {
 
-
-
-    public FlowingQuicksandBase(Properties pProperties) {
-        super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 2));
-    }
-
-
     private final Random rng = new Random();
 
-
+    public FlowingQuicksandBase(Properties pProperties) {super(pProperties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 2));
+    }
     // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
 
+    public String coverageTexture() {
+        return "qsrehydrated:textures/block/soft_quicksand.png";
+    }
 
     public double getOffset(BlockState blockstate) {
         int level = blockstate.getValue(LEVEL);
@@ -60,7 +57,6 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
 
     public double[] getSink() { return new double[]{.1d, .08d, .05d, .0d, .1d}; } // Sinking speed. Lower is slower.
     public double[] walkSpeed() { return new double[]{1d, .5d, .25d, .125d, 0d}; } // Horizontal movement speed (ignoring Gravity)
-    public double[] gravity() { return new double[] {0d, 0d, .1d, .2d, .3d}; } // Gravity pulls you towards the center of a given mess block- potentially away from any ledges one could climb up on.
     public int[] jumpPercentage() { return new int[]{30, 20, 0, 0, 0}; } // Chance per tick to be able to jump.
     public int getSpread() {return 1;} // How far to search for holes to fill. Negative instead indicates how tall to pile before spreading out.
 

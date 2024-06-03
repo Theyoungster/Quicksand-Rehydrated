@@ -5,4 +5,5 @@ public interface QuicksandInterface {
     double getBubblingChance();
     double getOffset(BlockState blockstate);
     //String getTex();
+    String coverageTexture();
 }
