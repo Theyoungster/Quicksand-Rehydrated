@@ -12,12 +12,6 @@ import net.mokai.quicksandrehydrated.particle.QuicksandBubbleParticle;
 public class ModEventBusEvents {
 
     @SubscribeEvent
-    public static void entityAttributeEvent(EntityAttributeCreationEvent event) {
-        event.put(ModEntityTypes.HUNNIBEE.get(), EntityHunnibee.setAttributes());
-    }
-
-
-    @SubscribeEvent
     public static void registerParticleFactories(final RegisterParticleProvidersEvent event)
     {
         event.register(ModParticles.QUICKSAND_BUBBLE_PARTICLES.get(), QuicksandBubbleParticle.Provider::new);

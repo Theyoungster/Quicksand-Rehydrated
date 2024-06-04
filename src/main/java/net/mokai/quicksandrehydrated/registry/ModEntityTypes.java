@@ -17,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
 import net.mokai.quicksandrehydrated.entity.EntityHunnibee;
+import net.mokai.quicksandrehydrated.entity.EntityTarGolem;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -30,12 +31,13 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<EntityBubble>> BUBBLE = ENTITIES.register("bubble", () -> EntityType.Builder.<EntityBubble>of(EntityBubble::new, MobCategory.MISC).sized(1f, 1f).fireImmune().noSave().build("bubble"));
     public static final RegistryObject<EntityType<EntityHunnibee>> HUNNIBEE = ENTITIES.register("hunnibee", () -> EntityType.Builder.<EntityHunnibee>of(EntityHunnibee::new, MobCategory.CREATURE).sized(1f, 2.9f).build("hunnibee"));
-
+    public static final RegistryObject<EntityType<EntityTarGolem>> TAR_GOLEM = ENTITIES.register("tar_golem", () -> EntityType.Builder.<EntityTarGolem>of(EntityTarGolem::new, MobCategory.CREATURE).sized(2f, 3f).build("tar_golem"));
 
     public static final RegistryObject<PoiType> MIXER_POI = POI_TYPES.register("mixer_poi", () -> new PoiType(ImmutableSet.copyOf(ModBlocks.MIXER.get().getStateDefinition().getPossibleStates()), 1,1));
 
-    public static final RegistryObject<VillagerProfession> MUDOLOGER = VILLAGER_PROFESSIONS.register("mudologer", () -> new VillagerProfession("mudologer", x -> x.get() == MIXER_POI.get(), x -> x.get() == MIXER_POI.get(), ImmutableSet.of(), ImmutableSet.of(),
-                    SoundEvents.BUCKET_FILL));
+    public static final RegistryObject<VillagerProfession> MUDOLOGER = VILLAGER_PROFESSIONS.register("mudologer", () -> new VillagerProfession("mudologer", x -> x.get() == MIXER_POI.get(), x -> x.get() == MIXER_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.BUCKET_FILL));
+
+
 
     public static void register(IEventBus eventBus) {
         ENTITIES.register(eventBus);
