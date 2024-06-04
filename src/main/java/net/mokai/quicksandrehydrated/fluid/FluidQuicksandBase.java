@@ -28,8 +28,8 @@ import java.util.function.Supplier;
 import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 
-
-public class FluidQuicksandBase extends LiquidBlock implements QuicksandInterface {
+//TODO: Decide if this is defunct or not.
+public class FluidQuicksandBase extends LiquidBlock {
 
     public FluidQuicksandBase(Supplier<? extends FlowingFluid> pFluid, Properties pProperties) {super(pFluid, pProperties);}
     private final Random rng = new Random();

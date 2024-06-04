@@ -58,6 +58,7 @@ public class QuicksandRehydrated {
        });
 */
         event.enqueueWork(ModMessages::register);
+        event.enqueueWork(ModEntityTypes::registerPOIs);
     }
 
     private void addCreative(CreativeModeTabEvent.BuildContents event) {
