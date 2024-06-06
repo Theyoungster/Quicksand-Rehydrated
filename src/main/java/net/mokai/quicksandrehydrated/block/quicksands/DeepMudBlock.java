@@ -166,7 +166,7 @@ public class DeepMudBlock extends QuicksandBase {
         double struggleForce = min+struggleAmount;
 
         pEntity.addDeltaMovement(new Vec3(0.0, struggleForce, 0.0));
-        pEntity.getLevel().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS, 0.25F, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.45F);
+        pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS, 0.25F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
 
     }
 
@@ -181,7 +181,7 @@ public class DeepMudBlock extends QuicksandBase {
     public void firstTouch(Entity pEntity) {
         trySetCoverage(pEntity);
         if (pEntity.getDeltaMovement().y <= -0.5) {
-            pEntity.getLevel().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_FALL, SoundSource.BLOCKS, 0.4F, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.45F);
+            pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_FALL, SoundSource.BLOCKS, 0.4F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
         }
     }
 

@@ -3,7 +3,6 @@ package net.mokai.quicksandrehydrated;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,7 +42,7 @@ public class QuicksandRehydrated {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        modEventBus.addListener(this::addCreative);
+        //modEventBus.addListener(this::addCreative);
 
     }
 
@@ -58,21 +57,22 @@ public class QuicksandRehydrated {
        });
 */
         event.enqueueWork(ModMessages::register);
-        event.enqueueWork(ModEntityTypes::registerPOIs);
+        //event.enqueueWork(ModEntityTypes::registerPOIs);
+
     }
 
-    private void addCreative(CreativeModeTabEvent.BuildContents event) {
-        if(event.getTab() == ModCreativeModeTab.QUICKSAND_TAB) {
-            Iterator<RegistryObject<Item>> iterator = ModItems.getItemList();
-
-            while (iterator.hasNext()) {
-                RegistryObject<Item> i = iterator.next();
-                event.accept(i);
-            }
-            System.out.println(ModItems.ITEMS.getEntries());
-
-        }
-    }
+//    private void addCreative(CreativeModeTabEvent.BuildContents event) {
+//        if(event.getTab() == ModCreativeModeTab.QUICKSAND_TAB) {
+//            Iterator<RegistryObject<Item>> iterator = ModItems.getItemList();
+//
+//            while (iterator.hasNext()) {
+//                RegistryObject<Item> i = iterator.next();
+//                event.accept(i);
+//            }
+//            System.out.println(ModItems.ITEMS.getEntries());
+//
+//        }
+//    }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

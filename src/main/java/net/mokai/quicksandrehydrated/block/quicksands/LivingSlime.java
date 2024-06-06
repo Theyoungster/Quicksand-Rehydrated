@@ -86,7 +86,7 @@ public class LivingSlime extends QuicksandBase {
     public void struggleAttempt(@NotNull BlockState pState, @NotNull Entity pEntity, double struggleAmount) {
 
         // block pos has potential to be incorrect?
-        double depth = getDepth(pEntity.getLevel(), pEntity.blockPosition(), pEntity);
+        double depth = getDepth(pEntity.level(), pEntity.blockPosition(), pEntity);
         entityQuicksandVar es = (entityQuicksandVar) pEntity;
 
         Vec3 entityPosition = pEntity.getPosition(0);
@@ -107,7 +107,7 @@ public class LivingSlime extends QuicksandBase {
         entityPosition = entityPosition.add(0.0, offsetAmount*1.5, 0.0);
         es.setPreviousPosition(entityPosition);
 
-        pEntity.getLevel().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_STEP, SoundSource.BLOCKS, 0.25F, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.45F);
+        pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_STEP, SoundSource.BLOCKS, 0.25F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
 
     }
 

@@ -61,9 +61,10 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         return .25;
     }
 
-    public void KILL(LivingEntity pEntity) {
-        pEntity.hurt(new DamageSource(MOD_ID + "_quicksand"), 2);
-    }
+    // TODO
+    //public void KILL(LivingEntity pEntity) {
+//        pEntity.hurt(new DamageSource(MOD_ID + "_quicksand"), 2);
+//    }
 
     // get depth as double, and return integer.
 
@@ -326,18 +327,19 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     }
 
-    public void deathMessage(Level pLevel, LivingEntity pEntity) {
-        if (pLevel.getLevelData().isHardcore()) {
-            pEntity.hurt(new DamageSource(MOD_ID + "_hardcore"), 2);
-        } else {
-            double p = Math.random();
-            if (p > getCustomDeathMessageOdds()) {
-                pEntity.hurt(new DamageSource(MOD_ID + "_generic_" + (int) (Math.random() * 3)), 2);
-            } else {
-                KILL(pEntity);
-            }
-        }
-    }
+    // TODO
+//    public void deathMessage(Level pLevel, LivingEntity pEntity) {
+//        if (pLevel.getLevelData().isHardcore()) {
+//            pEntity.hurt(new DamageSource(MOD_ID + "_hardcore"), 2);
+//        } else {
+//            double p = Math.random();
+//            if (p > getCustomDeathMessageOdds()) {
+//                pEntity.hurt(new DamageSource(MOD_ID + "_generic_" + (int) (Math.random() * 3)), 2);
+//            } else {
+//                KILL(pEntity);
+//            }
+//        }
+//    }
 
     // @Override
     // public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos,

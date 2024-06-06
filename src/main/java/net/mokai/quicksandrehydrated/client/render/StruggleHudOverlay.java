@@ -2,7 +2,7 @@ package net.mokai.quicksandrehydrated.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -27,26 +27,29 @@ public class StruggleHudOverlay {
             int x = width / 2;
             int y = height;
 
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShaderTexture(0, EMPTY_STRUGGLE);
+            //RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            //RenderSystem.setShaderTexture(0, EMPTY_STRUGGLE);
 
-            GuiComponent.blit(poseStack,x - 94, y - 27,0,0,182, 5, 182, 5);
+            //GuiComponent.blit(poseStack,x - 94, y - 27,0,0,182, 5, 182, 5);
+
+            // GuiGraphics.blit(x - 94, y - 27, 0, 182, 5, EMPTY_STRUGGLE);
+
+            // TODO
+
+            //RenderSystem.setShaderTexture(0, FILLED_STRUGGLE);
 
 
-            RenderSystem.setShaderTexture(0, FILLED_STRUGGLE);
+//            playerStruggling strugglingPlayer = (playerStruggling) p;
+//
+//            float percent = (float) strugglingPlayer.getStruggleHold() / 20.0f;
+//            int pixels_wide = (int) (182 * percent);
+//
+//            if (pixels_wide > 182) {
+//                pixels_wide = 182;
+//            }
 
-
-            playerStruggling strugglingPlayer = (playerStruggling) p;
-
-            float percent = (float) strugglingPlayer.getStruggleHold() / 20.0f;
-            int pixels_wide = (int) (182 * percent);
-
-            if (pixels_wide > 182) {
-                pixels_wide = 182;
-            }
-
-            GuiComponent.blit(poseStack, x - 94, y - 27, 0, 0, pixels_wide, 5, 182, 5);
+            //GuiComponent.blit(poseStack, x - 94, y - 27, 0, 0, pixels_wide, 5, 182, 5);
 
         }
 

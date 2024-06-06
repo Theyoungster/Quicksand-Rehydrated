@@ -32,7 +32,7 @@ public class StruggleAttemptC2SPacket {
         context.enqueueWork(() -> {
             // HERE WE ARE ON THE SERVER!
             ServerPlayer player = context.getSender();
-            ServerLevel level = player.getLevel();
+            ServerLevel level = player.serverLevel();
 
             BlockState playerBlockState = player.getFeetBlockState();
             Block playerBlock = playerBlockState.getBlock();

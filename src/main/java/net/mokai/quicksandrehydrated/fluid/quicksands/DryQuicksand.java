@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.DispenseFluidContainer;
@@ -93,7 +92,7 @@ public class DryQuicksand {
     );
 
     public static RegistryObject<LiquidBlock> dry_quicksand_block = BLOCKS.register(name + "_block", () ->
-            new ThisFluid(dry_quicksand, Properties.of(Material.AIR).noCollission().strength(100.0F).noLootTable())
+            new ThisFluid(dry_quicksand, Properties.of().replaceable().noCollission().strength(100.0F).noLootTable())
     );
     public static RegistryObject<Item> dry_quicksand_bucket = ITEMS.register(name + "_bucket", () ->
             new BucketItem(dry_quicksand, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1))

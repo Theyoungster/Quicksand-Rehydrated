@@ -15,9 +15,10 @@ public class SoftQuicksand extends FlowingQuicksandBase {
 
     public SoftQuicksand(Properties pProperties) {super(pProperties);}
 
-    @Override
-    public void KILL(LivingEntity pEntity) {
-        pEntity.hurt(new DamageSource(MOD_ID + "_soft_quicksand"), 2);
-    }
+//    @Override
+//    public void KILL(LivingEntity pEntity) {
+//        pEntity.hurt(new DamageSource(MOD_ID + "_soft_quicksand"), 2);
+//    }
+    // TODO
 
 }

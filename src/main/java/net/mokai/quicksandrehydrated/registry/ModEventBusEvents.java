@@ -14,6 +14,7 @@ public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerParticleFactories(final RegisterParticleProvidersEvent event)
     {
-        event.register(ModParticles.QUICKSAND_BUBBLE_PARTICLES.get(), QuicksandBubbleParticle.Provider::new);
+        //event.register(ModParticles.QUICKSAND_BUBBLE_PARTICLES.get(), QuicksandBubbleParticle.Provider::new);
     }
+
 }

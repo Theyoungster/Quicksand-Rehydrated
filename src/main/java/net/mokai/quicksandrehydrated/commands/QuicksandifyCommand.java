@@ -19,6 +19,7 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.commands.SetBlockCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Clearable;
@@ -79,7 +80,10 @@ public abstract class QuicksandifyCommand {
             if (j == 0) {
                 throw ERROR_FAILED.create();
             } else {
-                pSource.sendSuccess(Component.translatable("commands.fill.success", j), true);
+                int finalJ = j;
+                pSource.sendSuccess(() -> {
+                    return Component.translatable("commands.fill.success", finalJ);
+                }, true);
                 return j;
             }
         }

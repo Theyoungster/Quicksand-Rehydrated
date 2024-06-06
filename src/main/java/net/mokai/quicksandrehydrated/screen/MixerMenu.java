@@ -20,14 +20,14 @@ public class MixerMenu extends AbstractContainerMenu {
     private FluidStack fluidStack;
 
     public MixerMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
+        this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
     public MixerMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.MIXER_MENU.get(), id);
         checkContainerSize(inv, 4);
         blockEntity = (MixerBlockEntity) entity;
-        this.level = inv.player.level;
+        this.level = inv.player.level();
         this.data = data;
         this.fluidStack = blockEntity.getInFluidStack();
 

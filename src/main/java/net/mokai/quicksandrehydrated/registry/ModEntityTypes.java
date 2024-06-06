@@ -33,10 +33,14 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<EntityHunnibee>> HUNNIBEE = ENTITIES.register("hunnibee", () -> EntityType.Builder.<EntityHunnibee>of(EntityHunnibee::new, MobCategory.CREATURE).sized(1f, 2.9f).build("hunnibee"));
     public static final RegistryObject<EntityType<EntityTarGolem>> TAR_GOLEM = ENTITIES.register("tar_golem", () -> EntityType.Builder.<EntityTarGolem>of(EntityTarGolem::new, MobCategory.CREATURE).sized(2f, 3f).build("tar_golem"));
 
-    public static final RegistryObject<PoiType> MIXER_POI = POI_TYPES.register("mixer_poi", () -> new PoiType(ImmutableSet.copyOf(ModBlocks.MIXER.get().getStateDefinition().getPossibleStates()), 1,1));
+    public static final RegistryObject<PoiType> MIXER_POI = POI_TYPES.register("mixer_poi",
+            () -> new PoiType(ImmutableSet.copyOf(ModBlocks.MIXER.get().getStateDefinition().getPossibleStates()),
+                    1, 1));
 
-    public static final RegistryObject<VillagerProfession> MUDOLOGER = VILLAGER_PROFESSIONS.register("mudologer", () -> new VillagerProfession("mudologer", x -> x.get() == MIXER_POI.get(), x -> x.get() == MIXER_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.BUCKET_FILL));
-
+    public static final RegistryObject<VillagerProfession> MUDOLOGER =
+            VILLAGER_PROFESSIONS.register("mudologer", () -> new VillagerProfession("soundmaster",
+                    holder -> holder.get() == MIXER_POI.get(), holder -> holder.get() == MIXER_POI.get(),
+                    ImmutableSet.of(), ImmutableSet.of(), SoundEvents.BUCKET_FILL));
 
 
     public static void register(IEventBus eventBus) {
@@ -46,13 +50,13 @@ public class ModEntityTypes {
         VILLAGER_PROFESSIONS.register(eventBus);
     }
 
-    public static void registerPOIs() {
-        try {
-            ObfuscationReflectionHelper.findMethod(PoiType.class, "registerBlockStates", PoiType.class).invoke(null, MIXER_POI.get());
-        } catch (InvocationTargetException | IllegalAccessException exception) {
-            exception.printStackTrace();
-        }
-    }
+//    public static void registerPOIs() {
+//        try {
+//            ObfuscationReflectionHelper.findMethod(PoiType.class, "registerBlockStates", PoiType.class).invoke(null, MIXER_POI.get());
+//        } catch (InvocationTargetException | IllegalAccessException exception) {
+//            exception.printStackTrace();
+//        }
+//    }
 
 
 

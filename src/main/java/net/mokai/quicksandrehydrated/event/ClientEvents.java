@@ -1,6 +1,7 @@
 package net.mokai.quicksandrehydrated.event;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.*;
@@ -10,6 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.mokai.quicksandrehydrated.client.render.MyRenderTypes;
 import net.mokai.quicksandrehydrated.client.render.StruggleHudOverlay;
+import net.mokai.quicksandrehydrated.entity.playerStruggling;
 import net.mokai.quicksandrehydrated.util.Keybinding;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ public class ClientEvents {
         public static void onKeyInput(InputEvent.Key event) {
             if (Keybinding.STRUGGLE_KEY.consumeClick()) {
                 // cast to playerStruggling interface
-                //((playerStruggling)Minecraft.getInstance().player).attemptStruggle();
+                ((playerStruggling) Minecraft.getInstance().player).attemptStruggle();
             }
         }
 

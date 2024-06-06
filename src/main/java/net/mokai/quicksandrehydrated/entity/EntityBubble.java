@@ -87,7 +87,7 @@ public class EntityBubble extends Entity {
     }
 
     protected void readAdditionalSaveData(CompoundTag pCompound) {
-        this.blockState = NbtUtils.readBlockState(this.level.holderLookup(Registries.BLOCK),
+        this.blockState = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK),
                 pCompound.getCompound("BlockState"));
     }
 
@@ -97,7 +97,7 @@ public class EntityBubble extends Entity {
     }
 
     public double getSize() {
-        long ct = this.level.getGameTime();
+        long ct = this.level().getGameTime();
         return Math.sqrt(
                 EasingHandler.reverse_interp(
                         startLife,
@@ -118,10 +118,10 @@ public class EntityBubble extends Entity {
     @Override
     public void tick() {
 
-        if (this.level.getGameTime() > endLife) {
+        if (this.level().getGameTime() > endLife) {
             this.kill();
         }
-        if (this.level.getGameTime() + 1 > endLife) {
+        if (this.level().getGameTime() + 1 > endLife) {
             spawnParticles();
         } // NGL, no idea why particles can't spawn on the same tick the entity dies on.
           // Thankfully, we can just... get the tick before.
@@ -138,7 +138,7 @@ public class EntityBubble extends Entity {
 
     protected void spawnParticles() {
         for (int i = 0; i < 3; i++) {
-            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockState).setPos(this.getOnPos()),
+            this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockState).setPos(this.getOnPos()),
                     this.getX(), this.getY() + .5f, this.getZ(), (Math.random() - .5) * 2.0D, .25D,
                     (Math.random() - .5) * 2.0D);
         }

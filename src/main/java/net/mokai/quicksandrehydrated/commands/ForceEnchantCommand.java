@@ -71,9 +71,10 @@ public abstract class ForceEnchantCommand {
                 throw ERROR_NOTHING_HAPPENED.create();
             } else {
                 if (pTargets.size() == 1) {
-                    pSource.sendSuccess(Component.translatable("commands.enchant.success.single", enchantment.getFullname(pLevel), pTargets.iterator().next().getDisplayName()), true);
+                    // TODO
+                    //pSource.sendSuccess(Component.translatable("commands.enchant.success.single", enchantment.getFullname(pLevel), pTargets.iterator().next().getDisplayName()), true);
                 } else {
-                    pSource.sendSuccess(Component.translatable("commands.enchant.success.multiple", enchantment.getFullname(pLevel), pTargets.size()), true);
+                    //pSource.sendSuccess(Component.translatable("commands.enchant.success.multiple", enchantment.getFullname(pLevel), pTargets.size()), true);
                 }
 
                 return i;

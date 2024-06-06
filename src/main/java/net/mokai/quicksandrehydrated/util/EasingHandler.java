@@ -51,7 +51,10 @@ public class EasingHandler {
 
         do {
             currentHeight++;
-            BlockPos check = new BlockPos(pPos.getX(), currentHeight, pPos.getZ());
+
+
+
+            BlockPos check = new BlockPos(pPos.getX(), (int) currentHeight, pPos.getZ());
             playercube = check;
         } while (pLevel.getBlockState(playercube).getBlock() instanceof QuicksandBase);
 

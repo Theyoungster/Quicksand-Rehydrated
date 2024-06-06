@@ -74,8 +74,8 @@ public abstract class AirControlMixin
 
 
 
-            BlockState currentHeadBlock = entity.getLevel().getBlockState(new BlockPos(entity.getX(), entity.getEyeY(), entity.getZ()));
-            BlockState blockAtEyes = entity.getLevel().getBlockState(new BlockPos(entity.getX(), entity.getEyeY(),entity.getZ()));
+            BlockState currentHeadBlock = entity.level().getBlockState(new BlockPos((int) entity.getX(), (int) entity.getEyeY(), (int) entity.getZ()));
+            BlockState blockAtEyes = entity.level().getBlockState(new BlockPos((int) entity.getX(), (int) entity.getEyeY(),(int) entity.getZ()));
             boolean isQuicksand = blockAtEyes.getTags().toList().contains(QUICKSAND_DROWNABLE);
 
             boolean isBubbled = currentHeadBlock.is(Blocks.BUBBLE_COLUMN);
@@ -89,7 +89,7 @@ public abstract class AirControlMixin
             {
                 if(air <= -20 && (entity.getHealth()>2 || !isQuicksand))
                 {
-                    entity.hurt(DamageSource.DROWN, 2.0F);
+                    //entity.hurt(DamageSource., 2.0F); TODO
                     return 0;
                 } else {
                     return decreaseAirSupply(air, entity);
@@ -97,7 +97,7 @@ public abstract class AirControlMixin
             }
         }
 
-        if(isPlayer && !entity.getLevel().isClientSide() && entity.getLevel().getGameTime()%1200 == 0) { // Correct clientside air every minute. Should make this more frequent.
+        if(isPlayer && !entity.level().isClientSide() && entity.level().getGameTime()%1200 == 0) { // Correct clientside air every minute. Should make this more frequent.
             //PacketHandler.sendTo((ServerPlayer)entity, new PacketSyncAir(air));
         }
 
@@ -113,15 +113,15 @@ public abstract class AirControlMixin
     {
         FluidType stateAtEyes = entity.getEyeInFluidType();
         //if (blockAtEyes.getBlock().getCollisionShape(blockAtEyes,entity.level,new BlockPos(entity.getX(), entity.getEyeY(), entity.getZ()), entity.collision)
-        livingBreathingEvent.LivingCanBreatheFluidEvent event = new livingBreathingEvent.LivingCanBreatheFluidEvent(entity, entity.getLevel().getFluidState(entity.blockPosition().offset(0, entity.getEyeHeight(), 0)));
+        livingBreathingEvent.LivingCanBreatheFluidEvent event = new livingBreathingEvent.LivingCanBreatheFluidEvent(entity, entity.level().getFluidState(entity.blockPosition().offset(0, (int) entity.getEyeHeight(), 0)));
         MinecraftForge.EVENT_BUS.post(event);
 
         double d = .1d;
         AABB aabb = AABB.ofSize(entity.getEyePosition(), d, 1.0E-6D, d);
         boolean qsDepthTest = BlockPos.betweenClosedStream(aabb).anyMatch((p_201942_) -> {
-            BlockState blockstate = entity.level.getBlockState(p_201942_);
+            BlockState blockstate = entity.level().getBlockState(p_201942_);
             return !blockstate.isAir()
-                    && Shapes.joinIsNotEmpty(blockstate.getShape(entity.level, p_201942_).move((double)p_201942_.getX(), (double)p_201942_.getY(), (double)p_201942_.getZ()), Shapes.create(aabb), BooleanOp.AND);
+                    && Shapes.joinIsNotEmpty(blockstate.getShape(entity.level(), p_201942_).move((double)p_201942_.getX(), (double)p_201942_.getY(), (double)p_201942_.getZ()), Shapes.create(aabb), BooleanOp.AND);
         });
 
 

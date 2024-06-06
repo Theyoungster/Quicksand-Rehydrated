@@ -35,7 +35,7 @@ public class Quicksand extends QuicksandBase {
 
         pEntity.addDeltaMovement(new Vec3(0.0, middlePoint, 0.0));
 
-        pEntity.getLevel().playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, 0.25F, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.5F);
+        pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, 0.25F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.5F);
 
     }
 
@@ -44,8 +44,8 @@ public class Quicksand extends QuicksandBase {
         if (pEntity.getDeltaMovement().y <= -0.333) {
             double mvt = pEntity.getDeltaMovement().y;
             mvt = clamp(mvt, -0.666, 0);
-            pEntity.getLevel().playSound(pEntity, pEntity.blockPosition(), SoundEvents.MUD_FALL, SoundSource.BLOCKS, 0.3F+(float) mvt, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.45F);
-            pEntity.getLevel().playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, 0.3F+(float) mvt, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.45F);
+            pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.MUD_FALL, SoundSource.BLOCKS, 0.3F+(float) mvt, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
+            pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, 0.3F+(float) mvt, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
         }
     }
 
@@ -56,7 +56,7 @@ public class Quicksand extends QuicksandBase {
 
         Random rand = new Random();
         if (rand.nextInt(20*8) < 1) { // every 6 seconds
-            pLevel.playSound(pEntity, pEntity.blockPosition(), SoundEvents.SILVERFISH_STEP, SoundSource.BLOCKS, 0.25F, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.5F);
+            pLevel.playSound(pEntity, pEntity.blockPosition(), SoundEvents.SILVERFISH_STEP, SoundSource.BLOCKS, 0.25F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.5F);
         }
 
     }
