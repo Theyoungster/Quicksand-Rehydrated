@@ -14,4 +14,13 @@ public class ModModelLayers {
             new ResourceLocation(QuicksandRehydrated.MOD_ID, "sticky_slime_layer"), "main");
     public static final ModelLayerLocation BUBBLE_LAYER = new ModelLayerLocation(
             new ResourceLocation(QuicksandRehydrated.MOD_ID, "bubble_layer"), "main");
+
+
+    public static final ModelLayerLocation COVERAGE_LAYER_DEFAULT = new ModelLayerLocation(
+            new ResourceLocation(QuicksandRehydrated.MOD_ID, "coverage_default"), "main");
+
+    public static final ModelLayerLocation COVERAGE_LAYER_SLIM = new ModelLayerLocation(
+            new ResourceLocation(QuicksandRehydrated.MOD_ID, "coverage_slim"), "main");
+
+
 }

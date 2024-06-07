@@ -18,28 +18,29 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin {
 
-    @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-    private void modifyGetRenderType(LivingEntity pLivingEntity, boolean pBodyVisible, boolean pTranslucent,
-            boolean pGlowing, CallbackInfoReturnable<RenderType> cir) {
+//    @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
+//    private void modifyGetRenderType(LivingEntity pLivingEntity, boolean pBodyVisible, boolean pTranslucent,
+//            boolean pGlowing, CallbackInfoReturnable<RenderType> cir) {
+//
+//        if (pLivingEntity instanceof AbstractClientPlayer) {
+//
+//            AbstractClientPlayer abstractPlayer = (AbstractClientPlayer) pLivingEntity;
+//            playerStruggling pS = (playerStruggling) abstractPlayer;
+//            double coverPercent = pS.getCoveragePercent();
+//            if (coverPercent > 0.0) {
+//
+//                LivingEntityRenderer ler = (LivingEntityRenderer) (Object) this;
+//                ResourceLocation playerSkin = ler.getTextureLocation(pLivingEntity);
+//                ResourceLocation coverageMask = new ResourceLocation(pS.getCoverageTexture());
+//
+//                AbstractUniform coverPercentUniform = MyRenderTypes.CustomRenderTypes.coverageShader.safeGetUniform("coverPercent");
+//                coverPercentUniform.set((float) coverPercent);
+//
+//                cir.setReturnValue(MyRenderTypes.coverage(playerSkin, coverageMask));
+//
+//            }
+//        }
+//
+//    }
 
-        if (pLivingEntity instanceof AbstractClientPlayer) {
-
-            AbstractClientPlayer abstractPlayer = (AbstractClientPlayer) pLivingEntity;
-            playerStruggling pS = (playerStruggling) abstractPlayer;
-            double coverPercent = pS.getCoveragePercent();
-            if (coverPercent > 0.0) {
-
-                LivingEntityRenderer ler = (LivingEntityRenderer) (Object) this;
-                ResourceLocation playerSkin = ler.getTextureLocation(pLivingEntity);
-                ResourceLocation coverageMask = new ResourceLocation(pS.getCoverageTexture());
-
-                AbstractUniform coverPercentUniform = MyRenderTypes.CustomRenderTypes.coverageShader.safeGetUniform("coverPercent");
-                coverPercentUniform.set((float) coverPercent);
-
-                cir.setReturnValue(MyRenderTypes.coverage(playerSkin, coverageMask));
-
-            }
-        }
-
-    }
 }

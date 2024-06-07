@@ -46,6 +46,7 @@ public class PlayerMixin implements playerStruggling {
 
 
 
+
     String coverageTexture = "textures/entity/coverage/quicksand_coverage.png";
 
     public String getCoverageTexture() {return coverageTexture;}
