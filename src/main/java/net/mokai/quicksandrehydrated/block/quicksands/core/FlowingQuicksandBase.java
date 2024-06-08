@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -30,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
@@ -63,10 +61,6 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
 
     public double getCustomDeathMessageOdds() { return .25; }
 
-//    public void KILL(LivingEntity pEntity) {
-//        pEntity.hurt(new DamageSource(MOD_ID + "_quicksand"), 4);
-//    }
-    // TODO
 
 
 
@@ -182,20 +176,6 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
         }
 
     }
-
-// TODO
-//    public void deathMessage(Level pLevel, LivingEntity pEntity) {
-//        if (pLevel.getLevelData().isHardcore()) {
-//            pEntity.hurt(new DamageSource(MOD_ID + "_hardcore"), 2);
-//        } else {
-//            double p = Math.random();
-//            if (p > getCustomDeathMessageOdds()) {
-//                pEntity.hurt(new DamageSource(MOD_ID + "_generic_" + (int) (Math.random() * 3)), 2);
-//            } else {
-//                KILL(pEntity);
-//            }
-//        }
-//    }
 
     @Override
     public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {

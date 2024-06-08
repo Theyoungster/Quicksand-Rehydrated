@@ -5,12 +5,10 @@
   "minVersion": "0",
   "mixins":
   [
-    "AirControlMixin",
     "SlowdownMixin",
     "PlayerMixin",
     "FallingBlockEntityMixin",
-    "CanOccludeMixin",
-    "LivingEntityRendererMixin"
+    "CanOccludeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

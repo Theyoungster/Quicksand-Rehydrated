@@ -1,15 +1,7 @@
 package net.mokai.quicksandrehydrated.block.quicksands.core;
 
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -19,17 +11,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.entity.playerStruggling;
-import net.mokai.quicksandrehydrated.registry.ModParticles;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
-import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
@@ -88,11 +77,6 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     public double getCustomDeathMessageOdds() {
         return .25;
     }
-
-    // TODO
-    //public void KILL(LivingEntity pEntity) {
-//        pEntity.hurt(new DamageSource(MOD_ID + "_quicksand"), 2);
-//    }
 
     public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) {
         return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(null));
@@ -353,19 +337,6 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     }
 
-    // TODO
-//    public void deathMessage(Level pLevel, LivingEntity pEntity) {
-//        if (pLevel.getLevelData().isHardcore()) {
-//            pEntity.hurt(new DamageSource(MOD_ID + "_hardcore"), 2);
-//        } else {
-//            double p = Math.random();
-//            if (p > getCustomDeathMessageOdds()) {
-//                pEntity.hurt(new DamageSource(MOD_ID + "_generic_" + (int) (Math.random() * 3)), 2);
-//            } else {
-//                KILL(pEntity);
-//            }
-//        }
-//    }
 
     // @Override
     // public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos,

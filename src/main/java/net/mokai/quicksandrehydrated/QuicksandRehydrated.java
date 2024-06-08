@@ -1,22 +1,25 @@
 package net.mokai.quicksandrehydrated;
 
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingBreatheEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 import net.mokai.quicksandrehydrated.loot.ModLootModifiers;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
 import net.mokai.quicksandrehydrated.registry.*;
 import net.mokai.quicksandrehydrated.screen.MixerScreen;
 import net.mokai.quicksandrehydrated.screen.ModMenuTypes;
 
-import java.util.Iterator;
+import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(QuicksandRehydrated.MOD_ID)
@@ -25,6 +28,7 @@ public class QuicksandRehydrated {
     public static final String MOD_ID = "qsrehydrated";
 
     public QuicksandRehydrated() {
+
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.register(modEventBus);
@@ -44,18 +48,14 @@ public class QuicksandRehydrated {
 
         //modEventBus.addListener(this::addCreative);
 
+
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
-/*         event.enqueueWork(() -> {
-           SpawnPlacements.register(ModEntityTypes.CHOMPER.get(),
-                    SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                    Monster::checkMonsterSpawnRules);
 
-            ModMessages.register();
-       });
-*/
+
         event.enqueueWork(ModMessages::register);
         //event.enqueueWork(ModEntityTypes::registerPOIs);
 
@@ -85,6 +85,28 @@ public class QuicksandRehydrated {
 
         }
     }
+
+
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class GameModEvents {
+        @SubscribeEvent
+        public static void onLivingBreatheEvent(LivingBreatheEvent event) {
+
+            Entity entity = event.getEntity();
+            Vec3 eyePos = entity.getEyePosition();
+            BlockPos eyeBlockPos = new BlockPos((int) eyePos.x(), (int)eyePos.y(), (int)eyePos.z());
+            BlockState eyeState = entity.level().getBlockState(eyeBlockPos);
+
+            if (eyeState.is(QUICKSAND_DROWNABLE)) {
+                event.setCanBreathe(false);
+            }
+
+        }
+
+    }
+
+
+
 
 
 }
