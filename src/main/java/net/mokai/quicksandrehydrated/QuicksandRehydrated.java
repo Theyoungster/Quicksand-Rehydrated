@@ -41,6 +41,7 @@ public class QuicksandRehydrated {
         ModEntityTypes.register(modEventBus);
         ModLootModifiers.register(modEventBus);
         ModSounds.register(modEventBus);
+        ModCreativeModeTab.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 

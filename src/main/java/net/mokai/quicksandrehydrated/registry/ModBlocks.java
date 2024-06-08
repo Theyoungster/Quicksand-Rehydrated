@@ -1,7 +1,9 @@
 package net.mokai.quicksandrehydrated.registry;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -15,6 +17,8 @@ import net.mokai.quicksandrehydrated.block.quicksands.*;
 import net.mokai.quicksandrehydrated.block.quicksands.core.FlowingQuicksandBase;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ModBlocks {
@@ -41,14 +45,27 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> MIXER = registerBlock("mixer", () -> new MixerBlock(BlockBehaviour.Properties.of().strength(6f).requiresCorrectToolForDrops().noOcclusion()));
 
+    private static Collection<ItemStack> REGLIST;
+
+    public static Collection<ItemStack> setupCreativeGroups() {
+        REGLIST = new ArrayList<>();
+        addItem(QUICKSAND);
+        addItem(LIVING_SLIME);
+        addItem(DEEP_MUD);
+        addItem(SOFT_QUICKSAND);
+        addItem(MIXER);
+        return REGLIST;
+    }
+
+    public static void addItem(RegistryObject<Block> b) {
+        REGLIST.add(b.get().asItem().getDefaultInstance());
+    }
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
         return toReturn;
     }
-
-
 
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block) {
         return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
