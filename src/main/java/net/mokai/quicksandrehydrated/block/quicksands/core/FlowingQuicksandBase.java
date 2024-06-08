@@ -2,9 +2,9 @@ package net.mokai.quicksandrehydrated.block.quicksands.core;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
@@ -62,9 +61,6 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
 
     public double getCustomDeathMessageOdds() { return .25; }
 
-    public void KILL(LivingEntity pEntity) {
-        pEntity.hurt(new DamageSource(MOD_ID + "_quicksand"), 4);
-    }
 
 
 
@@ -138,9 +134,12 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
                 // Bubble code!
                 if(getBubblingChance()>0) {
                     if (Math.random() > getBubblingChance()) {
-                        Vec3 pos = new Vec3(pEntity.getX() + Math.random(), pPos.getY() + .5, pEntity.getZ() + Math.random());
+
+                        Vec3i pos = new Vec3i((int) (pEntity.getX() + Math.random()), (int) (pPos.getY() + .5), (int) (pEntity.getZ() + Math.random()));
+                        Vec3 pos2 = new Vec3(pEntity.getX() + Math.random(), pPos.getY() + .5, pEntity.getZ() + Math.random());
                         BlockPos np = new BlockPos(pos);
-                        spawnBubble(pLevel.getBlockState(np), pLevel, pos, np, this.defaultBlockState());
+                        spawnBubble(pLevel.getBlockState(np), pLevel, pos2, np, this.defaultBlockState());
+
                     }
                 }
                 // End bubble code
@@ -172,23 +171,10 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
         if (pEntity instanceof LivingEntity) {
             LivingEntity le = (LivingEntity) pEntity;
             if (pEntity.getAirSupply() <= -20 && le.getHealth() <= 2) {
-                deathMessage(pLevel, le);
+                //deathMessage(pLevel, le);
             }
         }
-    }
 
-
-    public void deathMessage(Level pLevel, LivingEntity pEntity) {
-        if (pLevel.getLevelData().isHardcore()) {
-            pEntity.hurt(new DamageSource(MOD_ID + "_hardcore"), 2);
-        } else {
-            double p = Math.random();
-            if (p > getCustomDeathMessageOdds()) {
-                pEntity.hurt(new DamageSource(MOD_ID + "_generic_" + (int) (Math.random() * 3)), 2);
-            } else {
-                KILL(pEntity);
-            }
-        }
     }
 
     @Override

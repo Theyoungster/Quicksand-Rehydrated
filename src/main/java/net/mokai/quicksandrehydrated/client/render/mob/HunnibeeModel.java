@@ -1,4 +1,4 @@
-package net.mokai.quicksandrehydrated.client.render;// Made with Blockbench 4.9.3
+package net.mokai.quicksandrehydrated.client.render.mob;// Made with Blockbench 4.9.3
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

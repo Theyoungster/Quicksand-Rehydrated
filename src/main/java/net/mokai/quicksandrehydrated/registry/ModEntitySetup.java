@@ -9,6 +9,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.client.render.*;
+import net.mokai.quicksandrehydrated.client.render.mob.HunnibeeModel;
+import net.mokai.quicksandrehydrated.client.render.mob.HunnibeeRenderer;
+import net.mokai.quicksandrehydrated.client.render.mob.TarGolemModel;
+import net.mokai.quicksandrehydrated.client.render.mob.TarGolemRenderer;
 import net.mokai.quicksandrehydrated.entity.*;
 
 import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;

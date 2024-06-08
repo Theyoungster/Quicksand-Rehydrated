@@ -1,5 +1,6 @@
 package net.mokai.quicksandrehydrated.block.entity;
 
+import net.minecraft.core.RegistryAccess;
 import net.mokai.quicksandrehydrated.block.MixerBlock;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
 import net.mokai.quicksandrehydrated.networking.packet.FluidSyncS2CPacket;
@@ -328,7 +329,10 @@ public class MixerBlockEntity extends BlockEntity implements MenuProvider {
         if(hasRecipe(pEntity)) {
             pEntity.FLUID_TANK.drain(recipe.get().getFluid().getAmount(), IFluidHandler.FluidAction.EXECUTE);
             pEntity.itemHandler.extractItem(1, 1, false);
-            pEntity.itemHandler.setStackInSlot(4, new ItemStack(recipe.get().getResultItem().getItem(),
+
+            RegistryAccess ra = pEntity.level.registryAccess();
+
+            pEntity.itemHandler.setStackInSlot(4, new ItemStack(recipe.get().getResultItem(ra).getItem(),
                     pEntity.itemHandler.getStackInSlot(4).getCount() + 1));
 
             pEntity.resetProgress();
@@ -345,9 +349,10 @@ public class MixerBlockEntity extends BlockEntity implements MenuProvider {
         Optional<FluidMixerRecipes> recipe = level.getRecipeManager()
                 .getRecipeFor(FluidMixerRecipes.Type.INSTANCE, inventory, level);
 
+        RegistryAccess ra = entity.level.registryAccess();
 
         return recipe.isPresent() && canInsertAmountIntoOutputSlot(inventory) &&
-                canInsertItemIntoOutputSlot(inventory, recipe.get().getResultItem())
+                canInsertItemIntoOutputSlot(inventory, recipe.get().getResultItem(ra))
                 && hasCorrectFluidInTank(entity, recipe) && hasCorrectFluidAmountInTank(entity, recipe);
     }
 

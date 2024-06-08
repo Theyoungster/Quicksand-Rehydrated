@@ -12,14 +12,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBase;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
-import net.mokai.quicksandrehydrated.util.DEPTH;
+import net.mokai.quicksandrehydrated.util.BodyDepthThreshold;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import java.util.Random;
 
-import static net.minecraft.core.particles.DustColorTransitionOptions.SCULK_PARTICLE_COLOR;
 import static org.joml.Math.lerp;
 
 public class DeepMudBlock extends QuicksandBase {
@@ -31,9 +30,18 @@ public class DeepMudBlock extends QuicksandBase {
     public DeepMudBlock(Properties pProperties) {super(pProperties);}
 
     // helps determine what behaviour the mud should have. Is the entity deep enough to get stuck in place?
-    public double stuckDepth = DEPTH.KNEE;
+    /**
+     * The Body Depth Threshold where the body is considered as stuck.
+     */
+    public static final BodyDepthThreshold STUCK_DEPTH = BodyDepthThreshold.KNEE;
+
+    /**
+     * Find out, if the depth level is considered as stuck.
+     * @param depthRaw The depth level.
+     * @return <code>true</code>, if it's considered as stuck.
+     */
     public boolean depthIsStuck(double depthRaw) {
-        return depthRaw >= stuckDepth;
+        return depthRaw >= STUCK_DEPTH.depth;
     }
 
     public double getSink(double depthRaw) { return 0.0; } // no sinky
@@ -43,7 +51,7 @@ public class DeepMudBlock extends QuicksandBase {
             return 0.99;
         }
         else {
-            double normalDepth = (depthRaw-stuckDepth) / (2-stuckDepth); // start the array at knee depth
+            double normalDepth = (depthRaw- STUCK_DEPTH.depth) / (2- STUCK_DEPTH.depth); // start the array at knee depth
             return EasingHandler.doubleListInterpolate(normalDepth, new double[]{0.6, 0.35, 0.1, 0.0, 0.0});
         }
     }
@@ -59,7 +67,7 @@ public class DeepMudBlock extends QuicksandBase {
 //            return EasingHandler.doubleListInterpolate(normalDepth, new double[]{0.99, 0.6});
         }
         else {
-            double normalDepth = (depthRaw-stuckDepth) / (2-stuckDepth); // start the array at knee depth
+            double normalDepth = (depthRaw- STUCK_DEPTH.depth) / (2- STUCK_DEPTH.depth); // start the array at knee depth
             return EasingHandler.doubleListInterpolate(normalDepth, new double[]{0.3, 0.1});
         }
     }
@@ -82,7 +90,7 @@ public class DeepMudBlock extends QuicksandBase {
             return 0.0; // go right to player if above
         }
         else {
-            double normalDepth = (depthRaw-stuckDepth) / (2-stuckDepth); // start the array at knee depth
+            double normalDepth = (depthRaw- STUCK_DEPTH.depth) / (2- STUCK_DEPTH.depth); // start the array at knee depth
             return EasingHandler.doubleListInterpolate(normalDepth, new double[]{0.15, 0.3}); // player not allowed to move
         }
     }
@@ -166,7 +174,7 @@ public class DeepMudBlock extends QuicksandBase {
         double struggleForce = min+struggleAmount;
 
         pEntity.addDeltaMovement(new Vec3(0.0, struggleForce, 0.0));
-        pEntity.getLevel().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS, 0.25F, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.45F);
+        pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS, 0.25F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
 
     }
 
@@ -181,7 +189,7 @@ public class DeepMudBlock extends QuicksandBase {
     public void firstTouch(Entity pEntity) {
         trySetCoverage(pEntity);
         if (pEntity.getDeltaMovement().y <= -0.5) {
-            pEntity.getLevel().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_FALL, SoundSource.BLOCKS, 0.4F, (pEntity.getLevel().getRandom().nextFloat() * 0.1F) + 0.45F);
+            pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.HONEY_BLOCK_FALL, SoundSource.BLOCKS, 0.4F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
         }
     }
 

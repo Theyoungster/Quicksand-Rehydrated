@@ -48,8 +48,8 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'parchment', version: '2022.12.18-1.19.3'
-    //mappings channel: 'official', version '1.19.3'
+    mappings channel: 'parchment', version: '2023.09.03-1.20.1'
+    //mappings channel: 'official', version '1.20.1'
 
     //accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -136,7 +136,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.3-44.1.5'
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 

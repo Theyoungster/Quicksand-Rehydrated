@@ -1,4 +1,4 @@
-package net.mokai.quicksandrehydrated.client.render;// Save this class in your mod and generate all required imports
+package net.mokai.quicksandrehydrated.client.render.mob;// Save this class in your mod and generate all required imports
 
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;

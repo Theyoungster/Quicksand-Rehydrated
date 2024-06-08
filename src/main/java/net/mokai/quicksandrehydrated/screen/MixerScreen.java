@@ -2,6 +2,7 @@ package net.mokai.quicksandrehydrated.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.screen.renderer.FluidTankRenderer;
 import net.mokai.quicksandrehydrated.util.MouseUtil;
@@ -37,51 +38,52 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
 
 
     @Override
-    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        renderFluidAreaTooltips(pPoseStack, pMouseX, pMouseY, x, y);
+        renderFluidAreaTooltips(pGuiGraphics, pMouseX, pMouseY, x, y);
     }
 
-    private void renderFluidAreaTooltips(PoseStack pPoseStack, int pMouseX, int pMouseY, int x, int y) {
+    private void renderFluidAreaTooltips(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, int x, int y) {
+
         if(isMouseAboveArea(pMouseX, pMouseY, x, y, 33, 14)) {
-            renderTooltip(pPoseStack, renderer.getTooltip(menu.getFluidStack(), TooltipFlag.Default.NORMAL),
-                    Optional.empty(), pMouseX - x, pMouseY - y);
+            pGuiGraphics.renderTooltip(this.font, renderer.getTooltip(menu.getFluidStack(), TooltipFlag.Default.NORMAL), Optional.empty(), pMouseX - x, pMouseY - y);
         }
         if(isMouseAboveArea(pMouseX, pMouseY, x, y, 107, 14)) {
-            renderTooltip(pPoseStack, rendererB.getTooltip(menu.getFluidStack(), TooltipFlag.Default.NORMAL),
+            pGuiGraphics.renderTooltip(this.font, rendererB.getTooltip(menu.getFluidStack(), TooltipFlag.Default.NORMAL),
                     Optional.empty(), pMouseX - x, pMouseY - y);
         }
+
     }
 
 
     @Override
-    protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
-        RenderSystem.setShaderTexture(0, TEXTURE);
 
-        this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
+        pGuiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        renderProgressArrow(pGuiGraphics, x, y);
 
-        renderProgressArrow(pPoseStack, x, y);
-        renderer.render(pPoseStack, x + 33, y + 14, menu.getFluidStack());
-        rendererB.render(pPoseStack, x + 107, y + 14, menu.getFluidStack());
+        renderer.render(pGuiGraphics.pose(), x + 33, y + 14, menu.getFluidStack());
+        rendererB.render(pGuiGraphics.pose(), x + 107, y + 14, menu.getFluidStack());
+
     }
 
-    private void renderProgressArrow(PoseStack pPoseStack, int x, int y) {
+    private void renderProgressArrow(GuiGraphics pGuiGraphics, int x, int y) {
         if(menu.isCrafting()) {
-            blit(pPoseStack, x + 80, y + 31, 176, 0, 8, menu.getScaledProgress());
+            menu.getScaledProgress();
+            pGuiGraphics.blit(TEXTURE, x + 80, y + 31, 0, 176, 8, 0);
         }
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
-        renderBackground(pPoseStack);
-        super.render(pPoseStack, mouseX, mouseY, delta);
-        renderTooltip(pPoseStack, mouseX, mouseY);
+    public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float delta) {
+        renderBackground(pGuiGraphics);
+        super.render(pGuiGraphics, mouseX, mouseY, delta);
+        renderTooltip(pGuiGraphics, mouseX, mouseY);
     }
 
     private boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY) {

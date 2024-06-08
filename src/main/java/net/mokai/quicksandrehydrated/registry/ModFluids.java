@@ -6,8 +6,8 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.mokai.quicksandrehydrated.fluid.quicksands.DryQuicksand;
-import net.mokai.quicksandrehydrated.fluid.quicksands.RedQuicksand;
+//import net.mokai.quicksandrehydrated.fluid.quicksands.DryQuicksand;
+//import net.mokai.quicksandrehydrated.fluid.quicksands.RedQuicksand;
 
 
 public class ModFluids {
@@ -15,8 +15,8 @@ public class ModFluids {
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, QuicksandRehydrated.MOD_ID);
     public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, QuicksandRehydrated.MOD_ID);
 
-    public static final DryQuicksand DRY_QUICKSAND = new DryQuicksand();
-    public static final RedQuicksand RED_QUICKSAND = new RedQuicksand();
+   // public static final DryQuicksand DRY_QUICKSAND = new DryQuicksand();
+    //public static final RedQuicksand RED_QUICKSAND = new RedQuicksand();
 
     /*
     public static final RegistryObject<FlowingFluid> DRY_QUICKSAND = FLUIDS.register("dry_quicksand",

@@ -46,6 +46,7 @@ public class PlayerMixin implements playerStruggling {
 
 
 
+
     String coverageTexture = "textures/entity/coverage/quicksand_coverage.png";
 
     public String getCoverageTexture() {return coverageTexture;}
@@ -89,7 +90,7 @@ public class PlayerMixin implements playerStruggling {
 
                 // can only do things if it exists, of course.
 
-                Level eLevel = player.getLevel();
+                Level eLevel = player.level();
                 BlockState bs = eLevel.getBlockState(bp);
 
                 int ticks = strugglingPlayer.getStruggleHold();
@@ -138,7 +139,7 @@ public class PlayerMixin implements playerStruggling {
 //            player.displayClientMessage(Component.literal("has quicksand grav modifier"), false);
 //        }
 
-        if (player.getLevel().isClientSide()) {
+        if (player.level().isClientSide()) {
 
             boolean keyDown = Keybinding.STRUGGLE_KEY.isDown();
             boolean flagHolding = strugglingPlayer.getHoldingStruggle();

@@ -2,6 +2,7 @@ package net.mokai.quicksandrehydrated.item.custom.potion;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -93,7 +94,10 @@ public class QuicksandPotion extends PotionItem {
         Optional<SinkingPotionConversionRecipe> recipe = level.getRecipeManager().getRecipeFor(SinkingPotionConversionRecipe.Type.INSTANCE, inventory, level);
 
         if (recipe.isPresent()) {
-            Item teststack = recipe.get().getResultItem().getItem();
+
+            RegistryAccess ra = level.registryAccess();
+            Item teststack = recipe.get().getResultItem(ra).getItem();
+
             if (teststack instanceof BlockItem) {
                 level.playSound(null, blockpos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 1.0F, 1.0F);
                 player.setItemInHand(pContext.getHand(), ItemUtils.createFilledResult(itemstack, player, new ItemStack(Items.GLASS_BOTTLE)));

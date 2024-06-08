@@ -1,6 +1,7 @@
 package net.mokai.quicksandrehydrated.mixins;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
@@ -71,10 +72,10 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
 
     public BlockPos getStuckBlock(Entity pEntity) {
 
-        Level pLevel = pEntity.getLevel();
+        Level pLevel = pEntity.level();
 
         Vec3 ePos = pEntity.position();
-        Level eLevel = pEntity.getLevel();
+        Level eLevel = pEntity.level();
 
         if (eLevel.getBlockState(pEntity.blockPosition()).getBlock() instanceof QuicksandBase) {
             return pEntity.blockPosition();
@@ -82,7 +83,9 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
 
         // offset into middle of current block.
 
-        BlockPos blockPosOffset = new BlockPos(ePos.add(0.5, 0, 0.5));
+        ePos = ePos.add(0.5, 0, 0.5);
+        Vec3i vec3i = new Vec3i((int) ePos.x, (int) ePos.y, (int) ePos.z);
+        BlockPos blockPosOffset = new BlockPos(vec3i);
 
         // there is bias towards the southwest block currently
         // Should eventually change to a more sophisticated approach
@@ -131,7 +134,7 @@ public abstract class SlowdownMixin implements entityQuicksandVar {
             BlockPos bp = getStuckBlock(thisEntity);
 
             if (bp != null) {
-                Level eLevel = thisEntity.getLevel();
+                Level eLevel = thisEntity.level();
                 BlockState bs = eLevel.getBlockState(bp);
 
                 QuicksandBase qs = (QuicksandBase) bs.getBlock();

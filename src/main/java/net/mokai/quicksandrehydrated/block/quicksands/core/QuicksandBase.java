@@ -1,15 +1,7 @@
 package net.mokai.quicksandrehydrated.block.quicksands.core;
 
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -19,21 +11,27 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.entity.playerStruggling;
-import net.mokai.quicksandrehydrated.registry.ModParticles;
-import net.mokai.quicksandrehydrated.util.DEPTH;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
-import static net.mokai.quicksandrehydrated.QuicksandRehydrated.MOD_ID;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
+/**
+ * This is where the <font color=red>M</font>
+ * <font color=orange>A</font>
+ * <font color=yellow>G</font>
+ * <font color=green>I</font>
+ * <font color=blue>C</font> is going on!
+ * This is the base of Blocks to function as Quicksand blocks.
+ * Override the specific methods to achieve non-default behavior when implementing other
+ * sinking blocks.
+ */
 public class QuicksandBase extends Block implements QuicksandInterface {
 
     private final Random rng = new Random();
@@ -45,63 +43,72 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
 
+    /**
+     * The path of the texture to be loaded that the player should be covered with.
+     * @return The path of the texture to be applied on the player.
+     * Default: <code>"qsrehydrated:textures/entity/coverage/quicksand_coverage.png"</code>
+     */
     public String coverageTexture() {
         return "qsrehydrated:textures/entity/coverage/quicksand_coverage.png";
     }
 
+    /**
+     * The relative offset in blocks, the sinking mechanic should respect.
+     * This allows not full blocks (think of mud with a water surface) to function with
+     * the actual sinking mechanic.
+     * @param blockstate The BlockState.
+     * @return
+     * <p>The offset in blocks, that the sinking mechanic will subtract.</p>
+     * <p><code>0</code> (default) means, that the sinking mechanic starts directly at the surface.</p>
+     * <p><code>0.5</code> means, the block is considered as half a block, so "sinking" starts only below this level.</p>
+     */
     public double getOffset(BlockState blockstate) {
         return 0d;
-    } // This value is subtracted from depth for substances that aren't full blocks.
+    }
 
+    /**
+     * Probability, that the substance bubbles when one sinks in it.
+     * @return The probability. <code>0</code> = No bubbles. <code>1</code> = Always bubbles.
+     */
     public double getBubblingChance() {
         return .75d;
-    } // Does this substance bubble when you sink?
+    }
 
     public double getCustomDeathMessageOdds() {
         return .25;
-    }
-
-    public void KILL(LivingEntity pEntity) {
-        pEntity.hurt(new DamageSource(MOD_ID + "_quicksand"), 2);
-    }
-
-    // get depth as double, and return integer.
-
-    public int toInt(double y) {
-        if (y < DEPTH.KNEE) {
-            return 0; // Surface: 0 - .375
-        } else if (y < DEPTH.WAIST) {
-            return 1; // Knee deep: .375 - .75
-        } else if (y < DEPTH.CHEST) {
-            return 2; // Waist deep: .75 - 1.25
-        } else if (y < DEPTH.SHOULDERS) {
-            return 3; // Chest deep: 1.25 - 1.625
-        } else {
-            return 4; // Under: 1.625+
-        }
     }
 
     public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) {
         return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(null));
     }
 
-    // Sinking speed. Lower is slower.
-    // normalized against the vertSpeed, so this value will remain effective - even
-    // if the quicksand is very thick.
+    /**
+     * The sinking speed, depending on the depth.
+     * normalized against the vertSpeed, so this value will remain effective - even
+     * if the quicksand is very thick.
+     * @param depthRaw The depth in blocks. <code>0</code> is exactly on surface level.
+     * @return The sinking value. Lower value means slower sinking.
+     */
     public double getSink(double depthRaw) {
         return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.01, 0.01 });
     }
 
-    // Horizontal Movement speed
-    // thickness, but inverse
-    // 0 = very thick
-    // 1 = very thin
+    /**
+     * Horizontal movement speed depending on the depth.
+     * Thickness - but inverse.
+     * @param depthRaw The depth of the object. <code>0</code> is exactly on surface level.
+     * @return The inverse resistance when walking. <code>0</code> = very thick; <code>1</code> = very thin.
+     */
     public double getWalk(double depthRaw) {
         return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.5, 0.0 });
     }
 
-    // Vertical Movement speed
-    // same as getWalk
+    /**
+     * Vertical movement speed depending on the depth.
+     * Same as <code>getWalk()</code>
+     * @param depthRaw The depth of the object.
+     * @return The inverse resistance when moving up/down. <code>0</code> = very thick; <code>1</code> = very thin.
+     */
     public double getVert(double depthRaw) {
         return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.1, 0.1 });
     }
@@ -124,11 +131,15 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.0, 0.0 });
     }
 
-    // whether the player can jump or not
-    // don't use A RNG value or there will be jittering, as this applies a small
-    // amount of friction.
-    // this also currently dictates whether the player can step up over block edges
-    // (like stairs, 1/2 a block at most)
+    /**
+     * whether the player can jump or not.
+     * Don't use A RNG value or there will be jittering, as this applies a small
+     * amount of friction.
+     * this also currently dictates whether the player can step up over block edges
+     * (like stairs, 1/2 a block at most)
+     * @param depth The depth, the player is currently stuck in.
+     * @return <code>true</code>, if the player is allowed to jump. <code>false</code> otherwise.
+     */
     public boolean getJump(double depth) {
         if (depth < 0.25) {
             return true;
@@ -326,18 +337,6 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     }
 
-    public void deathMessage(Level pLevel, LivingEntity pEntity) {
-        if (pLevel.getLevelData().isHardcore()) {
-            pEntity.hurt(new DamageSource(MOD_ID + "_hardcore"), 2);
-        } else {
-            double p = Math.random();
-            if (p > getCustomDeathMessageOdds()) {
-                pEntity.hurt(new DamageSource(MOD_ID + "_generic_" + (int) (Math.random() * 3)), 2);
-            } else {
-                KILL(pEntity);
-            }
-        }
-    }
 
     // @Override
     // public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos,
