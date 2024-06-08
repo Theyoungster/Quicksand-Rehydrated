@@ -29,6 +29,8 @@ public class StruggleDownC2SPacket {
             // HERE WE ARE ON THE SERVER!
             ServerPlayer player = context.getSender();
 
+            System.out.println("<Server>: Struggle Down");
+
             playerStruggling strugglingPlayer = (playerStruggling) player;
             strugglingPlayer.setHoldingStruggle(true);
 

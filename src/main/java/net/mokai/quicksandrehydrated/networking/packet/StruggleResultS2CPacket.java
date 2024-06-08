@@ -28,6 +28,9 @@ public class StruggleResultS2CPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
 
+                String amountStr = String.valueOf(this.amount);
+                System.out.println("<Client>: Struggle Result: "+amountStr);
+
                 Player thisPlayer = Minecraft.getInstance().player;
                 thisPlayer.addDeltaMovement(new Vec3(0.0, this.amount, 0.0));
 

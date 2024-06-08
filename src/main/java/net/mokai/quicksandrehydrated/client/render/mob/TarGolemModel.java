@@ -1,4 +1,4 @@
-package net.mokai.quicksandrehydrated.client.render;// Made with Blockbench 4.10.2
+package net.mokai.quicksandrehydrated.client.render.mob;// Made with Blockbench 4.10.2
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 

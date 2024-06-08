@@ -64,29 +64,27 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        //pGuiGraphics.blit( x, y, 0, imageWidth, imageHeight, ???);
+        pGuiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
         renderProgressArrow(pGuiGraphics, x, y);
 
-        // TODO render liquids in mixerscreen
-        //renderer.render(pPoseStack, x + 33, y + 14, menu.getFluidStack());
-        //rendererB.render(pPoseStack, x + 107, y + 14, menu.getFluidStack());
+        renderer.render(pGuiGraphics.pose(), x + 33, y + 14, menu.getFluidStack());
+        rendererB.render(pGuiGraphics.pose(), x + 107, y + 14, menu.getFluidStack());
 
     }
 
     private void renderProgressArrow(GuiGraphics pGuiGraphics, int x, int y) {
         if(menu.isCrafting()) {
             menu.getScaledProgress();
-            // TODO render progress arrow
             pGuiGraphics.blit(TEXTURE, x + 80, y + 31, 0, 176, 8, 0);
         }
     }
 
-//    @Override
-//    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
-//        renderBackground(pPoseStack);
-//        super.render(pPoseStack, mouseX, mouseY, delta);
-//        renderTooltip(pPoseStack, mouseX, mouseY);
-//    }
+    @Override
+    public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float delta) {
+        renderBackground(pGuiGraphics);
+        super.render(pGuiGraphics, mouseX, mouseY, delta);
+        renderTooltip(pGuiGraphics, mouseX, mouseY);
+    }
 
     private boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY) {
         return MouseUtil.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, renderer.getWidth(), renderer.getHeight());

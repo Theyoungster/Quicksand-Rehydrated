@@ -1,4 +1,4 @@
-package net.mokai.quicksandrehydrated.client.render;
+package net.mokai.quicksandrehydrated.client.render.mob;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;

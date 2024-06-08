@@ -29,7 +29,7 @@ public class ClientEvents {
         public static void onKeyInput(InputEvent.Key event) {
             if (Keybinding.STRUGGLE_KEY.consumeClick()) {
                 // cast to playerStruggling interface
-                ((playerStruggling) Minecraft.getInstance().player).attemptStruggle();
+                // ((playerStruggling) Minecraft.getInstance().player).attemptStruggle();
             }
         }
 

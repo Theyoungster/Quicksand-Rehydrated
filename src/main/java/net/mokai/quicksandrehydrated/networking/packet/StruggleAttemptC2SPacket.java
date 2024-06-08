@@ -37,6 +37,8 @@ public class StruggleAttemptC2SPacket {
             BlockState playerBlockState = player.getFeetBlockState();
             Block playerBlock = playerBlockState.getBlock();
 
+            System.out.println("<Server>: Struggle Attempt");
+
             if (playerBlock instanceof QuicksandBase) {
 
                 Random rand = new Random();

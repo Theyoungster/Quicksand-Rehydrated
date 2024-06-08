@@ -49,39 +49,22 @@ public class QuicksandRehydrated {
 
         //modEventBus.addListener(this::addCreative);
 
-
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
-
 
         event.enqueueWork(ModMessages::register);
         //event.enqueueWork(ModEntityTypes::registerPOIs);
 
     }
 
-//    private void addCreative(CreativeModeTabEvent.BuildContents event) {
-//        if(event.getTab() == ModCreativeModeTab.QUICKSAND_TAB) {
-//            Iterator<RegistryObject<Item>> iterator = ModItems.getItemList();
-//
-//            while (iterator.hasNext()) {
-//                RegistryObject<Item> i = iterator.next();
-//                event.accept(i);
-//            }
-//            System.out.println(ModItems.ITEMS.getEntries());
-//
-//        }
-//    }
-
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            //ItemBlockRenderTypes.setRenderLayer(ModFluids.DRY_QUICKSAND.get(), RenderType.solid());
 
+            //ItemBlockRenderTypes.setRenderLayer(ModFluids.DRY_QUICKSAND.get(), RenderType.solid());
             MenuScreens.register(ModMenuTypes.MIXER_MENU.get(), MixerScreen::new);
 
         }
