@@ -1,6 +1,8 @@
 package net.mokai.quicksandrehydrated.block.quicksands.core;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -21,6 +23,7 @@ import java.util.Random;
 
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
+import static org.joml.Math.abs;
 
 /**
  * This is where the <font color=red>M</font>
@@ -35,6 +38,8 @@ import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNA
 public class QuicksandBase extends Block implements QuicksandInterface {
 
     private final Random rng = new Random();
+
+    //public final QuicksandBehavior qsBehavior;
 
     public QuicksandBase(Properties pProperties) {
         super(pProperties);
@@ -113,20 +118,22 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.1, 0.1 });
     }
 
-    // the previous position will move towards the player this amount *per tick* !
-    // You can think of this as how "sticky" the quicksand is.
-    // 1.0 = no effect on player's movement
-    // 0.0 = player effectively cannot move unless they manage to stop touching the
-    // QS block.
+    /** the previous position will move towards the player this amount *per tick* !
+    * You can think of this as how "sticky" the quicksand is.
+    * 1.0 = no effect on player's movement
+    * 0.0 = player effectively cannot move unless they manage to stop touching the
+    * QS block.
+    **/
     public double getTugLerp(double depthRaw) {
         return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 1.0, 1.0 });
     }
 
-    // how much the player is pulled backwards
-    // You can think of this as how *strong* the sticky effect of the quicksand is
-    // 1.0 = player *cannot* move away from the previous position, fully locked in
-    // place.
-    // 0.0 = no effect on player's movement
+    /** how much the player is pulled backwards
+    * You can think of this as how *strong* the sticky effect of the quicksand is
+    * 1.0 = player *cannot* move away from the previous position, fully locked in
+    * place.
+    * 0.0 = no effect on player's movement
+     */
     public double getTug(double depthRaw) {
         return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.0, 0.0 });
     }
@@ -278,12 +285,22 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
         // runs when the player struggles in a block of this type.
 
-        pEntity.addDeltaMovement(new Vec3(0.0, struggleAmount / 2, 0.0));
-
         // particle should happen at surface in an area around.
         // Vec3 pos = pEntity.position();
         // pEntity.getLevel().addParticle(ModParticles.QUICKSAND_BUBBLE_PARTICLES.get(),pos.x,
         // pos.y, pos.z, 0, 0, 0);
+
+        // struggleAmount should be 0 .. 1, from 0 to 20 ticks
+
+        double middlePoint = -1 * abs(struggleAmount - 0.5) + 0.5;
+
+        // curve it
+        middlePoint = 5.25 * (middlePoint*middlePoint) - 0.15; // ranges -0.5 to 0.5
+
+        pEntity.addDeltaMovement(new Vec3(0.0, middlePoint, 0.0));
+
+        pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, 0.25F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.5F);
+
 
     }
 
@@ -317,7 +334,6 @@ public class QuicksandBase extends Block implements QuicksandInterface {
             // Entities choose which quicksand block to run the applyQuicksandEffects
             // function from.
 
-            boolean canJump = getJump(depth);
             entityQuicksandVar es = (entityQuicksandVar) pEntity;
 
             // more movement variables.

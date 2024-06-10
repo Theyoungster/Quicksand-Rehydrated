@@ -35,7 +35,7 @@ public class QuicksandPotionProjectile extends ThrownPotion {
         if (!this.level().isClientSide) {
 
             Vec3 so = pResult.getLocation();
-            Vec3 source = new Vec3(Math.floor(so.x)+.5, Math.floor(so.y)+.5, Math.floor(so.z)+.5);
+            Vec3 source = new Vec3(Math.floor(so.x)-.5, Math.floor(so.y)+.5, Math.floor(so.z)+.5);
             double sx = source.x-4;
             double sy = source.y-4;
             double sz = source.z-4;

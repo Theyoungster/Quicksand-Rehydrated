@@ -8,12 +8,12 @@ import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBase;
 public class EasingHandler {
 
     public static double lerp(double start, double end, double position) {
-        position = Math.max(0, Math.min(position, 1)); // Bound `position` to [0,1]
+        position = Math.max(0, Math.min(position, 1)); // limits `position` to [0,1]
         return ease(start, end, position);
     }
 
     public static double ease_pow(double start, double end, double position, double exponent) {
-        position = Math.max(0, Math.min(position, 1)); // Bound `position` to [0,1]
+        position = Math.max(0, Math.min(position, 1));
         return ease(Math.pow(position,exponent), start, end);
     }
 
@@ -31,11 +31,6 @@ public class EasingHandler {
     }
 
     public static double reverse_interp(double start, double end, double position) {
-        double b = end-start;
-        return (position-start)/b;
-    }
-
-    public static double reverse_interp_sqrt(double start, double end, double position) {
         double b = end-start;
         return (position-start)/b;
     }
@@ -100,6 +95,7 @@ public class EasingHandler {
     }
 
     private static double ease(double start, double end, double pos) {
+
         return (pos*(end-start))+start;
     }
 }

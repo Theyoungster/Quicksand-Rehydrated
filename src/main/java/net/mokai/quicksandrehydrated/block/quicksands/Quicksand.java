@@ -24,21 +24,6 @@ public class Quicksand extends QuicksandBase {
 
     public double getSink(double depthRaw) { return EasingHandler.doubleListInterpolate(depthRaw/2, new double[]{0.004, 0.004}); }
 
-    public void struggleAttempt(@NotNull BlockState pState, @NotNull Entity pEntity, double struggleAmount) {
-
-        // struggleAmount should be 0 .. 1, from 0 to 20 ticks
-
-        double middlePoint = -1 * abs(struggleAmount - 0.5) + 0.5;
-
-        // curve it
-        middlePoint = 5.25 * (middlePoint*middlePoint) - 0.15; // ranges -0.5 to 0.5
-
-        pEntity.addDeltaMovement(new Vec3(0.0, middlePoint, 0.0));
-
-        pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, 0.25F, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.5F);
-
-    }
-
     public void firstTouch(Entity pEntity) {
         trySetCoverage(pEntity);
         if (pEntity.getDeltaMovement().y <= -0.333) {
@@ -48,6 +33,7 @@ public class Quicksand extends QuicksandBase {
             pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, 0.3F+(float) mvt, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
         }
     }
+
 
     @Override
     public void applyQuicksandEffects(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
