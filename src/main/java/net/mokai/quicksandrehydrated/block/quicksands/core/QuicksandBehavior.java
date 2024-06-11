@@ -21,13 +21,15 @@ public class QuicksandBehavior {
     public DepthCurve tugStrengthVertical = new DepthCurve(0d);
     public DepthCurve tugLerp = new DepthCurve(1d);
     public double buoyancyPoint = 2d;
-    public double stepOutHeight = .25;
+    public double stepOutHeight = .1d;
+    public double offset = 0;
 
 
     public QuicksandBehavior setCoverageTexture(String coverageText) {this.coverageTexture = coverageText; return this;}
     public String            getCoverageTexture() {return "qsrehydrated:textures/entity/coverage/" + coverageTexture + ".png";}
 
     public QuicksandBehavior setBubbleChance(DepthCurve curve) {bubbleChance = curve; return this;}
+    public QuicksandBehavior setBubbleChance(double chance) {bubbleChance = new DepthCurve(chance); return this;}
     public double            getBubbleChance(double depth) {return bubbleChance.getAt(depth);}
 
     public QuicksandBehavior setSecretDeathMessage(String deathmessage) {secretDeathMessage = deathmessage; return this;}
@@ -37,32 +39,38 @@ public class QuicksandBehavior {
     public double            getSecretDeathMessageChance() {return secretDeathMessageChance;}
 
     public QuicksandBehavior setSinkSpeed(DepthCurve sinkCurve) {sinkSpeed = sinkCurve; return this;}
+    public QuicksandBehavior setSinkSpeed(double speed) {sinkSpeed = new DepthCurve(speed); return this;}
     public double            getSinkSpeed(double depth) {return sinkSpeed.getAt(depth);}
 
     public QuicksandBehavior setWalkSpeed(DepthCurve curve) {walkSpeed = curve; return this;}
+    public QuicksandBehavior setWalkSpeed(double speed) {walkSpeed = new DepthCurve(speed); return this;}
     public double            getWalkSpeed(double depth) {return walkSpeed.getAt(depth);}
 
     public QuicksandBehavior setVertSpeed(DepthCurve curve) {vertSpeed = curve; return this;}
+    public QuicksandBehavior setVertSpeed(double speed) {vertSpeed = new DepthCurve(speed); return this;}
     public double            getVertSpeed(double depth) {return vertSpeed.getAt(depth);}
 
     public QuicksandBehavior setTugStrengthHorizontal(DepthCurve curve) {tugStrengthHorizontal = curve; return this;}
+    public QuicksandBehavior setTugStrengthHorizontal(double tug) {tugStrengthHorizontal = new DepthCurve(tug); return this;}
     public double            getTugStrengthHorizontal(double depth) {return tugStrengthHorizontal.getAt(depth);}
 
     public QuicksandBehavior setTugStrengthVertical(DepthCurve curve) {tugStrengthVertical = curve; return this;}
+    public QuicksandBehavior setTugStrengthVertical(double tug) {tugStrengthVertical = new DepthCurve(tug); return this;}
     public double            getTugStrengthVertical(double depth) {return tugStrengthVertical.getAt(depth);}
 
     public QuicksandBehavior setTugLerp(DepthCurve curve) {tugLerp = curve; return this;}
+    public QuicksandBehavior setTugLerp(double lerp) {tugLerp = new DepthCurve(lerp); return this;}
     public double            getTugLerp(double depth) {return tugLerp.getAt(depth);}
 
     public QuicksandBehavior setBuoyancyPoint(double point) {buoyancyPoint = point; return this;}
     public double            getBuoyancyPoint() {return buoyancyPoint;}
 
-
     public QuicksandBehavior setStepOutHeight(double point) {stepOutHeight = point; return this;}
     public double            getStepOutHeight() {return stepOutHeight;}
-    public boolean           canStepOut(double height) {
-        System.out.println("Height: " + height + "          stepOutHeight " + stepOutHeight+ "       " + (height>=stepOutHeight));
-        return height>=stepOutHeight;}
+    public boolean           canStepOut(double height) {return height>=stepOutHeight;}
+
+    public QuicksandBehavior setOffset(double point) {offset = point; return this;}
+    public double            getOffset() {return offset;}
 
 
 

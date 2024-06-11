@@ -63,14 +63,14 @@ public class QuicksandBase extends Block implements QuicksandInterface {
      * <p><code>0.5</code> means, the block is considered as half a block, so "sinking" starts only below this level.</p>
      */
     public double getOffset(BlockState blockstate) {
-        return 0d;
+        return QSBehavior.getOffset();
     }
 
 
 
     public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) {
         // Are we accounting for player height? e.g. should a player fully under be at 2.0, or 1.0?
-        return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(null));
+        return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(pLevel.getBlockState(pPos)));
 
     }
 
@@ -172,8 +172,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         }
 
         double depth = getDepth(pLevel, pPos, pEntity);
-
-        if (depth >= 0) {
+        if (depth > 0) {
 
             // there are three main effects that happen every tick.
 
@@ -198,7 +197,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
 
             // Okay, so letting people jump on the top layer of the quicksand lets everyone just hold spacebar and jump over it all. I just commented it all out to disable it, and works better (tm)
-/*
+
             if (QSBehavior.canStepOut(depth)) {
                 if (pLevel.getBlockState(pPos.above()).isAir()) {
 
@@ -222,7 +221,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
                 pEntity.resetFallDistance();
             }
 
- */
+
             pEntity.setOnGround(false);
             pEntity.resetFallDistance();
 
@@ -240,7 +239,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
             }
         }
     }
-    public void firstTouch(Entity pEntity) {
+    public void firstTouch(Entity pEntity,Level pLevel) {
         trySetCoverage(pEntity);
     }
 
@@ -269,7 +268,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     public void tryApplyCoverage(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
         double depth = getDepth(pLevel, pPos, pEntity);
-        if (depth >= 0) {
+        if (depth > 0) {
             if (pEntity instanceof Player) {
 
                 playerStruggling pS = (playerStruggling) pEntity;
@@ -291,7 +290,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
         double depth = getDepth(pLevel, pPos, pEntity);
 
-        if (depth >= 0) {
+        if (depth > 0) {
 
             // all that needs to be done is set the fact that this entity is in quicksand.
             // Entities choose which quicksand block to run the applyQuicksandEffects
@@ -304,7 +303,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
             if (!es.getquicksandEnterFlag()) {
                 // if the enter flag isn't set - this entity entered quicksand
-                firstTouch(pEntity);
+                firstTouch(pEntity, pLevel);
                 es.setquicksandEnterFlag(true);
             }
 

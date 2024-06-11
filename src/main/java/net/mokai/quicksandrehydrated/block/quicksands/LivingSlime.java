@@ -35,8 +35,6 @@ public class LivingSlime extends QuicksandBase {
 
     public LivingSlime(Properties pProperties, QuicksandBehavior QSB) {super(pProperties, QSB);}
 
-
-
     public double getSink(double depthRaw) { return EasingHandler.doubleListInterpolate(depthRaw/2, new double[]{.001d, .009d, .009d, .009d, .009d}); }
 
     public double getWalk(double depthRaw) { return EasingHandler.doubleListInterpolate(depthRaw/2, new double[]{1d, .9d, .7d, .4d, .2d}); }
@@ -47,40 +45,6 @@ public class LivingSlime extends QuicksandBase {
 
     public double getTug(double depthRaw) { return EasingHandler.doubleListInterpolate(depthRaw/2, new double[]{0.08d, 0.07333d, 0.0666d, 0.06d, 0.06d}); }
 
-
-
-
-
-    public void quicksandTugMove(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
-
-        double depth = getDepth(pLevel, pPos, pEntity);
-        entityQuicksandVar es = (entityQuicksandVar) pEntity;
-
-        Vec3 currentPos = pEntity.getPosition(0);
-
-        // Get the Previous Position variable
-        Vec3 prevPos = es.getPreviousPosition();
-
-        // move previous pos towards player a tiny bit
-        double lerpAmountHorizontal = getTugLerp(depth);
-        double lerpAmountVertical = getTugLerp(depth);
-
-        // if the entity's position is BELOW the previous position, move it down faster
-//        if (currentPos.y < prevPos.y) {
-//            lerpAmountVertical = 1;
-//        }
-
-        Vec3 newPrevPos = new Vec3(
-            lerp(prevPos.x(), currentPos.x(), lerpAmountHorizontal),
-            lerp(prevPos.y(), currentPos.y(), lerpAmountVertical),
-            lerp(prevPos.z(), currentPos.z(), lerpAmountHorizontal)
-        );
-
-        newPrevPos = newPrevPos.add(0, -.02, 0);
-
-        es.setPreviousPosition(newPrevPos);
-
-    }
 
 
 

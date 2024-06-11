@@ -17,6 +17,7 @@ import net.mokai.quicksandrehydrated.block.quicksands.*;
 import net.mokai.quicksandrehydrated.block.quicksands.core.FlowingQuicksandBase;
 import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBase;
 import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBehavior;
+import net.mokai.quicksandrehydrated.util.DepthCurve;
 
 
 import java.util.ArrayList;
@@ -42,15 +43,27 @@ public class ModBlocks {
     private final static BlockBehaviour.Properties baseBehavior = BlockBehaviour.Properties.copy(Blocks.SAND).noCollission().requiresCorrectToolForDrops()
             .noOcclusion().isViewBlocking((A, B, C) -> true);
     private final static BlockBehaviour.Properties baseFlowingBehavior = BlockBehaviour.Properties.copy(Blocks.SAND).noCollission().requiresCorrectToolForDrops()
-            .noOcclusion().isViewBlocking((A, B, C) -> {return A.getValue(FlowingQuicksandBase.LEVEL) >= 4;});
+            .noOcclusion().isViewBlocking((A, B, C) -> A.getValue(FlowingQuicksandBase.LEVEL) >= 4);
+    private final static BlockBehaviour.Properties slimeBehavior =BlockBehaviour.Properties.copy(Blocks.SLIME_BLOCK).noCollission().requiresCorrectToolForDrops()
+            .noOcclusion().isViewBlocking((A, B, C) -> true);
 
 
 
     public static final RegistryObject<Block> QUICKSAND = registerBlock("quicksand", () -> new Quicksand( baseBehavior, new QuicksandBehavior()
             .setCoverageTexture("quicksand_coverage")
     ));
-    public static final RegistryObject<Block> LIVING_SLIME = registerBlock("living_slime", () -> new LivingSlime( baseBehavior, new QuicksandBehavior()));
-    public static final RegistryObject<Block> DEEP_MUD = registerBlock("deep_mud", () -> new DeepMudBlock( baseBehavior, new QuicksandBehavior()));
+    public static final RegistryObject<Block> LIVING_SLIME = registerBlock("living_slime", () -> new LivingSlime( slimeBehavior, new QuicksandBehavior()
+            .setTugLerp(0.025d)
+            .setTugStrengthHorizontal(new DepthCurve(0.08d,0.06d))
+            .setVertSpeed(.4d)
+            .setSinkSpeed(.009)
+            .setWalkSpeed(new DepthCurve(1, .2))
+    ));
+    public static final RegistryObject<Block> DEEP_MUD = registerBlock("deep_mud", () -> new DeepMudBlock( baseBehavior, new QuicksandBehavior()
+            .setOffset(.125)
+            .setSinkSpeed(new DepthCurve(DepthCurve.InterpType.POW_IN, .006, .002, 3)) // there seems to be some kind of limit on sinking speed; investigate!
+
+    ));
     public static final RegistryObject<Block> SOFT_QUICKSAND = registerBlock("soft_quicksand", () -> new FlowingQuicksandBase(baseFlowingBehavior, new QuicksandBehavior()));
 
 

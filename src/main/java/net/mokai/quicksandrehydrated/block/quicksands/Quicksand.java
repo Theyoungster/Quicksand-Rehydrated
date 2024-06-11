@@ -24,13 +24,13 @@ public class Quicksand extends QuicksandBase {
     public Quicksand(Properties pProperties, QuicksandBehavior QSB) {super(pProperties, QSB);}
 
     @Override
-    public void firstTouch(Entity pEntity) {
+    public void firstTouch(Entity pEntity, Level pLevel) {
         trySetCoverage(pEntity);
         if (pEntity.getDeltaMovement().y <= -0.333) {
             double mvt = pEntity.getDeltaMovement().y;
             mvt = clamp(mvt, -0.666, 0);
-            pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.MUD_FALL, SoundSource.BLOCKS, 0.3F+(float) mvt, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
-            pEntity.level().playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, 0.3F+(float) mvt, (pEntity.level().getRandom().nextFloat() * 0.1F) + 0.45F);
+            pLevel.playSound(pEntity, pEntity.blockPosition(), SoundEvents.MUD_FALL, SoundSource.BLOCKS, abs(0.3F+(float) mvt), (pLevel.getRandom().nextFloat() * 0.1F) + 0.45F);
+            pLevel.playSound(pEntity, pEntity.blockPosition(), SoundEvents.SOUL_SOIL_STEP, SoundSource.BLOCKS, abs(0.3F+(float) mvt), (pLevel.getRandom().nextFloat() * 0.1F) + 0.45F);
         }
     }
 

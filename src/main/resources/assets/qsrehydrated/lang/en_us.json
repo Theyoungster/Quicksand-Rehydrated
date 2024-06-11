@@ -70,8 +70,8 @@
   "item.qsrehydrated.music_disc_flight.desc": "Rimsky-Korsakov - Flight of the Bumblebee",
   "item.qsrehydrated.hunnibee_spawn_egg": "Hunnibee Spawn Egg",
 
-  "item.qsrehydrated.potion_of_sinking.effect.empty": "Potion of Sinking",
-  "item.qsrehydrated.splash_potion_of_sinking.effect.empty": "Splash Potion of Sinking",
+  "item.qsrehydrated.potion_of_sinking.effect.water": "Potion of Sinking",
+  "item.qsrehydrated.splash_potion_of_sinking.effect.water": "Splash Potion of Sinking",
 
 
 
