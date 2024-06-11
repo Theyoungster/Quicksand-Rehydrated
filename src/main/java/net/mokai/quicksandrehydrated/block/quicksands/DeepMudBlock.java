@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBase;
+import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBehavior;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.util.BodyDepthThreshold;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
@@ -27,7 +28,7 @@ public class DeepMudBlock extends QuicksandBase {
         return "qsrehydrated:textures/entity/coverage/mud_coverage.png";
     }
 
-    public DeepMudBlock(Properties pProperties) {super(pProperties);}
+    public DeepMudBlock(Properties pProperties, QuicksandBehavior QSB) {super(pProperties, QSB);}
 
     // helps determine what behaviour the mud should have. Is the entity deep enough to get stuck in place?
     /**

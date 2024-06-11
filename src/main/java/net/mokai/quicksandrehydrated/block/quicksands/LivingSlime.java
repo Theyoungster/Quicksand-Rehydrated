@@ -16,6 +16,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBase;
+import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBehavior;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.registry.ModParticles;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
@@ -32,7 +33,7 @@ public class LivingSlime extends QuicksandBase {
         return "qsrehydrated:textures/entity/coverage/slime_coverage.png";
     }
 
-    public LivingSlime(Properties pProperties) {super(pProperties);}
+    public LivingSlime(Properties pProperties, QuicksandBehavior QSB) {super(pProperties, QSB);}
 
 
 

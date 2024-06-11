@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBehavior;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,10 +21,9 @@ import static org.joml.Math.abs;
 import static org.joml.Math.clamp;
 
 public class Quicksand extends QuicksandBase {
-    public Quicksand(Properties pProperties) {super(pProperties);}
+    public Quicksand(Properties pProperties, QuicksandBehavior QSB) {super(pProperties, QSB);}
 
-    public double getSink(double depthRaw) { return EasingHandler.doubleListInterpolate(depthRaw/2, new double[]{0.004, 0.004}); }
-
+    @Override
     public void firstTouch(Entity pEntity) {
         trySetCoverage(pEntity);
         if (pEntity.getDeltaMovement().y <= -0.333) {

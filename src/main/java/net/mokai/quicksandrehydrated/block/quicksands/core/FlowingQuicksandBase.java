@@ -3,7 +3,11 @@ package net.mokai.quicksandrehydrated.block.quicksands.core;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ParticleUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,8 +16,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -32,179 +38,12 @@ import java.util.*;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 
-public class FlowingQuicksandBase extends FallingBlock implements QuicksandInterface {
+public class FlowingQuicksandBase extends QuicksandBase implements QuicksandInterface, Fallable {
 
     private final Random rng = new Random();
 
-    public FlowingQuicksandBase(Properties pProperties) {super(pProperties);
+    public FlowingQuicksandBase(Properties pProperties, QuicksandBehavior QSB) {super(pProperties, QSB);
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 2));
-    }
-    // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
-
-    public String coverageTexture() {
-        return "qsrehydrated:textures/block/soft_quicksand.png";
-    }
-
-    public double getOffset(BlockState blockstate) {
-        int level = blockstate.getValue(LEVEL);
-        return 0.25d * (4-level);
-    }
-
-    public double getBubblingChance() { return .75d; } // Does this substance bubble when you sink?
-
-    public double getStruggleSensitivity() {return .01d;} //.05 is very sensitive, .2 is moderately sensitive, and .8+ is very un-sensitive.
-
-    public double[] getSink() { return new double[]{.1d, .08d, .05d, .0d, .1d}; } // Sinking speed. Lower is slower.
-    public double[] walkSpeed() { return new double[]{1d, .5d, .25d, .125d, 0d}; } // Horizontal movement speed (ignoring Gravity)
-    public int[] jumpPercentage() { return new int[]{30, 20, 0, 0, 0}; } // Chance per tick to be able to jump.
-    public int getSpread() {return 1;} // How far to search for holes to fill. Negative instead indicates how tall to pile before spreading out.
-
-    public double getCustomDeathMessageOdds() { return .25; }
-
-
-
-
-
-    // ----- OKAY YOU CAN STOP OVERRIDING AND MODIFYING VALUES NOW ----- //
-
-
-
-    public int toInt(double y) {
-        if (y < .375) {
-            return 0; //         Surface: 0 - .375
-        } else if (y < .75) {
-            return 1; //         Knee deep: .375 - .75
-        } else if (y < 1.25) {
-            return 2; //         Waist deep: .75 - 1.25
-        } else if (y < 1.625) {
-            return 3; //         Chest deep: 1.25 - 1.625
-        } else {
-            return 4; //         Under: 1.625+
-        }
-    }
-
-    public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity, BlockState pState) { return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(pState)); }
-
-    public double getSink(double depth) { return getSink()[toInt(depth)] ; }
-    public double getWalk(double depth) { return walkSpeed()[toInt(depth)]; }
-    public boolean getJump(double depth, Level pLevel) {
-        rng.setSeed(pLevel.getGameTime());
-        float p = rng.nextInt(100);
-        return p < jumpPercentage()[toInt(depth)];
-    }
-
-
-
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void entityInside(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
-
-        if (pEntity instanceof EntityBubble) {return;}
-
-        //if (pEntity instanceof ItemEntity) { pEntity.makeStuckInBlock(pState, new Vec3(.1, .02, .1)); return; }  /// This is an ugly hack; items are jittering in quicksand, but skipping all of the code works fine.
-
-        double depth = getDepth(pLevel, pPos, pEntity, pState);
-
-        if (pEntity instanceof Player) {
-            if (((Player) pEntity).isCreative() && !((Player) pEntity).isAffectedByFluids()) {
-                return;
-            }
-        }
-        double mod = 1;
-        if (depth > 0) {
-
-
-
-            ////// SINKIN' CODE HERE //////
-            pEntity.setSprinting(false);
-            if (!(pEntity instanceof Player)) {
-                pEntity.setOnGround(true);
-                mod = 1.62 / pEntity.getEyeHeight(); // 1.62 is the player's eye height; this gets a multiplier so shorter entities sink slower.
-                depth = depth * mod;
-            }
-
-            boolean canJump = getJump(depth, pLevel);
-            double sink = getSink(depth);
-            double walk = getWalk(depth);
-            if (canJump) { pEntity.setOnGround(true); } // Semi-randomly set the player on 'land'. Above depth .6, this means the player can step back onto land.
-            if(pPos.getX() != pEntity.getBlockX() || pPos.getZ() != pEntity.getBlockZ()) // If the player is NOT fully inside this Quicksand block...
-            { walk = Math.max(walk, .0625); }// ... Cap the speed reduction.
-            else {
-                // Bubble code!
-                if(getBubblingChance()>0) {
-                    if (Math.random() > getBubblingChance()) {
-
-                        Vec3i pos = new Vec3i((int) (pEntity.getX() + Math.random()), (int) (pPos.getY() + .5), (int) (pEntity.getZ() + Math.random()));
-                        Vec3 pos2 = new Vec3(pEntity.getX() + Math.random(), pPos.getY() + .5, pEntity.getZ() + Math.random());
-                        BlockPos np = new BlockPos(pos);
-                        spawnBubble(pLevel.getBlockState(np), pLevel, pos2, np, this.defaultBlockState());
-
-                    }
-                }
-                // End bubble code
-            }
-
-
-
-            /**
-             * Things that might slurp the player down faster:
-             * - Heavy armor
-             * - struggling
-             * - Sinking potion effect
-             */
-
-            if(pLevel.isClientSide()) { // This bit is broken. We need to have the player themselves calculate their rotation / struggle speed, using the AirControlMixin to add the function, and then later call it.
-                double test = Math.abs(pEntity.getViewVector(0).x - pEntity.getViewVector(1).x);
-                if (test > getStruggleSensitivity()) {
-                    sink = sink + 1.1111111f;
-                }
-            }
-            pEntity.makeStuckInBlock(pState, new Vec3(walk, sink, walk)); /// Lower values are slower.
-
-
-            ////// SINKIN' CODE END
-
-
-        }
-        // Kill code here.
-        if (pEntity instanceof LivingEntity) {
-            LivingEntity le = (LivingEntity) pEntity;
-            if (pEntity.getAirSupply() <= -20 && le.getHealth() <= 2) {
-                //deathMessage(pLevel, le);
-            }
-        }
-
-    }
-
-    @Override
-    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-
-    }
-
-    public void spawnBubble(BlockState pState, Level pLevel, Vec3 pos, BlockPos pPos, BlockState bs) {
-        BlockState upOne = pLevel.getBlockState(pPos.above());
-        if (checkDrownable(pState) && !checkDrownable(upOne)) {
-            double offset = 0d;
-            Block gb = pState.getBlock();
-            if (gb instanceof QuicksandInterface) {
-                offset = ((QuicksandInterface)gb).getOffset(pState);
-            }
-            pos = pos.add( new Vec3(0, -offset, 0) );
-            spawnBubble(pLevel, pos);
-        }
-    }
-
-    public void spawnBubble(Level pLevel, Vec3 pos) {
-        if (!pLevel.isClientSide()) {
-            EntityBubble.spawn(pLevel, pos, Blocks.COAL_BLOCK.defaultBlockState());
-        }
-    }
-
-
-
-    public boolean checkDrownable(BlockState pState) {
-        return pState.getTags().toList().contains(QUICKSAND_DROWNABLE) || pState.getFluidState().getTags().toList().contains(QUICKSAND_DROWNABLE_FLUID);
     }
 
 
@@ -213,9 +52,7 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
 
 
 
-    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
-        pLevel.scheduleTick(pPos, this, this.getDelayAfterPlace());
-    }
+
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 1, 4);
 
@@ -267,7 +104,7 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
 
     }
 
-    // VANILLA blocktick stuff
+    // Vanilla blocktick stuff
 
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
@@ -359,14 +196,6 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
 
     }
 
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (isFree(pLevel.getBlockState(pPos.below())) && pPos.getY() >= pLevel.getMinBuildHeight()) {
-            FallingBlockEntity fallingblockentity = FallingBlockEntity.fall(pLevel, pPos, pState);
-            this.falling(fallingblockentity);
-        } else {
-            spreadTick(pLevel, pPos, pRandom);
-        }
-    }
 
     public int getDepth(ServerLevel pLevel, BlockPos pos, Block ourType) {
         BlockState bsA = pLevel.getBlockState(pos);
@@ -438,6 +267,64 @@ public class FlowingQuicksandBase extends FallingBlock implements QuicksandInter
             pLevel.scheduleTick(pPos.above(),this.asBlock(), 1);
         }
 
+    }
+
+
+
+
+    // ------------------------------------------- THIS IS FOR FALLINGBLOCK IMPLEMENTATION ----------------------
+
+
+    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
+        pLevel.scheduleTick(pPos, this, this.getDelayAfterPlace());
+    }
+
+    /**
+     * Update the provided state given the provided neighbor direction and neighbor state, returning a new state.
+     * For example, fences make their connections to the passed in state if possible, and wet concrete powder immediately
+     * returns its solidified counterpart.
+     * Note that this method should ideally consider only the specific direction passed in.
+     */
+    public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
+        pLevel.scheduleTick(pCurrentPos, this, this.getDelayAfterPlace());
+        return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+    }
+
+    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+        if (isFree(pLevel.getBlockState(pPos.below())) && pPos.getY() >= pLevel.getMinBuildHeight()) {
+            FallingBlockEntity fallingblockentity = FallingBlockEntity.fall(pLevel, pPos, pState);
+            this.falling(fallingblockentity);
+        } else {
+            spreadTick(pLevel, pPos, pRandom);
+        }
+    }
+
+    protected void falling(FallingBlockEntity pEntity) {
+    }
+
+    protected int getDelayAfterPlace() {
+        return 2;
+    }
+
+    public static boolean isFree(BlockState pState) {
+        return pState.isAir() || pState.is(BlockTags.FIRE) || pState.liquid() || pState.canBeReplaced();
+    }
+
+    /**
+     * Called periodically clientside on blocks near the player to show effects (like furnace fire particles).
+     */
+    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+        if (pRandom.nextInt(16) == 0) {
+            BlockPos blockpos = pPos.below();
+            if (isFree(pLevel.getBlockState(blockpos))) {
+                ParticleUtils.spawnParticleBelow(pLevel, pPos, pRandom, new BlockParticleOption(ParticleTypes.FALLING_DUST, pState));
+            }
+        }
+
+    }
+
+    public int getDustColor(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
+        return -16777216;
     }
 
 }

@@ -19,6 +19,7 @@ import net.mokai.quicksandrehydrated.entity.playerStruggling;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Random;
 
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
@@ -39,23 +40,17 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
     private final Random rng = new Random();
 
-    //public final QuicksandBehavior qsBehavior;
+    public QuicksandBehavior QSBehavior;
+    public QuicksandBehavior getQuicksandBehavior() {return QSBehavior;}
 
-    public QuicksandBase(Properties pProperties) {
+    public QuicksandBase(Properties pProperties, QuicksandBehavior QuicksandBehavior) {
         super(pProperties);
+        this.QSBehavior = QuicksandBehavior;
     }
 
 
     // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
 
-    /**
-     * The path of the texture to be loaded that the player should be covered with.
-     * @return The path of the texture to be applied on the player.
-     * Default: <code>"qsrehydrated:textures/entity/coverage/quicksand_coverage.png"</code>
-     */
-    public String coverageTexture() {
-        return "qsrehydrated:textures/entity/coverage/quicksand_coverage.png";
-    }
 
     /**
      * The relative offset in blocks, the sinking mechanic should respect.
@@ -71,52 +66,14 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         return 0d;
     }
 
-    /**
-     * Probability, that the substance bubbles when one sinks in it.
-     * @return The probability. <code>0</code> = No bubbles. <code>1</code> = Always bubbles.
-     */
-    public double getBubblingChance() {
-        return .75d;
-    }
 
-    public double getCustomDeathMessageOdds() {
-        return .25;
-    }
 
     public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) {
+        // Are we accounting for player height? e.g. should a player fully under be at 2.0, or 1.0?
         return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(null));
+
     }
 
-    /**
-     * The sinking speed, depending on the depth.
-     * normalized against the vertSpeed, so this value will remain effective - even
-     * if the quicksand is very thick.
-     * @param depthRaw The depth in blocks. <code>0</code> is exactly on surface level.
-     * @return The sinking value. Lower value means slower sinking.
-     */
-    public double getSink(double depthRaw) {
-        return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.01, 0.01 });
-    }
-
-    /**
-     * Horizontal movement speed depending on the depth.
-     * Thickness - but inverse.
-     * @param depthRaw The depth of the object. <code>0</code> is exactly on surface level.
-     * @return The inverse resistance when walking. <code>0</code> = very thick; <code>1</code> = very thin.
-     */
-    public double getWalk(double depthRaw) {
-        return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.5, 0.0 });
-    }
-
-    /**
-     * Vertical movement speed depending on the depth.
-     * Same as <code>getWalk()</code>
-     * @param depthRaw The depth of the object.
-     * @return The inverse resistance when moving up/down. <code>0</code> = very thick; <code>1</code> = very thin.
-     */
-    public double getVert(double depthRaw) {
-        return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.1, 0.1 });
-    }
 
     /** the previous position will move towards the player this amount *per tick* !
     * You can think of this as how "sticky" the quicksand is.
@@ -148,10 +105,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
      * @return <code>true</code>, if the player is allowed to jump. <code>false</code> otherwise.
      */
     public boolean getJump(double depth) {
-        if (depth < 0.25) {
-            return true;
-        }
-        return false;
+        return depth < 0.25;
     }
 
     // Don't override anything below unless you know what you're doing!
@@ -165,7 +119,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         Vec3 prevPos = es.getPreviousPosition();
 
         // move previous pos towards player by set amount
-        es.setPreviousPosition(prevPos.lerp(currentPos, getTugLerp(depth)));
+        es.setPreviousPosition(prevPos.lerp(currentPos, QSBehavior.getTugLerp(depth)));
 
     }
 
@@ -187,9 +141,9 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     public void quicksandMomentum(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity, double depth) {
 
         // get quicksand Variables
-        double walk = getWalk(depth);
-        double vert = getVert(depth);
-        double sink = getSink(depth);
+        double walk = QSBehavior.getWalkSpeed(depth);
+        double vert = QSBehavior.getVertSpeed(depth);
+        double sink = QSBehavior.getSinkSpeed(depth);
 
         // sinking is a replacement for gravity.
         Vec3 Momentum = pEntity.getDeltaMovement();
@@ -241,7 +195,11 @@ public class QuicksandBase extends Block implements QuicksandInterface {
             // Some movement stuff. Dealing with whether the entity is "OnGround"
             // whether they can jump, and step out onto a solid block.
 
-            if (getJump(depth)) {
+
+
+            // Okay, so letting people jump on the top layer of the quicksand lets everyone just hold spacebar and jump over it all. I just commented it all out to disable it, and works better (tm)
+/*
+            if (QSBehavior.canStepOut(depth)) {
                 if (pLevel.getBlockState(pPos.above()).isAir()) {
 
                     boolean playerFlying = false;
@@ -264,6 +222,10 @@ public class QuicksandBase extends Block implements QuicksandInterface {
                 pEntity.resetFallDistance();
             }
 
+ */
+            pEntity.setOnGround(false);
+            pEntity.resetFallDistance();
+
         }
 
     }
@@ -271,8 +233,9 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     public void trySetCoverage(Entity pEntity) {
         if (pEntity instanceof Player) {
             playerStruggling pS = (playerStruggling) pEntity;
-            if (pS.getCoverageTexture() != this.coverageTexture()) {
-                pS.setCoverageTexture(this.coverageTexture());
+        if (!Objects.equals(pS.getCoverageTexture(), QSBehavior.getCoverageTexture())) {
+                pS.setCoverageTexture(QSBehavior.getCoverageTexture());
+            System.out.println(QSBehavior.getCoverageTexture());
                 pS.setCoveragePercent(0.0);
             }
         }

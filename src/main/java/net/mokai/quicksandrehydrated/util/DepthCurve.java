@@ -1,7 +1,10 @@
 package net.mokai.quicksandrehydrated.util;
+import net.mokai.quicksandrehydrated.QuicksandRehydrated;
+import org.checkerframework.checker.units.qual.A;
 import org.joml.Vector2d;
 
 import java.util.ArrayList;
+import java.util.logging.LogManager;
 
 public class DepthCurve {
 
@@ -16,23 +19,35 @@ public class DepthCurve {
     public ArrayList<Vector2d> pts;
 
 
+    public DepthCurve (double constant) {
+        interptype = InterpType.CONSTANT;
+        start = constant;
+    }
+
     public DepthCurve (ArrayList<Vector2d> points) {
+        interptype = InterpType.CUSTOM;
         pts = points;
         start = points.get(0).y();
         end = points.get(points.size()-1).y();
     }
 
-    public DepthCurve (InterpType type, double A, double B, double exponent) {
-        interptype = type;
-        start = A;
-        end = B;
-        exp = exponent;
+    public DepthCurve (InterpType type, double start, double end, double exponent) {
+        assert(type != InterpType.CUSTOM);
+        if (type == InterpType.CUSTOM) {
+            System.out.println("ERROR: 'CUSTOM' is not a valid InterpType for DepthCurve(Interptype, double, double, double). Resolving to 'LINEAR'.");
+            interptype = InterpType.LINEAR;
+        } else {
+            interptype = type;
+        }
+            this.start = start;
+            this.end = end;
+            this.exp = exponent;
     }
 
-    public DepthCurve(double A, double B) {
+    public DepthCurve(double start, double end) {
         interptype = InterpType.LINEAR;
-        start = A;
-        end = B;
+        this.start = start;
+        this.end = end;
     }
 
 
@@ -41,6 +56,7 @@ public double getAt(double pos) {
     pos = Math.max(0, Math.min(pos, 1));
 
     switch (interptype) {
+        case CONSTANT:  return start;
         case LINEAR:    return ease(start, end, pos);
         case POW_IN:    return ease(start, end, Math.pow(pos, exp));
         case POW_OUT:   return ease(start, end, 1-Math.pow(1-pos, exp));
@@ -56,6 +72,7 @@ public double getAt(double pos) {
 
 
     public enum InterpType {
+        CONSTANT,
         LINEAR,
         POW_IN,
         POW_OUT,
