@@ -51,9 +51,6 @@ public class FlowingQuicksandBase extends QuicksandBase implements QuicksandInte
     // ------------------------------- Flowing specific ------------------------------------
 
 
-
-
-
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 1, 4);
 
     protected static final VoxelShape[] SHAPE_BY_LEVEL = new VoxelShape[]{

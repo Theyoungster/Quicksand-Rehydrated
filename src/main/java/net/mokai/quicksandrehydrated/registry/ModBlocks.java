@@ -53,15 +53,17 @@ public class ModBlocks {
             .setCoverageTexture("quicksand_coverage")
     ));
     public static final RegistryObject<Block> LIVING_SLIME = registerBlock("living_slime", () -> new LivingSlime( slimeBehavior, new QuicksandBehavior()
-            .setTugLerp(0.025d)
+            .setTugPointSpeed(0.025d)
             .setTugStrengthHorizontal(new DepthCurve(0.08d,0.06d))
             .setVertSpeed(.4d)
-            .setSinkSpeed(.009)
+            .setSinkSpeed(new DepthCurve(new double[]{.001d, .009d, .009d, .009d, .009d}))
             .setWalkSpeed(new DepthCurve(1, .2))
     ));
     public static final RegistryObject<Block> DEEP_MUD = registerBlock("deep_mud", () -> new DeepMudBlock( baseBehavior, new QuicksandBehavior()
             .setOffset(.125)
             .setSinkSpeed(new DepthCurve(DepthCurve.InterpType.POW_IN, .006, .002, 3)) // there seems to be some kind of limit on sinking speed; investigate!
+            .setSinkSpeed(0)
+
 
     ));
     public static final RegistryObject<Block> SOFT_QUICKSAND = registerBlock("soft_quicksand", () -> new FlowingQuicksandBase(baseFlowingBehavior, new QuicksandBehavior()));

@@ -47,7 +47,7 @@ public class LivingSlime extends QuicksandBase {
 
 
 
-
+    @Override
     public void struggleAttempt(@NotNull BlockState pState, @NotNull Entity pEntity, double struggleAmount) {
 
         // block pos has potential to be incorrect?

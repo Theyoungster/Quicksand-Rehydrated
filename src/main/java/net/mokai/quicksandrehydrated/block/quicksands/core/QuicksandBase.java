@@ -16,6 +16,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.entity.playerStruggling;
+import net.mokai.quicksandrehydrated.util.DepthCurve;
 import net.mokai.quicksandrehydrated.util.EasingHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,64 +50,91 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     }
 
 
-    // ----- OVERRIDE AND MODIFY THESE VALUES FOR YOUR QUICKSAND TYPE ----- //
+    public String getCoverageTexture() {return QSBehavior.getCoverageTexture();}
 
+    public String getSecretDeathMessage() {return QSBehavior.getSecretDeathMessage();}
+    public double getSecretDeathMessageChance() {return QSBehavior.getSecretDeathMessageChance();}
 
     /**
-     * The relative offset in blocks, the sinking mechanic should respect.
-     * This allows not full blocks (think of mud with a water surface) to function with
-     * the actual sinking mechanic.
+     * The probability, per tick, of producing a bubble while an entity is in the block.
+     * @return The probability. <code>0</code> = No bubbles. <code>1</code> = Always bubbles.
+     */
+    public double getBubbleChance(double depth) {return QSBehavior.getBubbleChance(depth);}
+
+    /**
+     * The sinking speed, depending on the depth.
+     * normalized against the vertSpeed, so this value will remain effective - even
+     * if the quicksand is very thick.
+     * @param depth The depth in blocks. <code>0</code> is exactly on surface level.
+     * @return The sinking value. Lower value means slower sinking.
+     */
+    public double getSinkSpeed(double depth) {return QSBehavior.getSinkSpeed(depth);}
+
+    /**
+     * Horizontal movement speed depending on the depth.
+     * Thickness - but inverse.
+     * @param depth The depth of the object. <code>0</code> is exactly on surface level.
+     * @return The inverse resistance when walking. <code>0</code> = very thick; <code>1</code> = very thin.
+     */
+    public double getWalkSpeed(double depth) {return QSBehavior.getWalkSpeed(depth);}
+
+    /**
+     * Vertical movement speed depending on the depth.
+     * Same as <code>getWalk()</code>
+     * @param depth The depth of the object.
+     * @return The inverse resistance when moving up/down. <code>0</code> = very thick; <code>1</code> = very thin.
+     */
+    public double getVertSpeed(double depth) {return QSBehavior.getVertSpeed(depth);} //TODO: invert this back
+
+    /** How strongly the quicksand pulls the player horizontally towards the Tug point. 1 is full strength.
+     * @return Horizontal tug strength. [0, 1]
+     */
+    public double getTugStrengthHorizontal(double depth) {return QSBehavior.getTugStrengthHorizontal(depth);}
+
+    /**
+     * How strongly the quicksand pulls the player vertically towards the Tug point. 1 is full strength.
+     * If not set, will default to equal the horizontal tug strength.
+     * @param depth
+     * @return Vertical tug strength. [0, 1]
+     */
+    public double getTugStrengthVertical(double depth) {return QSBehavior.getTugStrengthVertical(depth);}
+
+    /** How quickly the TugLerp point approaches the player, as a percentage of the distance per tick.
+     * You can think of this as how "sticky" the quicksand is.
+     * 1.0 = no effect on player's movement
+     * 0.0 = player effectively cannot move unless they manage to stop touching the QS.
+     * @param depth
+     * @return Vertical tug strength. [0, 1]
+     **/
+    public double getTugPointSpeed(double depth) {return QSBehavior.getTugPointSpeed(depth);}
+
+    /** The lowest point the TugPoint will sink to.
+     * @return The buoyancy depth.
+     */
+    public double getBuoyancyPoint() {return QSBehavior.getBuoyancyPoint();}
+
+    /** If the player is above this height, they can simply jump out of the quicksand.
+     * @param depth
+     * @return true if the player should be allowed to jump out.
+     */
+    public boolean canStepOut(double depth) {return QSBehavior.canStepOut(depth);}
+
+    /**
+     * How far from the top of a block the surface actually is.
+     * For example, Mud and Soulsand would use 0.125 (or 1/8th of a block) before sinking begins.
      * @param blockstate The BlockState.
-     * @return
-     * <p>The offset in blocks, that the sinking mechanic will subtract.</p>
-     * <p><code>0</code> (default) means, that the sinking mechanic starts directly at the surface.</p>
-     * <p><code>0.5</code> means, the block is considered as half a block, so "sinking" starts only below this level.</p>
+     * @return distance from the top of the block.
      */
-    public double getOffset(BlockState blockstate) {
-        return QSBehavior.getOffset();
-    }
+    public double getOffset(BlockState blockstate) {return QSBehavior.getOffset();}
 
 
-
+    /** The depth, in blocks, that the entity has sunk. Scales based on the entity's height, but is 1:1 for a Player.
+     * @return depth, in blocks.
+     */
     public double getDepth(Level pLevel, BlockPos pPos, Entity pEntity) {
-        // Are we accounting for player height? e.g. should a player fully under be at 2.0, or 1.0?
         return EasingHandler.getDepth(pEntity, pLevel, pPos, getOffset(pLevel.getBlockState(pPos)));
-
     }
 
-
-    /** the previous position will move towards the player this amount *per tick* !
-    * You can think of this as how "sticky" the quicksand is.
-    * 1.0 = no effect on player's movement
-    * 0.0 = player effectively cannot move unless they manage to stop touching the
-    * QS block.
-    **/
-    public double getTugLerp(double depthRaw) {
-        return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 1.0, 1.0 });
-    }
-
-    /** how much the player is pulled backwards
-    * You can think of this as how *strong* the sticky effect of the quicksand is
-    * 1.0 = player *cannot* move away from the previous position, fully locked in
-    * place.
-    * 0.0 = no effect on player's movement
-     */
-    public double getTug(double depthRaw) {
-        return EasingHandler.doubleListInterpolate(depthRaw / 2, new double[] { 0.0, 0.0 });
-    }
-
-    /**
-     * whether the player can jump or not.
-     * Don't use A RNG value or there will be jittering, as this applies a small
-     * amount of friction.
-     * this also currently dictates whether the player can step up over block edges
-     * (like stairs, 1/2 a block at most)
-     * @param depth The depth, the player is currently stuck in.
-     * @return <code>true</code>, if the player is allowed to jump. <code>false</code> otherwise.
-     */
-    public boolean getJump(double depth) {
-        return depth < 0.25;
-    }
 
     // Don't override anything below unless you know what you're doing!
     public void quicksandTugMove(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity, double depth) {
@@ -119,8 +147,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         Vec3 prevPos = es.getPreviousPosition();
 
         // move previous pos towards player by set amount
-        es.setPreviousPosition(prevPos.lerp(currentPos, QSBehavior.getTugLerp(depth)));
-
+        es.setPreviousPosition(prevPos.lerp(currentPos, getTugPointSpeed(depth)));
     }
 
     public void quicksandTug(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity, double depth) {
@@ -132,8 +159,9 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         Vec3 differenceVec = es.getPreviousPosition().subtract(pEntity.getPosition(0));
 
         // apply momentum towards previous pos to entity
-        double spd = getTug(depth);
-        Vec3 addMomentum = differenceVec.multiply(new Vec3(spd, spd, spd));
+        double hor = getTugStrengthHorizontal(depth);
+        double vert = getTugStrengthVertical(depth);
+        Vec3 addMomentum = differenceVec.multiply(new Vec3(hor, vert, hor));
         pEntity.setDeltaMovement(Momentum.add(addMomentum));
 
     }
@@ -141,9 +169,9 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     public void quicksandMomentum(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity, double depth) {
 
         // get quicksand Variables
-        double walk = QSBehavior.getWalkSpeed(depth);
-        double vert = QSBehavior.getVertSpeed(depth);
-        double sink = QSBehavior.getSinkSpeed(depth);
+        double walk = getWalkSpeed(depth);
+        double vert = getVertSpeed(depth);
+        double sink = getSinkSpeed(depth);
 
         // sinking is a replacement for gravity.
         Vec3 Momentum = pEntity.getDeltaMovement();
@@ -198,7 +226,7 @@ public class QuicksandBase extends Block implements QuicksandInterface {
 
             // Okay, so letting people jump on the top layer of the quicksand lets everyone just hold spacebar and jump over it all. I just commented it all out to disable it, and works better (tm)
 
-            if (QSBehavior.canStepOut(depth)) {
+            if (canStepOut(depth)) {
                 if (pLevel.getBlockState(pPos.above()).isAir()) {
 
                     boolean playerFlying = false;
@@ -232,9 +260,8 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     public void trySetCoverage(Entity pEntity) {
         if (pEntity instanceof Player) {
             playerStruggling pS = (playerStruggling) pEntity;
-        if (!Objects.equals(pS.getCoverageTexture(), QSBehavior.getCoverageTexture())) {
-                pS.setCoverageTexture(QSBehavior.getCoverageTexture());
-            System.out.println(QSBehavior.getCoverageTexture());
+        if (!Objects.equals(pS.getCoverageTexture(), getCoverageTexture())) {
+                pS.setCoverageTexture(getCoverageTexture());
                 pS.setCoveragePercent(0.0);
             }
         }
