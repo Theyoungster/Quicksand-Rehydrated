@@ -12,7 +12,8 @@ What does this fork add currently?
 - Liquid honey (todo)
 - Moss (todo)
 - Swallowing Flesh (todo)
-  Again, this is a modification for me and my friends! I don't expect any progress here to be merged in any meaningful way.
+
+Again, this is a modification for me and my friends! I don't expect any progress here to be merged in any meaningful way.
 
 Current bugs in this fork:
 ====
