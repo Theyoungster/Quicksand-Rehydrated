@@ -8,10 +8,7 @@
 name: Build and upload QSR (1.20.1-develop)
 
 on:
-  push:
-    branches: [ "1.20.1-develop" ]
-  pull_request:
-    branches: [ "1.20.1-develop" ]
+  workflow_dispatch:
 
 jobs:
   build:
