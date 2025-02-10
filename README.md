@@ -2,6 +2,10 @@ Why does this fork exist?
 ====
 I just wanted to add some qs types mine and my friends wanted, I don't code in java very well but I'm good at replicating and understanding code so a majority of this is just modifications of existing code. I'm aware of the discord and I'd join if I could, but I'm two years short sadly. Commits coming soon!
 
+Current bugs in this fork:
+====
+- When tar is connected to itself, I'm not sure how to make the block extend down 1px.
+
 Quicksand-Rehydrated
 ====
 Quicksand Rehydrated is a mod that adds, well... quicksand! It's a reimagining of the 1.7.10 mod *More Fun Quicksand Mod*, with more in-*depth* escape mechanics, and rebalancing to make the mod suitable for a Survival experience.
