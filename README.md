@@ -17,7 +17,7 @@ Again, this is a modification for me and my friends! I don't expect any progress
 
 Current bugs in this fork:
 ====
-- When tar is connected to itself, I'm not sure how to make the block extend down 1px.
+- When tar is connected to itself, I'm not sure how to make the block extend down 1px. (Suggestions welcome!)
 
 Quicksand-Rehydrated
 ====
