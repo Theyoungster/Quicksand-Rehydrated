@@ -1,30 +1,3 @@
-Why does this fork exist?
-====
-I just wanted to add some qs types mine and my friends wanted, I don't code in java very well but I'm good at replicating and understanding code so a majority of this is just modifications of existing code. I'm aware of the discord and I'd join if I could, but I'm two years short sadly. Commits coming soon! (Look at the quicksandbehavior_test branch)
-
-What does this fork add currently?
-====
-- Tar (implemented)
-- Melted Cheese (implemented)
-- Dark Latex (todo)
-- Light Latex (todo)
-- Grain (todo)
-- Liquid honey (todo)
-- Moss (todo)
-- Swallowing Flesh (todo)
-
-Again, this is a modification for me and my friends! I don't expect any progress here to be merged in any meaningful way.
-
-Current bugs in this fork:
-====
-- When 16x15x16 blocks (blocks that are shorter) are connected to themselves, I'm not sure how to make the block extend down 1px. (Suggestions welcome!)
-
-This fork's todo:
-====
-- All the blocks listed as todo (should be pretty easy, just need some time)
-- make some blocks like tar and melted cheese flow
-- Fix the 16x15x16 block bug
-
 Quicksand-Rehydrated
 ====
 Quicksand Rehydrated is a mod that adds, well... quicksand! It's a reimagining of the 1.7.10 mod *More Fun Quicksand Mod*, with more in-*depth* escape mechanics, and rebalancing to make the mod suitable for a Survival experience.
