@@ -1,7 +1,5 @@
 package net.mokai.quicksandrehydrated.entity.coverage;
 
-import net.minecraft.resources.ResourceLocation;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,89 +7,103 @@ import static net.minecraft.util.Mth.clamp;
 
 public class PlayerCoverage {
 
-    private List<CoverageEntry> coverageEntries;
+    public List<CoverageEntry> coverageEntries;
+    public boolean requiresUpdate = false;
 
     public PlayerCoverage() {
         this.coverageEntries = new ArrayList<>();
     }
 
     public void addCoverageEntry(CoverageEntry newEntry) {
-        // sorts through list and decides where to put it
 
-        int insertionIndex = -1;
+        // TODO this should be probably optimized in terms of determining
+        //  what part of the coverage texture needs updating.
+        // Also, it should combine similar coverage entries instead of just replacing.
+
+        // this function is called every tick a player is in a quicksand
+        // that itself isn't too terribly bad ... but what IS bad is that requiresUpdate is also always set to true,
+        // and the entire coverage texture is redone every tick.
+
+        // my idea was to track *which* coordinates were changed, and then feed those into the update function, but ...
+        // never got around to that.
+
+        // See CoverageLayer for the code that actually manages the texture
+        // updateTexture(PlayerCoverage cov)
+
+        newEntry.begin = clamp(newEntry.begin, 0, 32);
+        newEntry.end = clamp(newEntry.end, 0, 32);
+
+        // sort through the list and decide where to put it
+
+        requiresUpdate = true;
+        clearCoverage(newEntry.begin, newEntry.end);
+        if (coverageEntries.size() == 0) {
+            coverageEntries.add(0, newEntry);
+            return;
+        }
+
+        int insertionIndex = 0;
         for (int i = 0; i < coverageEntries.size(); i++) {
-
             CoverageEntry currentEntry = coverageEntries.get(i);
             if (currentEntry.begin > newEntry.begin) {
                 insertionIndex = i;
                 break;
             }
-
-        }
-
-        if (insertionIndex >= 0) {
-            insertionIndex = 0;
         }
 
         coverageEntries.add(insertionIndex, newEntry);
 
     }
 
-    public void addCoverage(int begin, int end, ResourceLocation texture) {
-        // TODO this needs to/should combine similar ones
-        removeCoverage(begin, end);
 
 
+    public void clearCoverage(int begin, int end) {
+        // Clears the coverage in the given area
 
-    }
-
-    public void removeCoverage(int begin, int end) {
+        // Bottom coord is Inclusive
+        // Top coord is NOT !
 
         List<CoverageEntry> entriesToRemove = new ArrayList<>();
 
         for (CoverageEntry entry : coverageEntries) {
 
-            boolean beginWithin = entry.begin <= end && entry.begin >= begin;
-            boolean endWithin = entry.end <= end && entry.end >= begin;
+            boolean entryBeginOverlap = entry.begin > begin && entry.begin <= end;
+            boolean entryEndOverlap = entry.end < end && entry.end >= begin;
 
-            if (!beginWithin && !endWithin) {
-                continue;
+            // this doesn't account correctly for if a coverage needs to be *split* (see below)
+            // ‾‾‾\ A
+            //    |
+            //    | ‾‾\ B
+            //    |   |
+            //    | __/
+            //    |
+            // ___/
+            // A will just be removed in this case
+
+            if (entryBeginOverlap && entryEndOverlap) {
+                entriesToRemove.add(entry);
             }
-            else {
-
-                // if it falls completely in the bound, it needs to be entirely removed.
-                if (beginWithin && endWithin) {
-                    entriesToRemove.add(entry);
-                }
-                else {
-
-                    // this coverage is only partially in the range
-                    if (beginWithin) {
-                        // Begin is inside the range, but the end is above. So this entry should begin further upwards
-                        truncateLowerHalf(entry, end);
-                    }
-                    else {
-                        // otherwise, End is in the range, but begin is further below it. So this entry should end further below the range.
-                        truncateUpperHalf(entry, begin);
-                    }
-
-                }
-
+            else if (entryBeginOverlap) {
+                truncateUpperHalf(entry, end);
+            }
+            else if (entryEndOverlap) {
+                truncateLowerHalf(entry, begin);
             }
 
         }
 
         coverageEntries.removeAll(entriesToRemove);
-
     }
 
     public void truncateLowerHalf(CoverageEntry entry, int pix) {
-        // remove the pixels below this. the coordinate at pix IS REMOVED.
+        // remove the pixels below this. the coordinate at pix is *Removed*.
+        // moves bottom coordinate UP
         pix = clamp(pix+1, 0, 31);
         entry.begin = pix;
     }
     public void truncateUpperHalf(CoverageEntry entry, int pix) {
-        // remove the pixels above this. the coordinate at pix IS REMOVED
+        // remove the pixels above this. the coordinate at pix is *Removed*
+        // Moves top coordinate DOWN
         pix = clamp(pix-1, 0, 31);
         entry.end = pix;
     }

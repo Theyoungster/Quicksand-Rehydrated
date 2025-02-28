@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.mokai.quicksandrehydrated.block.quicksands.core.QuicksandBase;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
+import net.mokai.quicksandrehydrated.entity.coverage.PlayerCoverage;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.entity.playerStruggling;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
@@ -30,19 +31,17 @@ import java.util.UUID;
 @Mixin(Player.class)
 public class PlayerMixin implements playerStruggling {
 
+
     private static final UUID GRAVITY_MODIFIER_QUICKSAND_UUID = UUID.fromString("b8c5b4f6-8188-4466-8239-53c567b11b32");
     private static final AttributeModifier GRAVITY_MODIFIER_QUICKSAND = new AttributeModifier(GRAVITY_MODIFIER_QUICKSAND_UUID, "Quicksand Gravity Cancel", (double)-1.0F, AttributeModifier.Operation.MULTIPLY_BASE);
 
     int struggleHold = 0;
     boolean holdingStruggle = false;
 
-    double coveragePercent = 0.0;
+    public PlayerCoverage coverage = new PlayerCoverage();
 
-    public double getCoveragePercent() {
-        return this.coveragePercent;
-    }
-    public void setCoveragePercent(double set) {
-        this.coveragePercent = set;
+    public PlayerCoverage getCoverage() {
+        return this.coverage;
     }
 
 

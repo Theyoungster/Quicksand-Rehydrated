@@ -93,7 +93,9 @@ public class ModBlocks {
             .setWobbleTugVertical(0.1)
 
             .addQuicksandEffect(QuicksandWobblePEffect.class)
+            .setCoverageTexture("slime_coverage")
     ));
+
 
 
 
@@ -101,12 +103,14 @@ public class ModBlocks {
     static QuicksandBehavior mudSinkable = new QuicksandBehavior()
             .setVertSpeed(0.4)
             .setWalkSpeed(new DepthCurve(new double[]{0.9, 0.55, 0.15, 0.1, 0.0}))
-            .setSinkSpeed(0);
+            .setSinkSpeed(0)
+            .setCoverageTexture("mud_coverage");
 
     public static final RegistryObject<Block> THIN_MUD = registerBlock("thin_mud", () -> new DeepMudBlock( muddyBehavior.sound(SoundType.MUD), mudSinkable, 0.2d));
     public static final RegistryObject<Block> SHALLOW_MUD = registerBlock("shallow_mud", () -> new DeepMudBlock( muddyBehavior.sound(SoundType.MUD), mudSinkable, 0.5d));
     public static final RegistryObject<Block> DEEP_MUD = registerBlock("deep_mud", () -> new DeepMudBlock( muddyBehavior.sound(SoundType.MUD), mudSinkable, 1.0d));
     public static final RegistryObject<Block> BOTTOMLESS_MUD = registerBlock("bottomless_mud", () -> new DeepMudBlock( muddyBehavior.sound(SoundType.MUD), mudSinkable, 2.5d));
+
 
 
     public static final RegistryObject<Block> SOFT_QUICKSAND = registerBlock("soft_quicksand", () -> new FlowingQuicksandBase(baseFlowingBehavior, new QuicksandBehavior()));

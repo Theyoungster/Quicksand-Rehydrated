@@ -1,6 +1,7 @@
 package net.mokai.quicksandrehydrated.block.quicksands.core;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +15,10 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.entity.EntityBubble;
+import net.mokai.quicksandrehydrated.entity.coverage.CoverageEntry;
+import net.mokai.quicksandrehydrated.entity.coverage.PlayerCoverage;
 import net.mokai.quicksandrehydrated.entity.data.QuicksandEffect;
 import net.mokai.quicksandrehydrated.entity.data.QuicksandEffectManager;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
@@ -28,6 +32,7 @@ import java.util.Random;
 import static net.mokai.quicksandrehydrated.util.ModTags.Blocks.QUICKSAND_DROWNABLE;
 import static net.mokai.quicksandrehydrated.util.ModTags.Fluids.QUICKSAND_DROWNABLE_FLUID;
 import static org.joml.Math.abs;
+import static org.joml.Math.clamp;
 
 /**
  * This is where the <font color=red>M</font>
@@ -216,6 +221,8 @@ public class QuicksandBase extends Block implements QuicksandInterface {
         double depth = getDepth(pLevel, pPos, pEntity);
         if (depth > 0) {
 
+            trySetCoverage(pEntity);
+
             // there are three main effects that happen every tick.
 
             // first, the quicksand's main effects are applied. Thickness and sinking.
@@ -273,12 +280,29 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     }
 
     public void trySetCoverage(Entity pEntity) {
+
+        // Set a section of coverage, bottom to the current depth value (as a percentage)
+        // It's called "try" set coverage, but it does it every time, no matter what.
+        // Ideally, some kind of check should be done so that it doesn't edit it if it doesn't need to.
+
+        // ... though, that *could* be done in the PlayerCoverage class instead of here.
+
         if (pEntity instanceof Player) {
+
             playerStruggling pS = (playerStruggling) pEntity;
-        if (!Objects.equals(pS.getCoverageTexture(), getCoverageTexture())) {
-                pS.setCoverageTexture(getCoverageTexture());
-                pS.setCoveragePercent(0.0);
-            }
+
+            PlayerCoverage pC = pS.getCoverage();
+
+            double depth = getDepth(pEntity.level(), pEntity.blockPosition(), pEntity);
+            double depth_percent = clamp(depth, 0.0, 2.0)/2.0;
+
+            int begin = 0;
+            int end = (int) (32 * depth_percent);
+            end = clamp(end, 0, 32);
+
+            ResourceLocation tex = new ResourceLocation(QuicksandRehydrated.MOD_ID, QSBehavior.getCoverageTex());
+            pC.addCoverageEntry(new CoverageEntry(begin, end, tex));
+
         }
     }
     public void firstTouch(BlockPos pPos, Entity pEntity, Level pLevel) {
@@ -329,19 +353,19 @@ public class QuicksandBase extends Block implements QuicksandInterface {
     }
 
     public void tryApplyCoverage(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull Entity pEntity) {
-        double depth = getDepth(pLevel, pPos, pEntity);
-        if (depth > 0) {
-            if (pEntity instanceof Player) {
-
-                playerStruggling pS = (playerStruggling) pEntity;
-                double currentAmount = pS.getCoveragePercent();
-                double shouldBe = depth/1.875;
-                if (shouldBe > 1.0) {shouldBe = 1.0;}
-
-                if (shouldBe > currentAmount) {pS.setCoveragePercent(shouldBe);}
-
-            }
-        }
+//        double depth = getDepth(pLevel, pPos, pEntity);
+//        if (depth > 0) {
+//            if (pEntity instanceof Player) {
+//
+//                playerStruggling pS = (playerStruggling) pEntity;
+//                double currentAmount = pS.getCoveragePercent();
+//                double shouldBe = depth/1.875;
+//                if (shouldBe > 1.0) {shouldBe = 1.0;}
+//
+//                if (shouldBe > currentAmount) {pS.setCoveragePercent(shouldBe);}
+//
+//            }
+//        }
     }
 
     // special function for sinkables that runs when an entity jumps on, or in it.
