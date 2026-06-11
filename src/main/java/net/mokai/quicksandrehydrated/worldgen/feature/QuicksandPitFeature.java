@@ -1,6 +1,9 @@
 package net.mokai.quicksandrehydrated.worldgen.feature;
 
+import java.util.List;
+
 import com.mojang.serialization.Codec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -10,8 +13,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-
-import java.util.List;
 
 /**
  * Feature that generates a quicksand pit with customizable block type and shape.
@@ -40,6 +41,16 @@ public class QuicksandPitFeature extends Feature<QuicksandPitConfiguration> {
         // Get the block to use for the pit from the configuration
         Block pitBlock = config.block;
         BlockState pitBlockState = pitBlock.defaultBlockState();
+
+        // Get the surface block, if it exists
+        Block surfaceBlock;
+        if (config.hasSurface) {
+            surfaceBlock = config.surfaceBlock;
+        }
+        else {
+            surfaceBlock = config.block;
+        }
+        BlockState surfaceBlockState = surfaceBlock.defaultBlockState();
 
         // Generate a quicksand pit with random size based on configuration
         // Use a wider range for more variable sizes
@@ -223,6 +234,8 @@ public class QuicksandPitFeature extends Feature<QuicksandPitConfiguration> {
                     // Get deep into this position
                     int localDepth = depthMap[mapX][mapZ];
                     
+                    int surfaceY = findSurfaceY(level, new BlockPos(worldX, 0, worldZ));
+
                     // Verify that the height of the ground at this location is exactly equal to pitLevel.
                     // This prevents the puddle from spreading over different height levels.
                     int localSurfaceY = findSurfaceY(level, new BlockPos(worldX, 0, worldZ));
@@ -231,8 +244,12 @@ public class QuicksandPitFeature extends Feature<QuicksandPitConfiguration> {
                         continue;
                     }
                     
+                    BlockPos surfacePos = new BlockPos(worldX, surfaceY, worldZ);
+
+                    level.setBlock(surfacePos, surfaceBlockState, 3);
+                    
                     // Now let's place all the quicksand blocks at once, from top to bottom.
-                    for (int depth = 0; depth < localDepth; depth++) {
+                    for (int depth = 1; depth < localDepth; depth++) {
                         int worldY = pitLevel - depth;
                         BlockPos pos = new BlockPos(worldX, worldY, worldZ);
                         
