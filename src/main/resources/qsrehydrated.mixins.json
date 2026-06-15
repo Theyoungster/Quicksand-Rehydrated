@@ -8,7 +8,9 @@
     "PlayerMixin",
     "FallingBlockEntityMixin",
     "CanOccludeMixin",
-    "SlowdownMixin",
+    "SlowdownMixin"
+  ],
+  "client": [
     "ScreenEffectRendererMixin"
   ],
   "injectors": {
