@@ -5,7 +5,6 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
@@ -47,16 +46,6 @@ public class ModEntitySetup {
         event.registerLayerDefinition(ModModelLayers.CAVE_BLOB_CLEAR_LAYER, CaveBlobModel::createOuterBodyLayer);
         event.registerLayerDefinition(ModModelLayers.CAVE_BLOB_SOLID_LAYER, CaveBlobModel::createInnerBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SNORKEL, () -> SnorkelModel.createArmorLayer(new CubeDeformation(0)));
-    }
-
-    @SubscribeEvent
-    public static void entityAttributeEvent(EntityAttributeCreationEvent event) {
-        event.put(ModEntityTypes.HUNNIBEE.get(), EntityHunnibee.setAttributes());
-        event.put(ModEntityTypes.TAR_GOLEM.get(), EntityTarGolem.setAttributes());
-        event.put(ModEntityTypes.TAR_SLIME.get(),   EntityTarSlime.createAttributes().build());
-        event.put(ModEntityTypes.MUDDY_BLOB.get(),  EntityMuddyBlob.createAttributes().build());
-        event.put(ModEntityTypes.SAND_BLOB.get(),   EntitySandBlob.createAttributes().build());
-        event.put(ModEntityTypes.CAVE_BLOB.get(),   EntityCaveBlob.setAttributes());
     }
 
     public static final ModelLayerLocation BUBBLE       = register("bubble");
