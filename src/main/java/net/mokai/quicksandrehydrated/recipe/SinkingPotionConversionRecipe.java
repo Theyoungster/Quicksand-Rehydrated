@@ -90,20 +90,38 @@ public class SinkingPotionConversionRecipe implements Recipe<SimpleContainer> {
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
 
             JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
-            NonNullList<Ingredient> input = NonNullList.withSize(1, Ingredient.EMPTY);
-            input.set(0, Ingredient.fromJson(ingredients.get(0)));
-            return new SinkingPotionConversionRecipe(pRecipeId, output, input);
+            NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(), Ingredient.EMPTY);
+
+            for (int i = 0; i < inputs.size(); i++) {
+                inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
+            }
+            return new SinkingPotionConversionRecipe(pRecipeId, output, inputs);
 
         }
 
         @Override
-        public @Nullable SinkingPotionConversionRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-            return null;
+        public @Nullable SinkingPotionConversionRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+            int size = buf.readInt();
+            NonNullList<Ingredient> inputs = NonNullList.withSize(size, Ingredient.EMPTY);
+            
+            for (int i = 0; i < size; i++) {
+                inputs.set(i, Ingredient.fromNetwork(buf));
+            }
+
+            ItemStack output = buf.readItem();
+            return new SinkingPotionConversionRecipe(id, output, inputs);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, SinkingPotionConversionRecipe pRecipe) {
+        public void toNetwork(FriendlyByteBuf buf, SinkingPotionConversionRecipe recipe) {
 
+            buf.writeInt(recipe.getIngredients().size());
+
+            for (Ingredient ing : recipe.getIngredients()) {
+                ing.toNetwork(buf);
+            }
+
+            buf.writeItemStack(recipe.output, false);
         }
     }
 }
