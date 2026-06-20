@@ -127,16 +127,6 @@ public class Quicksand extends QuicksandBase {
         entityQuicksandVar entQS = (entityQuicksandVar) pEntity;
         double liquid = pState.getValue(LIQUEFACTION);
 
-        System.out.print("{ ");
-        QuicksandEffectManager qsEffects = entQS.getQuicksandEffectManager();
-        for (QuicksandEffect effect : qsEffects.effects) {
-            System.out.print(effect.getClass().getSimpleName());
-            System.out.print(", ");
-        }
-        System.out.println(" }");
-
-
-
         // randomly play sounds
         Random rand = new Random();
         if (rand.nextInt(20*8) < 1) { // every 6 seconds
