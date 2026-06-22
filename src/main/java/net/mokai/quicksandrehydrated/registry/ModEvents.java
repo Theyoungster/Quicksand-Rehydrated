@@ -2,7 +2,10 @@ package net.mokai.quicksandrehydrated.registry;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +13,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -48,6 +52,14 @@ public class ModEvents {
         // when the player logs in
         playerStruggling pS = (playerStruggling) e.getEntity();
         pS.syncCoverage();
+    }
+
+    @SubscribeEvent
+    public static void mossyPillowDamage(LivingHurtEvent event) {
+        Entity attacker = event.getSource().getEntity();
+        if (attacker instanceof Player player && player.getMainHandItem().is(ModItems.MOSSY_PILLOW.get())) {
+            event.setAmount(0.0F);
+        }
     }
 
     @SubscribeEvent

@@ -3,6 +3,7 @@ package net.mokai.quicksandrehydrated.registry;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
+import net.mokai.quicksandrehydrated.item.MossyPillowItem;
 import net.mokai.quicksandrehydrated.item.QuicksandBook;
 import net.mokai.quicksandrehydrated.item.Rope;
 import net.minecraft.world.food.FoodProperties;
@@ -30,6 +31,8 @@ public class ModItems {
             () -> new ItemNameBlockItem(ModBlocks.CRANBERRY_BUSH.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationMod(1f).fast().build())));
     public static final RegistryObject<Item> ROPE = ITEMS.register("rope", () -> new Rope(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> MOSSY_PILLOW =
+            ITEMS.register("mossy_pillow", () -> new MossyPillowItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> MUSIC_DISC =
             ITEMS.register("music_disc_flight", () -> new RecordItem(1, ModSounds.FLIGHT_DISK, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 1540));
     public static final RegistryObject<Item> QUICKSAND_BOOK =
@@ -82,6 +85,7 @@ public class ModItems {
         REGLIST = new ArrayList<>();
         addItem(CRANBERRY);
         addItem(ROPE);
+        addItem(MOSSY_PILLOW);
         addItem(MUSIC_DISC);
         addItem(QUICKSAND_BOOK);
         addItem(QUICKSAND_POTION);

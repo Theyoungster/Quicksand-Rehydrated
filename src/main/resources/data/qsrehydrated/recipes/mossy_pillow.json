@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C",
+    "M",
+    "C"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:moss_carpet"
+    },
+    "M": {
+      "item": "minecraft:moss_block"
+    }
+  },
+  "result": {
+    "item": "qsrehydrated:mossy_pillow"
+  }
+}
