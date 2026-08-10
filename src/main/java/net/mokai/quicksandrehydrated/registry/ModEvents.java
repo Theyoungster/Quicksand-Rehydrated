@@ -49,9 +49,7 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void playerLogIn(PlayerEvent.PlayerLoggedInEvent e) {
-        // when the player logs in
-        playerStruggling pS = (playerStruggling) e.getEntity();
-        pS.syncCoverage();
+        // Coverage sync is temporarily disabled while network codec issues are diagnosed.
     }
 
     @SubscribeEvent
@@ -64,26 +62,7 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void playerStartTracking(PlayerEvent.StartTracking e) {
-
-        Entity target = e.getTarget();
-        if (target instanceof Player) {
-
-            if (!target.level().isClientSide) {
-
-                Player targetPlayer = (Player) target;
-                playerStruggling pS = (playerStruggling) target;
-
-                ServerPlayer serverPlayer = (ServerPlayer) e.getEntity();
-
-                ModMessages.sendToPlayer(
-                    new CoverageSyncS2CPacket(targetPlayer.getId(), pS.getCoverage()),
-                    serverPlayer
-                );
-
-            }
-
-        }
-
+        // Coverage sync is temporarily disabled while network codec issues are diagnosed.
     }
 
 }

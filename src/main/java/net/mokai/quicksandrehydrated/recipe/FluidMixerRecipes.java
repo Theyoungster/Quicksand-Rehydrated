@@ -2,7 +2,6 @@ package net.mokai.quicksandrehydrated.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.util.FluidJSONUtil;
@@ -116,7 +115,7 @@ public class FluidMixerRecipes implements Recipe<SimpleContainer> {
                 inputs.set(i, Ingredient.fromNetwork(buf));
             }
 
-            ItemStack output = buf.readItem();
+            ItemStack output = RecipeNetworkUtil.readOutput(buf);
             return new FluidMixerRecipes(id, output, inputs, fluid);
         }
 
@@ -129,7 +128,7 @@ public class FluidMixerRecipes implements Recipe<SimpleContainer> {
             for (Ingredient ing : recipe.getIngredients()) {
                 ing.toNetwork(buf);
             }
-            buf.writeItemStack(recipe.getResultItem(Minecraft.getInstance().level.registryAccess()), false);
+            RecipeNetworkUtil.writeOutput(buf, recipe.output);
 
         }
     }

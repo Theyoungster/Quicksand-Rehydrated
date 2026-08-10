@@ -28,6 +28,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mokai.quicksandrehydrated.entity.coverage.WashingSystem;
 import net.mokai.quicksandrehydrated.loot.ModLootModifiers;
 import net.mokai.quicksandrehydrated.networking.ModMessages;
+import net.mokai.quicksandrehydrated.networking.EngulfMessages;
 import net.mokai.quicksandrehydrated.registry.*;
 import net.mokai.quicksandrehydrated.screen.MixerScreen;
 import net.mokai.quicksandrehydrated.screen.ModMenuTypes;
@@ -80,6 +81,7 @@ public class QuicksandRehydrated {
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             ModMessages.register();
+            EngulfMessages.register();
             // Register world generation for quicksand pits
             ModFeatures.registerWorldGeneration();
             Regions.register(new ModRegion(new ResourceLocation(MOD_ID, "overworld_1"), 2));
