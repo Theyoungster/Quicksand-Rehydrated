@@ -35,16 +35,16 @@ public class ClientEvents {
     public static class ClientForgeEvents {
 
         @SubscribeEvent
-        public static void onKeyInput(InputEvent.Key event) {
-            if (Keybinding.STRUGGLE_KEY.isDown()) {
-                ((playerStruggling) Minecraft.getInstance().player).BeginStruggle();
-            }
-        }
-
-        @SubscribeEvent
         public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+            if (event.phase != TickEvent.Phase.END) {
+                return;
+            }
 
             Player player = event.player;
+            Player localPlayer = Minecraft.getInstance().player;
+            if (localPlayer == null || player != localPlayer) {
+                return;
+            }
             playerStruggling strugglingPlayer = (playerStruggling) player;
 
             if (player.level().isClientSide()) {

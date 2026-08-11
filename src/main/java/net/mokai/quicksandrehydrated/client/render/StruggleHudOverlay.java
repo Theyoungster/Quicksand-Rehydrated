@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.mokai.quicksandrehydrated.QuicksandRehydrated;
+import net.mokai.quicksandrehydrated.client.EngulfClient;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.entity.playerStruggling;
 
@@ -17,9 +18,12 @@ public class StruggleHudOverlay {
     public static final IGuiOverlay HUD_STRUGGLE = ((gui, guiGraphics, partialTick, width, height) -> {
 
         Player p = Minecraft.getInstance().player;
-        entityQuicksandVar es = (entityQuicksandVar) p;
+        if (p == null) return;
 
-        if (es.getInQuicksand()) {
+        boolean showQuicksandBar = p instanceof entityQuicksandVar es && es.getInQuicksand();
+        boolean showEngulfBar = EngulfClient.isEngulfed();
+
+        if (showQuicksandBar || showEngulfBar) {
 
             int bar_x = (width / 2) - 91;
             int bar_y = height - 29;
@@ -29,9 +33,9 @@ public class StruggleHudOverlay {
 
             guiGraphics.blit(EMPTY_STRUGGLE,bar_x, bar_y,0,0, bar_w, bar_h, bar_w, bar_h);
 
-            playerStruggling strugglingPlayer = (playerStruggling) p;
-
-            float percent = (float) strugglingPlayer.getStruggleHold() / 20.0f;
+            float percent = showEngulfBar
+                    ? EngulfClient.getStruggleProgress() / 12.0f
+                    : ((playerStruggling) p).getStruggleHold() / 20.0f;
             int pixels_wide = (int) (182 * percent);
 
             if (pixels_wide > 182) {
