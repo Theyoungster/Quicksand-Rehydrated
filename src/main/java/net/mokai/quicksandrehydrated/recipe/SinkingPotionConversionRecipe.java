@@ -108,7 +108,7 @@ public class SinkingPotionConversionRecipe implements Recipe<SimpleContainer> {
                 inputs.set(i, Ingredient.fromNetwork(buf));
             }
 
-            ItemStack output = RecipeNetworkUtil.readOutput(buf);
+            ItemStack output = buf.readItem();
             return new SinkingPotionConversionRecipe(id, output, inputs);
         }
 
@@ -121,7 +121,7 @@ public class SinkingPotionConversionRecipe implements Recipe<SimpleContainer> {
                 ing.toNetwork(buf);
             }
 
-            RecipeNetworkUtil.writeOutput(buf, recipe.output);
+            buf.writeItemStack(recipe.output, false);
         }
     }
 }
