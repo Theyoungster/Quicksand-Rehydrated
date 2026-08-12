@@ -70,14 +70,6 @@ public class EntitySandBlob extends Slime {
         return SoundEvents.SAND_PLACE;
     }
 
-    @Override
-    protected void dealDamage(LivingEntity target) {
-        super.dealDamage(target);
-        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 6, 0));
-        target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS,        20 * 6, 0));
-        target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS,       20 * 3, 0));
-    }
-
     @Override protected int getJumpDelay() { return Math.max(1, super.getJumpDelay() + 4); }
     @Override protected SoundEvent getJumpSound() { return SoundEvents.SAND_BREAK; }
     @Override public boolean causeFallDamage(float d, float m, DamageSource s) { return false; }

@@ -18,10 +18,12 @@ public class EngulfClientEvents {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent e) {
-        if (e.phase != TickEvent.Phase.END) return;
-        EngulfClient.tickClient();
-
         Minecraft mc = Minecraft.getInstance();
+        if (e.phase != TickEvent.Phase.END) return;
+
+        if(!mc.isPaused()){EngulfClient.tickClient();}
+
+
         if (mc.player == null) {
             lastSneakDown = false;
             return;

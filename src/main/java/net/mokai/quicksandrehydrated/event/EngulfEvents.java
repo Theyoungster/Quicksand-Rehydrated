@@ -39,7 +39,7 @@ public class EngulfEvents {
 
     private static final float MIN_SIZE = 2.0f;
     private static final int COOLDOWN_TICKS = 40;
-    private static final int IMMUNITY_AFTER_ESCAPE = 100;
+    private static final int IMMUNITY_AFTER_ESCAPE = 40;
 
     private static final int DMG_INTERVAL = 20;
     private static final float DMG_BASE = 0.5f;
@@ -153,7 +153,6 @@ public class EngulfEvents {
         p.noPhysics = true;
         double topY = s.getY() + s.getBbHeight() * SINK_START_FACTOR;
         p.setPos(s.getX(), topY, s.getZ());
-        p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 7, true, false));
         p.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 60, 2, true, false));
         p.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 1, true, false));
         syncClientState(p, true, 0);
@@ -172,16 +171,18 @@ public class EngulfEvents {
             return;
         }
         dampenSlime(s);
-        p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 7, true, false));
         p.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 10, 2, true, false));
         p.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 1, true, false));
+
         int ticks = n.getInt(K_TICKS) + 1;
         n.putInt(K_TICKS, ticks);
+
         int rateStage = Math.min(RAMP_MAX_STAGE, ticks / RAMP_STEP_TICKS);
         float prog = n.getFloat(K_SINK_PROG);
-        prog += (float) (SINK_RATE + SINK_RATE_ACCEL * rateStage);
+        prog += (float) (SINK_RATE + SINK_RATE_ACCEL * rateStage); // Yo we GOTTA clean this section up
         if (prog > 1f) prog = 1f;
         n.putFloat(K_SINK_PROG, prog);
+
         double topY = s.getY() + s.getBbHeight() * SINK_START_FACTOR;
         double endY = s.getY() + s.getBbHeight() * INSIDE_OFFSET_FACTOR;
         double targetY = topY + (endY - topY) * prog;
@@ -191,6 +192,7 @@ public class EngulfEvents {
         p.setDeltaMovement(p.getDeltaMovement().scale(MOTION_DAMP).add(pull.x, dy, pull.z));
         p.hurtMarked = true;
         p.setPos(p.getX(), targetY, p.getZ());
+
         int stage = Math.min(RAMP_MAX_STAGE, ticks / RAMP_STEP_TICKS);
         float base = DMG_BASE * (1 + stage);
         float finalDmg = base * (1.0f + prog * DEPTH_DMG_BONUS);
