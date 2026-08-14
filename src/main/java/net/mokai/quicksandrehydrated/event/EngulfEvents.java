@@ -59,7 +59,7 @@ public class EngulfEvents {
     private static final double SINK_RATE = 0.0085;
     private static final double SINK_RATE_ACCEL = 0.0025;
 
-    private static final int REQUIRED_TOGGLES = 2; //24;
+    private static final int REQUIRED_TOGGLES = 24;
     private static final int PROGRESS_DECAY_TPS = 5;
 
     private static int TICK;
