@@ -222,6 +222,24 @@ public class FlowingQuicksandBase extends QuicksandBase implements QuicksandInte
     }
 
     public void spreadTick(ServerLevel pLevel, BlockPos pPos, RandomSource rand) {
+        BlockState below = pLevel.getBlockState(pPos.below());
+        if (pLevel.getBlockState(pPos.below()).getBlock() == this.asBlock()) {
+            if (below.getValue(LEVEL) < 4){
+                below.setValue(LEVEL, below.getValue(LEVEL) + 1);
+                BlockState current = pLevel.getBlockState(pPos);
+                int currentLevel = current.getValue(LEVEL);
+                if (currentLevel == 1) {
+                    pLevel.setBlock(pPos, Blocks.AIR.defaultBlockState(), 3);
+                } else {
+                    current.setValue(LEVEL, current.getValue(LEVEL) - 1);
+                }
+                pLevel.setBlock(pPos.below(), current.setValue(
+                        LEVEL,
+                        below.isAir() ? 1 : below.getValue(LEVEL) + 1), 3);
+                return;
+            }
+        }
+
         if (pLevel.getBlockState(pPos.above()).getBlock() != this.asBlock()) {
             BlockState self = pLevel.getBlockState(pPos);
             int selfLevel = self.getValue(LEVEL);
