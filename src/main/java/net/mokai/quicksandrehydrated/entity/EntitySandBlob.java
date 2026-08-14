@@ -18,7 +18,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
-public class EntitySandBlob extends Slime {
+public class EntitySandBlob extends Slime implements PredatoryMob{
 
     private static final int TARGET_SIZE = 4;
     private boolean suppressSplitCheck = false;

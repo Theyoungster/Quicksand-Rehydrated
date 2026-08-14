@@ -8,6 +8,7 @@ import net.mokai.quicksandrehydrated.QuicksandRehydrated;
 import net.mokai.quicksandrehydrated.client.EngulfClient;
 import net.mokai.quicksandrehydrated.entity.entityQuicksandVar;
 import net.mokai.quicksandrehydrated.entity.playerStruggling;
+import net.mokai.quicksandrehydrated.event.EngulfEvents;
 
 public class StruggleHudOverlay {
 
@@ -34,7 +35,7 @@ public class StruggleHudOverlay {
             guiGraphics.blit(EMPTY_STRUGGLE,bar_x, bar_y,0,0, bar_w, bar_h, bar_w, bar_h);
 
             float percent = showEngulfBar
-                    ? EngulfClient.getStruggleProgress() / 12.0f
+                    ? EngulfClient.getStruggleProgress() / (float) EngulfEvents.ESCAPE_TOGGLES()
                     : ((playerStruggling) p).getStruggleHold() / 20.0f;
             int pixels_wide = (int) (182 * percent);
 

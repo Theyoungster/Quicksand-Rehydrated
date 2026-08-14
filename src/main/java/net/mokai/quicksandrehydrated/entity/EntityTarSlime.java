@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityTarSlime extends Slime {
+public class EntityTarSlime extends Slime implements PredatoryMob {
 
     private static final int TARGET_SIZE = 4;
     private boolean suppressSplitCheck = false;
