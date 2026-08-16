@@ -3,6 +3,7 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "1.20.1-develop" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,13 +25,14 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle Wrapper
       run: ./gradlew build
-
+    - name: Rename the file
+      run: cd build/libs && rm -f QSR-autobuild-* && mv *-all.jar QSR-autobuild-${{ github.run_number }}.jar 
     - name: Create and publish GitHub Release from branch
       uses: ncipollo/release-action@v1
       with:
         tag: "v1.20.1-${{ github.run_number }}"  # generated tag name
         commit: ${{ github.sha }}                # point tag to the current commit
-        artifacts: "build/libs/*.jar"
+        artifacts: "QSR-autobuild-${{ github.run_number }}.jar"
         name: "Automated release ${{ github.run_number }}"
-        body: "This is an automated build based on the latest push; it is highly unstable, and there WILL be bugs. We recommend you do not use this release for modpacks or survival playthroughs.\nThe file titled _____-all.jar is used by developers, use the other file."
+        body: "This is an automated build based on the latest push; it is highly unstable, and there WILL be bugs. We recommend you do not use this release for modpacks or survival playthroughs."
         prerelease: true
