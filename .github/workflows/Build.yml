@@ -26,7 +26,7 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew build
     - name: Rename the file
-      run: cd builds/lib && rm *-all.jar && mv *.jar QSR-autobuild-${{ github.run_number }}.jar 
+      run: cd builds/libs mv *-all.jar QSR-autobuild-${{ github.run_number }}.jar 
     - name: Create and publish GitHub Release from branch
       uses: ncipollo/release-action@v1
       with:
