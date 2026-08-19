@@ -32,7 +32,7 @@ jobs:
       with:
         tag: "v1.20.1-${{ github.run_number }}"  # generated tag name
         commit: ${{ github.sha }}                # point tag to the current commit
-        artifacts: "QSR-autobuild-${{ github.run_number }}.jar"
+        artifacts: "build/libs/*.jar"
         name: "Automated release ${{ github.run_number }}"
         body: "This is an automated build based on the latest push; it is highly unstable, and there WILL be bugs. We recommend you do not use this release for modpacks or survival playthroughs."
         prerelease: true
